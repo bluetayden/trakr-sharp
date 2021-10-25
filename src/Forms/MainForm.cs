@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace trakr_sharp.Forms {
+namespace trakr_sharp {
     public partial class MainForm : Form {
         public MainForm() {
             InitializeComponent();

@@ -13,7 +13,7 @@ namespace trakr_sharp {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Forms.MainForm());
+            Application.Run(new MainForm());
         }
     }
 }

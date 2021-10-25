@@ -14,7 +14,7 @@ namespace trakr_sharp.Utils {
 
         public static IEnumerable<string> getRunningProcList() {
             // Get list of all running process names
-            IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe").ToList();
+            IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
 
             // Filter unwanted processes from list
             IEnumerable<string> filteredProcs = runningProcs.Where(proc => !ignoredProc(proc));

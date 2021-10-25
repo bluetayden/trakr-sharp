@@ -8,21 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace trakr_sharp.Forms {
+namespace trakr_sharp {
     public partial class AddProgramsForm : Form {
+        // Fields
+        private IEnumerable<string> _runningProcs;
+
+        // Constructor
         public AddProgramsForm() {
             InitializeComponent();
 
-            // Get list of running procs and store in runningProcListBox
-            IEnumerable<string> runningProcs = Utils.SysCalls.getRunningProcList();
-            foreach (string proc in runningProcs) {
-                this.runningProcListBox.Items.Add(proc);
-            }
-
-            // Prevent searchbox placeholder text from being highlighted on form start
-            this.searchBox.SelectionStart = 0;
+            // Get list of running systems procs
+            this._runningProcs = Utils.SysCalls.getRunningProcList();
+            // Store the list in runningProcListBox
+            populateRunningProcListBox();
         }
 
+        // Member functions
         private void cancelButton_Click(object sender, EventArgs e) {
             this.DialogResult = DialogResult.Cancel;
         }
@@ -52,6 +53,24 @@ namespace trakr_sharp.Forms {
                     runningProcListBox.Items.Add(currItem);
                     selectedProcListBox.Items.Remove(currItem);
                 }
+            }
+        }
+
+        private void searchBox_OnValidQuery(Controls.SearchBox sender, string query) {
+            populateRunningProcListBox(query);
+        }
+
+        private void populateRunningProcListBox(string query = "") {
+            // Clear runningProcListBox
+            this.runningProcListBox.Items.Clear();
+
+            // Add each proc in _runningProcs to runningProcListBox if contains query
+            if (query != "") {
+                IEnumerable<string> filteredProcs = this._runningProcs.Where(proc => proc.Contains(query));
+                this.runningProcListBox.Items.AddRange(filteredProcs.ToArray<string>());
+            }
+            else {
+                this.runningProcListBox.Items.AddRange(_runningProcs.ToArray<string>());
             }
         }
     }
