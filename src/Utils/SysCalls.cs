@@ -12,7 +12,7 @@ namespace trakr_sharp.Utils {
                 "spoolsv.exe", "lsass.exe", "csrss.exe", "smss.exe", "winlogon.exe", "svchost.exe", "services.exe",
                 "System", "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
 
-        public static IEnumerable<string> getRunningProcList() {
+        public static List<string> getRunningProcList() {
             // Get list of all running process names
             IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
 
@@ -23,11 +23,15 @@ namespace trakr_sharp.Utils {
             // Order list alphabetically
             filteredProcs = filteredProcs.OrderBy(proc => proc[0]);
 
-            return filteredProcs;
+            return filteredProcs.ToList();
         }
 
         private static bool ignoredProc(string proc) {
             return ignoredProcs.Contains(proc);
+        }
+
+        public static void Print(object msg) {
+            Debug.WriteLine(msg);
         }
     }
 }

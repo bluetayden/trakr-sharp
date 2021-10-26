@@ -11,7 +11,8 @@ using System.Windows.Forms;
 namespace trakr_sharp {
     public partial class AddProgramsForm : Form {
         // Fields
-        private IEnumerable<string> _runningProcs;
+        private List<string> _runningProcs = new List<string>();
+        private List<string> _selectedProcs = new List<string>();
 
         // Constructor
         public AddProgramsForm() {
@@ -20,7 +21,7 @@ namespace trakr_sharp {
             // Get list of running systems procs
             this._runningProcs = Utils.SysCalls.getRunningProcList();
             // Store the list in runningProcListBox
-            populateRunningProcListBox();
+            queryRunningProcListBox();
         }
 
         // Member functions
@@ -28,49 +29,60 @@ namespace trakr_sharp {
             this.DialogResult = DialogResult.Cancel;
         }
 
-        private void addButton_Click(object sender, EventArgs e) {
-            // Loop through all checked items in runningProcListBox
-            for (int i = 0; i < this.runningProcListBox.Items.Count; i++) {
-                // If currItem is checked
-                if (this.runningProcListBox.GetItemChecked(i)) {
-                    object currItem = runningProcListBox.Items[i];
-
-                    // Add it to selectedProcListBox and remove from runningProcListBox
-                    selectedProcListBox.Items.Add(currItem);
-                    runningProcListBox.Items.Remove(currItem);
-                }
-            }
-        }
-
-        private void removeButton_Click(object sender, EventArgs e) {
-            // Loop through all checked items in selectedProcListBox
-            for (int i = 0; i < this.selectedProcListBox.Items.Count; i++) {
-                // If currItem is checked
-                if (this.selectedProcListBox.GetItemChecked(i)) {
-                    object currItem = selectedProcListBox.Items[i];
-
-                    // Add it to runningProcListBox and remove from selectedProcListBox
-                    runningProcListBox.Items.Add(currItem);
-                    selectedProcListBox.Items.Remove(currItem);
-                }
-            }
-        }
-
+        // Called when this.searchBox raises a public valid query event
         private void searchBox_OnValidQuery(Controls.SearchBox sender, string query) {
-            populateRunningProcListBox(query);
+            queryRunningProcListBox(query);
         }
 
-        private void populateRunningProcListBox(string query = "") {
+        // Called when an item in runningProcListBox has been checked
+        private void runningProcListBox_ItemCheck(object sender, ItemCheckEventArgs e) {
+            this.BeginInvoke((MethodInvoker)(() => updateProcListFields()));
+        }
+
+        // Updates _runningProcs and _selectedProcs from runningProcListBox's checked items
+        // and selectedProcListBox's unchecked items then populates the relevant list boxes
+        private void updateProcListFields() {
+            List<string> checkedItems = this.runningProcListBox.CheckedItems.Cast<string>().ToList();
+
+            // Update _runningProcs to not contain any of runningProcList's checked items 
+            this._runningProcs = this._runningProcs.Where(proc => !checkedItems.Contains(proc)).ToList();
+            // Update _selectedProcs to contain the checked items
+            this._selectedProcs.AddRange(checkedItems);
+
+            // Repopulate procListBoxes
+            populateProcListBoxes();
+        }
+
+        // Takes an optional procList and uses it to populate runningProcListBox
+        // otherwise populates using this._runningProcs. Also populates selectedProcListBox.
+        private void populateProcListBoxes(IEnumerable<string> procList = default) {
+            this.runningProcListBox.Items.Clear();
+            this.selectedProcListBox.Items.Clear();
+
+            // runningProcListBox
+            if (procList != default(IEnumerable<string>)) {
+                this.runningProcListBox.Items.AddRange(procList.ToArray<string>());
+            }
+            else {
+                this.runningProcListBox.Items.AddRange(this._runningProcs.ToArray<string>());
+            }
+
+            // selectedProcListBox
+            this.selectedProcListBox.Items.AddRange(this._selectedProcs.ToArray<string>());
+        }
+
+        // Filters the current items in runningProcListBox using an optional query
+        private void queryRunningProcListBox(string query = "") {
             // Clear runningProcListBox
             this.runningProcListBox.Items.Clear();
 
             // Add each proc in _runningProcs to runningProcListBox if contains query
             if (query != "") {
                 IEnumerable<string> filteredProcs = this._runningProcs.Where(proc => proc.Contains(query));
-                this.runningProcListBox.Items.AddRange(filteredProcs.ToArray<string>());
+                populateProcListBoxes(filteredProcs);
             }
             else {
-                this.runningProcListBox.Items.AddRange(_runningProcs.ToArray<string>());
+                populateProcListBoxes();
             }
         }
     }
