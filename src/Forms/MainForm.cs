@@ -12,6 +12,7 @@ namespace trakr_sharp {
     public partial class MainForm : Form {
         public MainForm() {
             InitializeComponent();
+
             printToProgramConsole("Welcome to trakr\r\n");
         }
 

@@ -66,6 +66,7 @@ namespace trakr_sharp {
             // applyButton
             // 
             this.applyButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.applyButton.Enabled = false;
             this.applyButton.Location = new System.Drawing.Point(80, 6);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
@@ -150,6 +151,7 @@ namespace trakr_sharp {
             // addButton
             // 
             this.addButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.addButton.Enabled = false;
             this.addButton.Location = new System.Drawing.Point(3, 52);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(33, 23);
@@ -161,6 +163,7 @@ namespace trakr_sharp {
             // removeButton
             // 
             this.removeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.removeButton.Enabled = false;
             this.removeButton.Location = new System.Drawing.Point(3, 81);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(33, 23);

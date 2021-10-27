@@ -59,35 +59,13 @@ namespace trakr_sharp {
         // Called whenever an item in runningProcListBox is checked
         private void runningProcList_ItemCheck(object sender, ItemCheckEventArgs e) {
             this.BeginInvoke((MethodInvoker)(() => updateCheckedRunningProcs(e.Index)));
+            this.BeginInvoke((MethodInvoker)(() => handleButtonEnabling()));
         }
 
         // Called whenever an item in selectedProcListBox is checked
         private void selectedProcList_ItemCheck(object sender, ItemCheckEventArgs e) {
             this.BeginInvoke((MethodInvoker)(() => updateCheckedSelectedProcs(e.Index)));
-        }
-
-        // Updates _runningProcs and _selectedProcs for an addition action
-        private void updateProcListFieldsForAddition() {
-            // Update _selectedProcs to contain runningProcList's checked items
-            this._selectedProcs.AddRange(this._checkedRunningProcs);
-            // Update _runningProcs to not contain any of runningProcList's checked items 
-            this._runningProcs = this._runningProcs.Where(proc => !this._checkedRunningProcs.Contains(proc)).ToList();
-            // Clear _checkedRunningProcs
-            this._checkedRunningProcs.Clear();
-
-            Utils.SysCalls.Print("Updated proc list fields (addition)");
-        }
-
-        // Updates _runningProcs and _selectedProcs for a removal action
-        private void updateProcListFieldsForRemoval() {
-            // Update _selectedProcs to remove any of selectedProcList's checked items
-            this._selectedProcs.RemoveAll(proc => this.selectedProcListBox.CheckedItems.Cast<string>().ToList().Contains(proc));
-            // Update _runningProcs to contain selectedProcList's checked items
-            this._runningProcs.AddRange(this.selectedProcListBox.CheckedItems.Cast<string>().ToList());
-            // Clear _checkedSelectedProcs
-            this._checkedSelectedProcs.Clear();
-
-            Utils.SysCalls.Print("Updated proc list fields (removal)");
+            this.BeginInvoke((MethodInvoker)(() => handleButtonEnabling()));
         }
 
         // Updates _checkedRunningProcs using the state of the item at runningProcListBox.Items[cIndex]
@@ -124,6 +102,30 @@ namespace trakr_sharp {
             Utils.SysCalls.Print("Updated _checkedSelectedProcs " + this._checkedSelectedProcs.Count);
         }
 
+        // Updates _runningProcs and _selectedProcs for an addition action
+        private void updateProcListFieldsForAddition() {
+            // Update _selectedProcs to contain runningProcList's checked items
+            this._selectedProcs.AddRange(this._checkedRunningProcs);
+            // Update _runningProcs to not contain any of runningProcList's checked items 
+            this._runningProcs = this._runningProcs.Where(proc => !this._checkedRunningProcs.Contains(proc)).ToList();
+            // Clear _checkedRunningProcs
+            this._checkedRunningProcs.Clear();
+
+            Utils.SysCalls.Print("Updated proc list fields (addition)");
+        }
+
+        // Updates _runningProcs and _selectedProcs for a removal action
+        private void updateProcListFieldsForRemoval() {
+            // Update _selectedProcs to remove any of selectedProcList's checked items
+            this._selectedProcs.RemoveAll(proc => this.selectedProcListBox.CheckedItems.Cast<string>().ToList().Contains(proc));
+            // Update _runningProcs to contain selectedProcList's checked items
+            this._runningProcs.AddRange(this.selectedProcListBox.CheckedItems.Cast<string>().ToList());
+            // Clear _checkedSelectedProcs
+            this._checkedSelectedProcs.Clear();
+
+            Utils.SysCalls.Print("Updated proc list fields (removal)");
+        }
+
         // Takes an optional procList (i.e. when user querying) and uses it to populate runningProcListBox.
         // Otherwise populates using _runningProcs. Also populates selectedProcListBox with _selectedProcs.
         private void populateProcListBoxes(IEnumerable<string> procList = default) {
@@ -154,6 +156,9 @@ namespace trakr_sharp {
             this.runningProcListBox.EndUpdate();
             this.selectedProcListBox.EndUpdate();
 
+            // Set button enabled properties
+            handleButtonEnabling();
+
             Utils.SysCalls.Print("Repopulated procListBoxes");
         }
 
@@ -174,12 +179,12 @@ namespace trakr_sharp {
             Utils.SysCalls.Print("Queried runningProcListBox");
         }
 
-        // Restores checked items of the runningProcListBox that were lost during search/repopulation
+        // Restores checked states of the runningProcListBox that were lost during search/repopulation
         private void restoreRunningProcListBoxChecks() {
             // Suppress listbox UI updates
             this.runningProcListBox.BeginUpdate();
 
-            // Temporarily disable remove ItemChecked event
+            // Temporarily disable ItemChecked event
             this.runningProcListBox.ItemCheck -= this.runningProcList_ItemCheck;
 
             // Restore checks based on _checkedRunningProcs
@@ -199,12 +204,12 @@ namespace trakr_sharp {
             Utils.SysCalls.Print("Restored runningProcListBox checks");
         }
 
-        // Restores checked items of the selectedProcListBox that were lost during search/repopulation
+        // Restores checked states of the selectedProcListBox that were lost during search/repopulation
         private void restoreSelectedProcListBoxChecks() {
             // Suppress listbox UI updates
             this.selectedProcListBox.BeginUpdate();
 
-            // Temporarily disable remove ItemChecked event
+            // Temporarily disable ItemChecked event
             this.selectedProcListBox.ItemCheck -= this.selectedProcList_ItemCheck;
 
             // Restore checks based on _selectedRunningProcs
@@ -222,6 +227,18 @@ namespace trakr_sharp {
             this.selectedProcListBox.EndUpdate();
 
             Utils.SysCalls.Print("Restored selectedProcListBox checks");
+        }
+
+        // Controls enabling/disabling of buttons depending on listBox selections/population
+        private void handleButtonEnabling() {
+            // Add button
+            this.addButton.Enabled = this._checkedRunningProcs.Count > 0;
+
+            // Remove button
+            this.removeButton.Enabled = this._checkedSelectedProcs.Count > 0;
+
+            // Apply button
+            this.applyButton.Enabled = this.selectedProcListBox.Items.Count > 0;
         }
     }
 }
