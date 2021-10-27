@@ -50,5 +50,9 @@ namespace trakr_sharp.Controls {
                 OnValidQuery?.Invoke(this, this.queryBox.Text);
             }
         }
+
+        public void clearQueryBox() {
+            this.queryBox.Text = _placeholderText;
+        }
     }
 }

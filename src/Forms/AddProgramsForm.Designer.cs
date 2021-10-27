@@ -31,10 +31,14 @@ namespace trakr_sharp {
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.runningProcListBox = new System.Windows.Forms.CheckedListBox();
             this.selectedProcListBox = new System.Windows.Forms.CheckedListBox();
+            this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.addButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             this.searchBox = new trakr_sharp.Controls.SearchBox();
             this.panel1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -89,12 +93,13 @@ namespace trakr_sharp {
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45F));
             this.tableLayoutPanel2.Controls.Add(this.runningProcListBox, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.selectedProcListBox, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.selectedProcListBox, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -105,24 +110,64 @@ namespace trakr_sharp {
             // 
             // runningProcListBox
             // 
+            this.runningProcListBox.CheckOnClick = true;
             this.runningProcListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.runningProcListBox.FormattingEnabled = true;
             this.runningProcListBox.Location = new System.Drawing.Point(3, 3);
             this.runningProcListBox.Name = "runningProcListBox";
-            this.runningProcListBox.Size = new System.Drawing.Size(223, 157);
+            this.runningProcListBox.Size = new System.Drawing.Size(200, 157);
             this.runningProcListBox.Sorted = true;
             this.runningProcListBox.TabIndex = 1;
-            this.runningProcListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.runningProcListBox_ItemCheck);
+            this.runningProcListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.runningProcList_ItemCheck);
             // 
             // selectedProcListBox
             // 
+            this.selectedProcListBox.CheckOnClick = true;
             this.selectedProcListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.selectedProcListBox.FormattingEnabled = true;
-            this.selectedProcListBox.Location = new System.Drawing.Point(232, 3);
+            this.selectedProcListBox.Location = new System.Drawing.Point(254, 3);
             this.selectedProcListBox.Name = "selectedProcListBox";
-            this.selectedProcListBox.Size = new System.Drawing.Size(223, 157);
+            this.selectedProcListBox.Size = new System.Drawing.Size(201, 157);
             this.selectedProcListBox.Sorted = true;
             this.selectedProcListBox.TabIndex = 2;
+            this.selectedProcListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.selectedProcList_ItemCheck);
+            // 
+            // tableLayoutPanel3
+            // 
+            this.tableLayoutPanel3.ColumnCount = 1;
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Controls.Add(this.addButton, 0, 0);
+            this.tableLayoutPanel3.Controls.Add(this.removeButton, 0, 1);
+            this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(209, 3);
+            this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            this.tableLayoutPanel3.RowCount = 2;
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(39, 157);
+            this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // addButton
+            // 
+            this.addButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.addButton.Location = new System.Drawing.Point(3, 52);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(33, 23);
+            this.addButton.TabIndex = 0;
+            this.addButton.Text = ">>";
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            // 
+            // removeButton
+            // 
+            this.removeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.removeButton.Location = new System.Drawing.Point(3, 81);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(33, 23);
+            this.removeButton.TabIndex = 1;
+            this.removeButton.Text = "<<";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // searchBox
             // 
@@ -147,6 +192,7 @@ namespace trakr_sharp {
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -161,5 +207,8 @@ namespace trakr_sharp {
         private System.Windows.Forms.CheckedListBox runningProcListBox;
         private System.Windows.Forms.CheckedListBox selectedProcListBox;
         private Controls.SearchBox searchBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button removeButton;
     }
 }

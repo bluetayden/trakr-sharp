@@ -31,7 +31,9 @@ namespace trakr_sharp.Utils {
         }
 
         public static void Print(object msg) {
-            Debug.WriteLine(msg);
+            #if DEBUG
+                Debug.WriteLine(msg);
+            #endif
         }
     }
 }
