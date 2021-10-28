@@ -21,9 +21,9 @@ namespace trakr_sharp {
             InitializeComponent();
 
             // Get list of running systems procs
-            this._runningProcs = Utils.SysCalls.getRunningProcList();
+            this._runningProcs = Utils.SysCalls.GetRunningProcList();
             // Store the lists in runningProcListBox
-            populateProcListBoxes();
+            repopulateProcListBoxes();
         }
 
         // Member functions
@@ -40,7 +40,7 @@ namespace trakr_sharp {
             // Update _runningProcs and _selectedProcs
             updateProcListFieldsForAddition();
             // Repopulate the list boxes with the updated fields
-            populateProcListBoxes();
+            repopulateProcListBoxes();
 
             // Clear searchBox
             this.searchBox.clearQueryBox();
@@ -50,10 +50,22 @@ namespace trakr_sharp {
             // Update _runningProcs and _selectedProcs
             updateProcListFieldsForRemoval();
             // Repopulate the list boxes with the updated fields
-            populateProcListBoxes();
+            repopulateProcListBoxes();
 
             // Clear searchBox
             this.searchBox.clearQueryBox();
+        }
+
+        private void applyButton_Click(object sender, EventArgs e) {
+            // Add items in selectedProcListBox to db
+            Utils.Database.InsertPrograms(this._selectedProcs);
+            // Remove the items from _selectedProcs so they can't be accessed again
+            this._selectedProcs.Clear();
+
+            // Repopulate listboxes to reflect changes in _selectedProcs
+            repopulateProcListBoxes();
+            // Enable/Disable buttons accordingly
+            handleButtonEnabling();
         }
 
         // Called whenever an item in runningProcListBox is checked
@@ -104,9 +116,9 @@ namespace trakr_sharp {
 
         // Updates _runningProcs and _selectedProcs for an addition action
         private void updateProcListFieldsForAddition() {
-            // Update _selectedProcs to contain runningProcList's checked items
+            // Update _selectedProcs to contain runningProcListBox's checked items
             this._selectedProcs.AddRange(this._checkedRunningProcs);
-            // Update _runningProcs to not contain any of runningProcList's checked items 
+            // Update _runningProcs to not contain any of runningProcListBox's checked items 
             this._runningProcs = this._runningProcs.Where(proc => !this._checkedRunningProcs.Contains(proc)).ToList();
             // Clear _checkedRunningProcs
             this._checkedRunningProcs.Clear();
@@ -116,10 +128,10 @@ namespace trakr_sharp {
 
         // Updates _runningProcs and _selectedProcs for a removal action
         private void updateProcListFieldsForRemoval() {
-            // Update _selectedProcs to remove any of selectedProcList's checked items
-            this._selectedProcs.RemoveAll(proc => this.selectedProcListBox.CheckedItems.Cast<string>().ToList().Contains(proc));
-            // Update _runningProcs to contain selectedProcList's checked items
-            this._runningProcs.AddRange(this.selectedProcListBox.CheckedItems.Cast<string>().ToList());
+            // Update _runningProcs to contain selectedProcListBox's checked items
+            this._runningProcs.AddRange(this._checkedSelectedProcs);
+            // Update _selectedProcs to remove any of selectedProcListBox's checked items
+            this._selectedProcs = this._selectedProcs.Where(proc => !this._checkedSelectedProcs.Contains(proc)).ToList();
             // Clear _checkedSelectedProcs
             this._checkedSelectedProcs.Clear();
 
@@ -128,7 +140,7 @@ namespace trakr_sharp {
 
         // Takes an optional procList (i.e. when user querying) and uses it to populate runningProcListBox.
         // Otherwise populates using _runningProcs. Also populates selectedProcListBox with _selectedProcs.
-        private void populateProcListBoxes(IEnumerable<string> procList = default) {
+        private void repopulateProcListBoxes(IEnumerable<string> procList = default) {
             // Suppress listbox UI updates
             this.runningProcListBox.BeginUpdate();
             this.selectedProcListBox.BeginUpdate();
@@ -170,10 +182,10 @@ namespace trakr_sharp {
             // Add each proc in _runningProcs to runningProcListBox if contains query
             if (query != "") {
                 IEnumerable<string> filteredProcs = this._runningProcs.Where(proc => proc.ToLower().Contains(query));
-                populateProcListBoxes(filteredProcs);
+                repopulateProcListBoxes(filteredProcs);
             }
             else {
-                populateProcListBoxes();
+                repopulateProcListBoxes();
             }
 
             Utils.SysCalls.Print("Queried runningProcListBox");

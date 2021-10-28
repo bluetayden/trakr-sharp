@@ -73,6 +73,7 @@ namespace trakr_sharp {
             this.applyButton.TabIndex = 0;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
             // 
             // tableLayoutPanel1
             // 

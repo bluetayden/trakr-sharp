@@ -13,6 +13,7 @@ namespace trakr_sharp {
         public MainForm() {
             InitializeComponent();
 
+            Utils.Database.Init();
             printToProgramConsole("Welcome to trakr\r\n");
         }
 
