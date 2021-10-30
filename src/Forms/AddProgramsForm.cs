@@ -15,7 +15,7 @@ namespace trakr_sharp {
             InitializeComponent();
 
             // Initialise this.runningProcListBox
-            this.runningProcList.setProcs(Utils.SysCalls.GetRunningProcList());
+            this.runningProcList.setProcs(Utils.SysCalls.GetUntrackedRunningProcList());
 
             // Repopulate both procListBoxes
             repopulateProcListBoxes();

@@ -12,7 +12,23 @@ namespace trakr_sharp.Utils {
             "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System", 
             "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
 
+        // List of currently running processes on the device
         public static List<string> GetRunningProcList() {
+            // Get list of all running process names
+            IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
+
+            // Filter unwanted processes from list
+            IEnumerable<string> filteredProcs = runningProcs.Where(proc => !_ignoredProcs.Contains(proc));
+            // Remove duplicates from list
+            filteredProcs = filteredProcs.Distinct();
+            // Order list alphabetically
+            filteredProcs = filteredProcs.OrderBy(proc => proc[0]);
+
+            return filteredProcs.ToList();
+        }
+
+        // List of currently running processes on the device, without procs that are already stored in the db
+        public static List<string> GetUntrackedRunningProcList() {
             // Get list of all running process names
             IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
 

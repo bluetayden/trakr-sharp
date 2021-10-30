@@ -15,6 +15,8 @@ namespace trakr_sharp {
             InitializeComponent();
 
             Utils.Database.Init();
+            this.trackingList.addTrackedProcs(Utils.Database.GetProcessNameList());
+
             printToProgramConsole("Welcome to trakr\r\n");
         }
         #endregion
@@ -24,6 +26,14 @@ namespace trakr_sharp {
             using (AddProgramsForm addProgramsForm = new AddProgramsForm()) {
                 addProgramsForm.ShowDialog();
             }
+        }
+
+        // Runs whenever CheckRunningProcsTimer elapses
+        private void CheckRunningProcsTimer_Tick(object sender, EventArgs e) {
+            // Update this.trackingList
+            this.trackingList.addTrackedProcs(Utils.Database.GetProcessNameList());
+            this.trackingList.updateRunningTrackedProcs(Utils.SysCalls.GetRunningProcList());
+            this.trackingList.updateListBox();
         }
         #endregion
 

@@ -69,6 +69,12 @@
     <Compile Include="Controls\SearchBox.Designer.cs">
       <DependentUpon>SearchBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TrackingList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TrackingList.Designer.cs">
+      <DependentUpon>TrackingList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddProgramsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\SearchBox.resx">
       <DependentUpon>SearchBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TrackingList.resx">
+      <DependentUpon>TrackingList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddProgramsForm.resx">
       <DependentUpon>AddProgramsForm.cs</DependentUpon>
