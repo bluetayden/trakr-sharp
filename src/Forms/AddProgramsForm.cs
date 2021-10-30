@@ -66,7 +66,7 @@ namespace trakr_sharp {
 
         private void applyButton_Click(object sender, EventArgs e) {
             // Add items in selectedProcListBox to db
-            Utils.Database.InsertPrograms(this.selectedProcList.getProcs());
+            Utils.Database.InsertProcs(this.selectedProcList.getProcs());
             // Remove the items from _selectedProcs so they can't be accessed again
             this.selectedProcList.setProcs(new List<string>());
 
