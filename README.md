@@ -6,6 +6,6 @@
  VS Community 2019 was used for development.  
 
  Open `trakr-sharp.sln`  
+ Select either `Debug` or `Release` as desired  
  Select `Build > Build Solution`  
- Select `Build > Clean Solution`  
- Press F5  
+ Press F5 to Debug or find the compiled program in `trakr-sharp/src/bin/Release`

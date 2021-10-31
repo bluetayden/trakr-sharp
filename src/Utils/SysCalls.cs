@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Data;
 using System.Diagnostics;
 
 namespace trakr_sharp.Utils {
     class SysCalls {
-        private static readonly string[] _ignoredProcs = new string[] {"System Idle Process", "explorer.exe", "smss.exe", 
-            "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System", 
+        private static readonly string[] _ignoredProcs = new string[] {"System Idle Process", "explorer.exe", "smss.exe",
+            "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System",
             "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
 
         // List of currently running processes on the device
@@ -28,7 +29,7 @@ namespace trakr_sharp.Utils {
         }
 
         // List of currently running processes on the device, without procs that are already stored in the db
-        public static List<string> GetUntrackedRunningProcList() {
+        public static List<string> GetRunningUntrackedProcList() {
             // Get list of all running process names
             IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
 
@@ -44,6 +45,24 @@ namespace trakr_sharp.Utils {
             filteredProcs = filteredProcs.OrderBy(proc => proc[0]);
 
             return filteredProcs.ToList();
+        }
+
+        // List of currently running process on the device that are being tracked in the db
+        public static List<string> GetRunningTrackedProcList() {
+            List<string> trackedProcs = Utils.Database.GetProcessNameList();
+
+            // Filter currently running process to only contain those being tracked
+            trackedProcs = GetRunningProcList().Where(proc => trackedProcs.Contains(proc)).ToList();
+
+            return trackedProcs;
+        }
+
+        public static void PrintDataTable(DataTable table) {
+            foreach (DataRow row in table.Rows) {
+                foreach (var item in row.ItemArray) {
+                    Print(item);
+                }
+            }
         }
 
         public static void Print(object msg) {

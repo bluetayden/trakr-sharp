@@ -10,82 +10,62 @@ using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
-        #region Init
-        private List<string> _trackedProcs = new List<string>(); // List of tracked procs from db
-        private List<string> _runningTrackedProcs = new List<string>(); // List of procs that are running and in db
+        private DataTable _trackedProcs { get; set; }
 
         public TrackingList() {
             InitializeComponent();
         }
-        #endregion
 
-        #region LocalEventHandlers
-        // Called whenever a new item is added to this._trackedList, draws contents of _trackedProcs
-        // and shades them green if they are also in _runningTrackedProcs
-        private void listBox_DrawItem(object sender, DrawItemEventArgs e) {
-            // Get item at e.Index from this.listBox
-            string item = this.listBox.Items[e.Index].ToString();
+        // Repopulates this.listView using a DataTable of tracked procs from the db
+        public void repopulateListView(DataTable trackedTable) {
+            if (trackedTable.Rows.Count != this.listView.Items.Count) {
+                this.listView.BeginUpdate();
+                this.listView.Items.Clear();
 
-            // Draw the background depending on if the proc is running
-            if (_runningTrackedProcs.Contains(item)) {
-                e.Graphics.FillRectangle(new SolidBrush(Color.LightGreen), e.Bounds);
-            }
-            else {
-                e.DrawBackground();
-            }
+                // Loop through each row in DataTable
+                foreach (DataRow row in trackedTable.Rows) {
+                    // Create a new LVItem (skip adding data to first column)
+                    ListViewItem item = new ListViewItem();
 
-            // If item is selected
-            if ((e.State & DrawItemState.Selected) == DrawItemState.Selected) {
-                // Draw text with highlight colour
-                e.Graphics.DrawString(item, this.Font, SystemBrushes.HighlightText, e.Bounds.Left, e.Bounds.Top);
-            }
-            // If item not selected
-            else {
-                // Draw regular text colour
-                e.Graphics.DrawString(item, this.Font, SystemBrushes.ControlText, e.Bounds.Left, e.Bounds.Top);
+                    // Add values from DataTable to each column in the LV item
+                    for (int i = 0; i < trackedTable.Columns.Count; i++) {
+                        item.SubItems.Add(row[i].ToString());
+                    }
+
+                    // Add the item to this.listView
+                    listView.Items.Add(item);
+                }
+
+                this.listView.EndUpdate();
             }
         }
 
-        // On leaving listBox focus, disable item highlighting
-        private void listBox_Leave(object sender, EventArgs e) {
-            this.listBox.SelectedIndex = -1;
-        }
-        #endregion
-
-        #region Methods
-        // Handles listBox reflecting addition of new programs to the db during runtime
-        public void addTrackedProcs(List<string> procs) {
-            // Add procs to _trackedProcs that were not already there
-            this._trackedProcs.AddRange(procs.Where(proc => !this._trackedProcs.Contains(proc)));
-        }
-
-        // Updates _runningTrackedProcs based on currently running system procs
-        public void updateRunningTrackedProcs(List<string> runningProcs) {
-            this._runningTrackedProcs.Clear();
-
-            // Add every item in runningProcs that is in _trackedProcs to _runningTrackedProcs
-            this._runningTrackedProcs = runningProcs.Where(proc => _trackedProcs.Contains(proc)).Cast<string>().ToList();
-        }
-
-        // Update this.listBox to reflect changes in _runningTrackedProcs
-        public void updateListBox() {
-            this.listBox.BeginUpdate();
-
-            // Clear this.listBox
-            this.listBox.Items.Clear();
-
-            // Add values from _trackedProcs to this.listBox (implicitly calls listBox_DrawItem which handles green shading)
-            foreach (string proc in this._trackedProcs) {
-                this.listBox.Items.Add(proc);
+        // Uses a list to shade items in this.listView that are running green
+        public void updateRunningColors(List<string> running) {
+            foreach (ListViewItem lv_item in this.listView.Items) {
+                if (running.Contains(lv_item.SubItems[6].Text)) {
+                    lv_item.BackColor = Color.PaleGreen;
+                }
+                else {
+                    lv_item.BackColor = Color.White;
+                }
             }
-
-            // Remove highlighting of first item on update
-            this.listBox.SelectedIndex = -1;
-
-            this.listBox.EndUpdate();
-
-            Utils.SysCalls.Print("Updated TrackingList ListBox");
         }
-        #endregion
+
+        // Resizes columns using fixed proportions
+        private void resizeColumnHeaders() {
+            int width = this.listView.Width - 26;
+
+            listView.Columns[0].Width = 24;
+            listView.Columns[1].Width = (int)(width * 0.3);
+            for (int i = 2; i < this.listView.Columns.Count; i++) {
+                listView.Columns[i].Width = (int)(width * 0.175);
+            }
+        }
+
+        // Called whenever TrackingList is forced to resize (replace with MainForm_ResizeEnd later)
+        private void TrackingList_Resize(object sender, EventArgs e) {
+            resizeColumnHeaders();
+        }
     }
 }

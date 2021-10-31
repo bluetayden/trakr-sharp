@@ -31,8 +31,8 @@ namespace trakr_sharp {
             this.deleteButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
-            this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.CheckRunningProcsTimer = new System.Windows.Forms.Timer(this.components);
+            this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
             this.SuspendLayout();
@@ -115,6 +115,12 @@ namespace trakr_sharp {
             this.programConsole.TabIndex = 3;
             this.programConsole.WordWrap = false;
             // 
+            // CheckRunningProcsTimer
+            // 
+            this.CheckRunningProcsTimer.Enabled = true;
+            this.CheckRunningProcsTimer.Interval = 5000;
+            this.CheckRunningProcsTimer.Tick += new System.EventHandler(this.CheckRunningProcsTimer_Tick);
+            // 
             // trackingList
             // 
             this.trackingList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -122,12 +128,6 @@ namespace trakr_sharp {
             this.trackingList.Name = "trackingList";
             this.trackingList.Size = new System.Drawing.Size(462, 202);
             this.trackingList.TabIndex = 4;
-            // 
-            // CheckRunningProcsTimer
-            // 
-            this.CheckRunningProcsTimer.Enabled = true;
-            this.CheckRunningProcsTimer.Interval = 5000;
-            this.CheckRunningProcsTimer.Tick += new System.EventHandler(this.CheckRunningProcsTimer_Tick);
             // 
             // MainForm
             // 
@@ -153,8 +153,8 @@ namespace trakr_sharp {
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.TextBox programConsole;
-        private Controls.TrackingList trackingList;
         private System.Windows.Forms.Timer CheckRunningProcsTimer;
+        private Controls.TrackingList trackingList;
     }
 }
 
