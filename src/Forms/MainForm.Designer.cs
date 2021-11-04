@@ -24,14 +24,12 @@ namespace trakr_sharp {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.components = new System.ComponentModel.Container();
             this.mainGridLayout = new System.Windows.Forms.TableLayoutPanel();
             this.buttonLayout = new System.Windows.Forms.GroupBox();
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
-            this.CheckRunningProcsTimer = new System.Windows.Forms.Timer(this.components);
             this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
@@ -73,7 +71,7 @@ namespace trakr_sharp {
             this.editButton.Location = new System.Drawing.Point(3, 62);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(144, 23);
-            this.editButton.TabIndex = 0;
+            this.editButton.TabIndex = 2;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
             // 
@@ -112,14 +110,8 @@ namespace trakr_sharp {
             this.programConsole.ReadOnly = true;
             this.programConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.programConsole.Size = new System.Drawing.Size(462, 107);
-            this.programConsole.TabIndex = 3;
+            this.programConsole.TabIndex = 1;
             this.programConsole.WordWrap = false;
-            // 
-            // CheckRunningProcsTimer
-            // 
-            this.CheckRunningProcsTimer.Enabled = true;
-            this.CheckRunningProcsTimer.Interval = 5000;
-            this.CheckRunningProcsTimer.Tick += new System.EventHandler(this.CheckRunningProcsTimer_Tick);
             // 
             // trackingList
             // 
@@ -127,7 +119,7 @@ namespace trakr_sharp {
             this.trackingList.Location = new System.Drawing.Point(3, 3);
             this.trackingList.Name = "trackingList";
             this.trackingList.Size = new System.Drawing.Size(462, 202);
-            this.trackingList.TabIndex = 4;
+            this.trackingList.TabIndex = 2;
             // 
             // MainForm
             // 
@@ -135,9 +127,12 @@ namespace trakr_sharp {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(624, 321);
             this.Controls.Add(this.mainGridLayout);
+            this.MinimumSize = new System.Drawing.Size(640, 360);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "trakr";
+            this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainGridLayout.ResumeLayout(false);
             this.mainGridLayout.PerformLayout();
             this.buttonLayout.ResumeLayout(false);
@@ -153,7 +148,6 @@ namespace trakr_sharp {
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.TextBox programConsole;
-        private System.Windows.Forms.Timer CheckRunningProcsTimer;
         private Controls.TrackingList trackingList;
     }
 }

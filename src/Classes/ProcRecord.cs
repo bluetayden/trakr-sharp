@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace trakr_sharp.Utils {
+﻿namespace trakr_sharp {
     public class ProcRecord {
         public string proc_name { get; set; }
         public string program_name { get; set; }

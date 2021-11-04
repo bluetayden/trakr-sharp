@@ -11,6 +11,9 @@ using System.Windows.Forms;
 namespace trakr_sharp {
     public partial class AddProgramsForm : Form {
         #region Init
+        public delegate void OnDBUpdateDelegate(AddProgramsForm sender, string query); // Create delegator for public query event
+        public event OnDBUpdateDelegate OnDBUpdate; // Create instance of that event from delegator
+
         public AddProgramsForm() {
             InitializeComponent();
 
@@ -40,8 +43,13 @@ namespace trakr_sharp {
         #endregion
 
         #region LocalEventHandlers
+        private void AddProgramsForm_FormClosed(object sender, FormClosedEventArgs e) {
+            // TO DO: RESOURCE CLEANUP
+            Utils.SysCalls.Print("AddProgramsForm closed");
+        }
+
         private void cancelButton_Click(object sender, EventArgs e) {
-            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
 
         private void addButton_Click(object sender, EventArgs e) {
@@ -67,6 +75,9 @@ namespace trakr_sharp {
         private void applyButton_Click(object sender, EventArgs e) {
             // Add items in selectedProcListBox to db
             Utils.Database.InsertProcs(this.selectedProcList.getProcs());
+            // Raise public event that db was altered
+            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " entries to database.");
+
             // Remove the items from _selectedProcs so they can't be accessed again
             this.selectedProcList.setProcs(new List<string>());
 

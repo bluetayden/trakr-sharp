@@ -10,25 +10,27 @@ using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
-        private DataTable _trackedProcs { get; set; }
+        private DataTable _trackedTable { get; set; }
 
         public TrackingList() {
             InitializeComponent();
         }
 
-        // Repopulates this.listView using a DataTable of tracked procs from the db
-        public void repopulateListView(DataTable trackedTable) {
-            if (trackedTable.Rows.Count != this.listView.Items.Count) {
+        // Updates the _trackedTable field and repopulates this.listView with it
+        public void repopulateListView() {
+            _trackedTable = Utils.Database.GetDataTable();
+
+            if (_trackedTable.Rows.Count != this.listView.Items.Count) {
                 this.listView.BeginUpdate();
                 this.listView.Items.Clear();
 
                 // Loop through each row in DataTable
-                foreach (DataRow row in trackedTable.Rows) {
+                foreach (DataRow row in _trackedTable.Rows) {
                     // Create a new LVItem (skip adding data to first column)
                     ListViewItem item = new ListViewItem();
 
                     // Add values from DataTable to each column in the LV item
-                    for (int i = 0; i < trackedTable.Columns.Count; i++) {
+                    for (int i = 0; i < _trackedTable.Columns.Count; i++) {
                         item.SubItems.Add(row[i].ToString());
                     }
 
@@ -53,7 +55,7 @@ namespace trakr_sharp.Controls {
         }
 
         // Resizes columns using fixed proportions
-        private void resizeColumnHeaders() {
+        public void resizeColumnHeaders() {
             int width = this.listView.Width - 26;
 
             listView.Columns[0].Width = 24;
@@ -61,11 +63,6 @@ namespace trakr_sharp.Controls {
             for (int i = 2; i < this.listView.Columns.Count; i++) {
                 listView.Columns[i].Width = (int)(width * 0.175);
             }
-        }
-
-        // Called whenever TrackingList is forced to resize (replace with MainForm_ResizeEnd later)
-        private void TrackingList_Resize(object sender, EventArgs e) {
-            resizeColumnHeaders();
         }
     }
 }

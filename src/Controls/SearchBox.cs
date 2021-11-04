@@ -11,9 +11,9 @@ using System.Windows.Forms;
 namespace trakr_sharp.Controls {
     public partial class SearchBox : UserControl {
         // Fields
-        private readonly string _placeholderText = "Search...";
         public delegate void OnValidQueryDelegate(SearchBox sender, string query); // Create delegator for public query event
         public event OnValidQueryDelegate OnValidQuery; // Create instance of that event from delegator
+        private readonly string _placeholderText = "Search...";
 
         // Constructor
         public SearchBox() {

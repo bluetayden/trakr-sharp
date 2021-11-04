@@ -28,12 +28,12 @@ namespace trakr_sharp {
             System.Windows.Forms.TableLayoutPanel addRemovePanel;
             System.Windows.Forms.Panel applyCancelPanel;
             System.Windows.Forms.TableLayoutPanel mainLayout;
-            this.removeButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
-            this.applyButton = new System.Windows.Forms.Button();
-            this.cancelButton = new System.Windows.Forms.Button();
+            this.removeButton = new System.Windows.Forms.Button();
             this.runningProcList = new trakr_sharp.Controls.ProcCheckedListBox();
             this.selectedProcList = new trakr_sharp.Controls.ProcCheckedListBox();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.applyButton = new System.Windows.Forms.Button();
             this.searchBox = new trakr_sharp.Controls.SearchBox();
             procListAndButtonPanel = new System.Windows.Forms.TableLayoutPanel();
             addRemovePanel = new System.Windows.Forms.TableLayoutPanel();
@@ -77,18 +77,6 @@ namespace trakr_sharp {
             addRemovePanel.Size = new System.Drawing.Size(39, 157);
             addRemovePanel.TabIndex = 0;
             // 
-            // removeButton
-            // 
-            this.removeButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.removeButton.Enabled = false;
-            this.removeButton.Location = new System.Drawing.Point(3, 81);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(33, 23);
-            this.removeButton.TabIndex = 1;
-            this.removeButton.Text = "<<";
-            this.removeButton.UseVisualStyleBackColor = true;
-            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
-            // 
             // addButton
             // 
             this.addButton.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -101,57 +89,17 @@ namespace trakr_sharp {
             this.addButton.UseVisualStyleBackColor = true;
             this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
-            // applyCancelPanel
+            // removeButton
             // 
-            applyCancelPanel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            applyCancelPanel.Controls.Add(this.cancelButton);
-            applyCancelPanel.Controls.Add(this.applyButton);
-            applyCancelPanel.Location = new System.Drawing.Point(306, 196);
-            applyCancelPanel.Margin = new System.Windows.Forms.Padding(0);
-            applyCancelPanel.Name = "applyCancelPanel";
-            applyCancelPanel.Size = new System.Drawing.Size(158, 35);
-            applyCancelPanel.TabIndex = 2;
-            // 
-            // applyButton
-            // 
-            this.applyButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.applyButton.Enabled = false;
-            this.applyButton.Location = new System.Drawing.Point(80, 6);
-            this.applyButton.Name = "applyButton";
-            this.applyButton.Size = new System.Drawing.Size(75, 23);
-            this.applyButton.TabIndex = 0;
-            this.applyButton.Text = "Apply";
-            this.applyButton.UseVisualStyleBackColor = true;
-            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
-            // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cancelButton.Location = new System.Drawing.Point(3, 6);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 1;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
-            // 
-            // mainLayout
-            // 
-            mainLayout.ColumnCount = 1;
-            mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            mainLayout.Controls.Add(applyCancelPanel, 0, 2);
-            mainLayout.Controls.Add(procListAndButtonPanel, 0, 0);
-            mainLayout.Controls.Add(this.searchBox, 0, 1);
-            mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            mainLayout.Location = new System.Drawing.Point(0, 0);
-            mainLayout.Margin = new System.Windows.Forms.Padding(0);
-            mainLayout.Name = "mainLayout";
-            mainLayout.RowCount = 3;
-            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            mainLayout.Size = new System.Drawing.Size(464, 231);
-            mainLayout.TabIndex = 0;
+            this.removeButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.removeButton.Enabled = false;
+            this.removeButton.Location = new System.Drawing.Point(3, 81);
+            this.removeButton.Name = "removeButton";
+            this.removeButton.Size = new System.Drawing.Size(33, 23);
+            this.removeButton.TabIndex = 1;
+            this.removeButton.Text = "<<";
+            this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // runningProcList
             // 
@@ -170,6 +118,58 @@ namespace trakr_sharp {
             this.selectedProcList.Size = new System.Drawing.Size(201, 157);
             this.selectedProcList.TabIndex = 2;
             this.selectedProcList.OnItemCheck += new trakr_sharp.Controls.ProcCheckedListBox.OnItemCheckDelegate(this.selectedProcList_OnItemCheck);
+            // 
+            // applyCancelPanel
+            // 
+            applyCancelPanel.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            applyCancelPanel.Controls.Add(this.cancelButton);
+            applyCancelPanel.Controls.Add(this.applyButton);
+            applyCancelPanel.Location = new System.Drawing.Point(306, 196);
+            applyCancelPanel.Margin = new System.Windows.Forms.Padding(0);
+            applyCancelPanel.Name = "applyCancelPanel";
+            applyCancelPanel.Size = new System.Drawing.Size(158, 35);
+            applyCancelPanel.TabIndex = 2;
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cancelButton.Location = new System.Drawing.Point(3, 6);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 1;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // applyButton
+            // 
+            this.applyButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.applyButton.Enabled = false;
+            this.applyButton.Location = new System.Drawing.Point(80, 6);
+            this.applyButton.Name = "applyButton";
+            this.applyButton.Size = new System.Drawing.Size(75, 23);
+            this.applyButton.TabIndex = 0;
+            this.applyButton.Text = "Apply";
+            this.applyButton.UseVisualStyleBackColor = true;
+            this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
+            // 
+            // mainLayout
+            // 
+            mainLayout.ColumnCount = 1;
+            mainLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            mainLayout.Controls.Add(applyCancelPanel, 0, 2);
+            mainLayout.Controls.Add(procListAndButtonPanel, 0, 0);
+            mainLayout.Controls.Add(this.searchBox, 0, 1);
+            mainLayout.Dock = System.Windows.Forms.DockStyle.Fill;
+            mainLayout.Location = new System.Drawing.Point(0, 0);
+            mainLayout.Margin = new System.Windows.Forms.Padding(0);
+            mainLayout.Name = "mainLayout";
+            mainLayout.RowCount = 3;
+            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+            mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            mainLayout.Size = new System.Drawing.Size(464, 231);
+            mainLayout.TabIndex = 0;
             // 
             // searchBox
             // 
@@ -190,6 +190,7 @@ namespace trakr_sharp {
             this.Name = "AddProgramsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add programs to trakr";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddProgramsForm_FormClosed);
             procListAndButtonPanel.ResumeLayout(false);
             addRemovePanel.ResumeLayout(false);
             applyCancelPanel.ResumeLayout(false);

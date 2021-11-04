@@ -31,7 +31,6 @@ namespace trakr_sharp.Controls {
             this.Date_Opened = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Hours_Used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Date_Added = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Process_Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listView
@@ -42,8 +41,7 @@ namespace trakr_sharp.Controls {
             this.Elapsed_Time,
             this.Date_Opened,
             this.Hours_Used,
-            this.Date_Added,
-            this.Process_Name});
+            this.Date_Added});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.FullRowSelect = true;
             this.listView.HideSelection = false;
@@ -83,10 +81,6 @@ namespace trakr_sharp.Controls {
             this.Date_Added.Text = "Added";
             this.Date_Added.Width = 70;
             // 
-            // Process_Name
-            // 
-            this.Process_Name.Width = 0;
-            // 
             // TrackingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -94,7 +88,6 @@ namespace trakr_sharp.Controls {
             this.Controls.Add(this.listView);
             this.Name = "TrackingList";
             this.Size = new System.Drawing.Size(434, 150);
-            this.Resize += new System.EventHandler(this.TrackingList_Resize);
             this.ResumeLayout(false);
 
         }
@@ -108,6 +101,5 @@ namespace trakr_sharp.Controls {
         private System.Windows.Forms.ColumnHeader Date_Opened;
         private System.Windows.Forms.ColumnHeader Hours_Used;
         private System.Windows.Forms.ColumnHeader Date_Added;
-        private System.Windows.Forms.ColumnHeader Process_Name;
     }
 }
