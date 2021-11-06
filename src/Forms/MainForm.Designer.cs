@@ -85,6 +85,7 @@ namespace trakr_sharp {
             this.deleteButton.Text = "Delete";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             // 
             // addButton
             // 

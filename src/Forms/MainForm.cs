@@ -28,8 +28,7 @@ namespace trakr_sharp {
 
             // this.trackingList init
             this.trackingList.resizeColumnHeaders();
-            this.trackingList.repopulateListView();
-            this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs());
+            updateTrackingList();
 
             // Get current window state for use in this.listView resizing later
             this._lastWindowState = this.WindowState;
@@ -47,21 +46,22 @@ namespace trakr_sharp {
             addProgramsForm.OnDBUpdate += addProgramsForm_OnDBUpdate;
         }
 
-        #region PublicEventHandlers
-        private void procMonitor_OnTrackedProcEvent(ProcMonitor sender, string msg) {
-            Utils.SysCalls.Print(msg);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.repopulateListView()));
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs())));
-        }
+        private void deleteButton_Click(object sender, EventArgs e) {
+            List<string> selectedItems = trackingList.GetSelectedItems();
 
-        private void addProgramsForm_OnDBUpdate(AddProgramsForm sender, string msg) {
-            Utils.SysCalls.Print(msg);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.repopulateListView()));
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs())));
+            if (selectedItems.Count > 0) {
+                // Update db
+                Utils.Database.DeleteProcs(selectedItems);
+
+                // Update this.trackingList
+                updateTrackingListInvoke();
+
+                // Print msg
+                string msg = String.Format("Deleted {0} entries from the database", selectedItems.Count);
+                Utils.SysCalls.Print(msg);
+                printToProgramConsole(msg);
+            }
         }
-        #endregion
 
         // Called when the form is finished resizing
         private void MainForm_ResizeEnd(object sender, EventArgs e) {
@@ -77,11 +77,50 @@ namespace trakr_sharp {
         }
         #endregion
 
+        #region PublicEventHandlers
+        private void procMonitor_OnTrackedProcEvent(ProcMonitor sender, string msg) {
+            Utils.SysCalls.Print(msg);
+            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+
+            // Only running colours need to be updated on this event
+            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs())));
+        }
+
+        private void addProgramsForm_OnDBUpdate(AddProgramsForm sender, string msg) {
+            // Print msg that entries were added to db
+            Utils.SysCalls.Print(msg);
+            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+
+            // Update _procMonitor
+            _procMonitor.UpdateTrackingFields();
+
+            // Update this.trackingList
+            updateTrackingListInvoke();
+        }
+        #endregion
+
         #region Methods
         // Prints msg with a timestamp to MainForm's programConsole
         private void printToProgramConsole(string msg) {
             string currTime = DateTime.Now.ToString("h:mm:ss");
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
+        }
+
+
+        // Update of this.trackingList (repopulation, updating running colours)
+        private void updateTrackingList() {
+            using (DataTable trackedTable = Utils.Database.GetDataTable()) {
+                this.trackingList.repopulateListView(trackedTable);
+            }
+            this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs());
+        }
+
+        // Same as updateTrackingList but with cross thread call support
+        private void updateTrackingListInvoke() {
+            using (DataTable trackedTable = Utils.Database.GetDataTable()) {
+                this.BeginInvoke((MethodInvoker)(() => this.trackingList.repopulateListView(trackedTable)));
+            }
+            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningColors(this._procMonitor.GetRunningProcs())));
         }
         #endregion
     }

@@ -49,6 +49,16 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        public static void DeleteProcs(List<string> proc_names) {
+            using (LiteDatabase db = ConnectToDatabase()) {
+                // Get 'tracked' collection from db
+                ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
+
+                // Delete record with proc_name fields that are in proc_names
+                trackedCol.DeleteMany(record => proc_names.Contains(record.proc_name));
+            }
+        }
+
         public static List<string> GetProcessNameList() {
             List<string> procNames = new List<string>();
 
@@ -92,7 +102,7 @@ namespace trakr_sharp.Utils {
             procTable.Columns.Add("Date_Opened");
             procTable.Columns.Add("Hours_Used");
             procTable.Columns.Add("Date_Added");
-            // unneeded for listView
+            // Used in listView but not displayed in UI
             procTable.Columns.Add("Process_Name");
 
             // Get all records from db as list

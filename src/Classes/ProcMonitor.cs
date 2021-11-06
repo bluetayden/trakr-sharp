@@ -10,11 +10,10 @@ namespace trakr_sharp {
         public delegate void OnTrackedProcEventDelegate(ProcMonitor sender, string msg); // Create delegator for public OnTrackedProc event
         public event OnTrackedProcEventDelegate OnTrackedProcEvent; // Create instance of that event from delegator
         private List<string> _trackedProcs;
-        private List<string> _runningTrackedProcs;
+        private Dictionary<string, int> _runningTrackedPairs;
 
         public ProcMonitor() {
-            _trackedProcs = Utils.Database.GetProcessNameList();
-            _runningTrackedProcs = Utils.SysCalls.GetRunningTrackedProcList();
+            UpdateTrackingFields();
 
             WatchProcessCreations();
             WatchProcessDeletions();
@@ -24,12 +23,19 @@ namespace trakr_sharp {
         #region Methods
         // Used by MainForm to print a msg for trackedProcs that were already running before trakr started
         public string GetStartupString() {
-            Utils.SysCalls.Print(_trackedProcs.Count + " processes are currently being tracked.");
-            return _trackedProcs.Count + " processes are currently being tracked.";
+            Utils.SysCalls.Print(_trackedProcs.Count + " processes are currently being tracked");
+            return _trackedProcs.Count + " processes are currently being tracked";
         }
 
         public List<string> GetRunningProcs() {
-            return _runningTrackedProcs;
+            List<string> keyList = new List<string>(_runningTrackedPairs.Keys);
+            return keyList;
+        }
+
+        // Used to update _trackedProcs and _runningTrackedPairs when a db update ocurrs or on init
+        public void UpdateTrackingFields() {
+            _trackedProcs = Utils.Database.GetProcessNameList();
+            _runningTrackedPairs = Utils.SysCalls.GetRunningTrackedPairs();
         }
 
         // Watches for when any new process is created
@@ -54,13 +60,22 @@ namespace trakr_sharp {
             ManagementBaseObject targetInstance = (ManagementBaseObject)e.NewEvent["TargetInstance"];
             string name = targetInstance["Name"]?.ToString();
 
-            // If the new process is in _trackedProcs and has not yet been added to _runningTrackedProcs
-            if (_trackedProcs.Contains(name) && !_runningTrackedProcs.Contains(name)) {
-                _runningTrackedProcs.Add(name);
+            //  If the new process is in _trackedProcs
+            if (_trackedProcs.Contains(name)) {
+                // If process has not yet been added to _runningTrackedProcs
+                if (!_runningTrackedPairs.ContainsKey(name)) {
+                    // Add KVP of name with instance count of 1
+                    _runningTrackedPairs.Add(name, 1);
 
-                // Send message that proc has started to MainForm
-                Utils.SysCalls.Print(name + " started");
-                OnTrackedProcEvent?.Invoke(this, name + " started");
+                    // Send message that proc has started to MainForm
+                    Utils.SysCalls.Print(name + " started");
+                    OnTrackedProcEvent?.Invoke(this, name + " started");
+                }
+                // else if process is already in _runningTrackedProcs, inc count
+                else {
+                    _runningTrackedPairs[name] += 1;
+                    Utils.SysCalls.Print("Updated instance count of " + name + " to " + _runningTrackedPairs[name]);
+                }
             }
 
             // Cleanup event args
@@ -71,11 +86,20 @@ namespace trakr_sharp {
             ManagementBaseObject targetInstance = (ManagementBaseObject)e.NewEvent["TargetInstance"];
             string name = targetInstance["Name"]?.ToString();
 
-            if (_trackedProcs.Contains(name) && _runningTrackedProcs.Contains(name)) {
-                _runningTrackedProcs.Remove(name);
+            // If stopped process in _runningTrackedPairs
+            if (_runningTrackedPairs.ContainsKey(name)) {
+                // Decrease instance count
+                _runningTrackedPairs[name] -= 1;
+                Utils.SysCalls.Print("Updated instance count of " + name + " to " + _runningTrackedPairs[name]);
 
-                Utils.SysCalls.Print(name + " stopped");
-                OnTrackedProcEvent?.Invoke(this, name + " stopped");
+                // If instance count is now 0
+                if (_runningTrackedPairs[name] == 0) {
+                    // remove key from _runningTrackedPairs
+                    _runningTrackedPairs.Remove(name);
+                    // print process stopped
+                    Utils.SysCalls.Print(name + " stopped");
+                    OnTrackedProcEvent?.Invoke(this, name + " stopped");
+                }
             }
 
             // Cleanup event args

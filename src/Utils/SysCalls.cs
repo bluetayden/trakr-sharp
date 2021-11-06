@@ -14,14 +14,16 @@ namespace trakr_sharp.Utils {
             "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
 
         // List of currently running processes on the device
-        public static List<string> GetRunningProcList() {
+        public static List<string> GetRunningProcList(bool incDuplicates = false) {
             // Get list of all running process names
             IEnumerable<string> runningProcs = Process.GetProcesses().Select(proc => proc.ProcessName + ".exe");
 
             // Filter unwanted processes from list
             IEnumerable<string> filteredProcs = runningProcs.Where(proc => !_ignoredProcs.Contains(proc));
-            // Remove duplicates from list
-            filteredProcs = filteredProcs.Distinct();
+            if (!incDuplicates) {
+                // Remove duplicates from list
+                filteredProcs = filteredProcs.Distinct();
+            }
             // Order list alphabetically
             filteredProcs = filteredProcs.OrderBy(proc => proc[0]);
 
@@ -47,14 +49,28 @@ namespace trakr_sharp.Utils {
             return filteredProcs.ToList();
         }
 
-        // List of currently running process on the device that are being tracked in the db
-        public static List<string> GetRunningTrackedProcList() {
+        // List of <string name, int count> of currently running process on the device that are being tracked in the db
+        public static Dictionary<string, int> GetRunningTrackedPairs() {
             List<string> trackedProcs = Utils.Database.GetProcessNameList();
 
-            // Filter currently running process to only contain those being tracked
-            trackedProcs = GetRunningProcList().Where(proc => trackedProcs.Contains(proc)).ToList();
+            // Filter currently running process to only contain those being tracked (include duplicates)
+            trackedProcs = GetRunningProcList(true).Where(proc => trackedProcs.Contains(proc)).ToList();
 
-            return trackedProcs;
+            // Store name keys in trackedPairs, and inc count for every ocurrence of a particular proc
+            Dictionary<string, int> trackedPairs = new Dictionary<string, int>();
+
+            foreach (string p in trackedProcs) {
+                // If a key == p in trackedPairs, inc count
+                if (trackedPairs.ContainsKey(p)) {
+                    trackedPairs[p] += 1;
+                }
+                // Otherwise add p to trackedPairs with count 1
+                else {
+                    trackedPairs.Add(p, 1);
+                }
+            }
+
+            return trackedPairs;
         }
 
         public static void PrintDataTable(DataTable table) {

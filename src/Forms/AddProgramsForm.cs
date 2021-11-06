@@ -76,7 +76,7 @@ namespace trakr_sharp {
             // Add items in selectedProcListBox to db
             Utils.Database.InsertProcs(this.selectedProcList.getProcs());
             // Raise public event that db was altered
-            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " entries to database.");
+            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " entries to database");
 
             // Remove the items from _selectedProcs so they can't be accessed again
             this.selectedProcList.setProcs(new List<string>());

@@ -10,27 +10,35 @@ using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
-        private DataTable _trackedTable { get; set; }
-
         public TrackingList() {
             InitializeComponent();
         }
 
-        // Updates the _trackedTable field and repopulates this.listView with it
-        public void repopulateListView() {
-            _trackedTable = Utils.Database.GetDataTable();
+        // Returns list of selected values in the "Process_Name" column of this.listView
+        public List<string> GetSelectedItems() {
+            List<string> selectedProcNames = new List<string>();
 
-            if (_trackedTable.Rows.Count != this.listView.Items.Count) {
+            foreach (ListViewItem selectedItem in this.listView.SelectedItems) {
+                selectedProcNames.Add(selectedItem.SubItems[6].Text);
+            }
+
+            return selectedProcNames;
+        }
+
+        // Updates the _trackedTable field and repopulates this.listView with it
+        public void repopulateListView(DataTable trackedTable) {
+            if (trackedTable.Rows.Count != this.listView.Items.Count) {
                 this.listView.BeginUpdate();
                 this.listView.Items.Clear();
 
                 // Loop through each row in DataTable
-                foreach (DataRow row in _trackedTable.Rows) {
+                foreach (DataRow row in trackedTable.Rows) {
                     // Create a new LVItem (skip adding data to first column)
                     ListViewItem item = new ListViewItem();
 
                     // Add values from DataTable to each column in the LV item
-                    for (int i = 0; i < _trackedTable.Columns.Count; i++) {
+                    // Keep in mind the last column (index 6) contains proc_names but isn't visible in the UI
+                    for (int i = 0; i < trackedTable.Columns.Count; i++) {
                         item.SubItems.Add(row[i].ToString());
                     }
 
@@ -45,6 +53,7 @@ namespace trakr_sharp.Controls {
         // Uses a list to shade items in this.listView that are running green
         public void updateRunningColors(List<string> running) {
             foreach (ListViewItem lv_item in this.listView.Items) {
+                // Keep in mind index 6 contains proc_names but isn't visible in the UI
                 if (running.Contains(lv_item.SubItems[6].Text)) {
                     lv_item.BackColor = Color.PaleGreen;
                 }
