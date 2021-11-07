@@ -30,7 +30,7 @@ namespace trakr_sharp.Controls {
             this.Program_Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Elapsed_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Date_Opened = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Hours_Used = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Total_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Date_Added = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Process_Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Is_Running = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -45,7 +45,7 @@ namespace trakr_sharp.Controls {
             this.Program_Name,
             this.Elapsed_Time,
             this.Date_Opened,
-            this.Hours_Used,
+            this.Total_Time,
             this.Date_Added,
             this.Process_Name,
             this.Is_Running,
@@ -80,9 +80,9 @@ namespace trakr_sharp.Controls {
             this.Date_Opened.Text = "Opened";
             this.Date_Opened.Width = 70;
             // 
-            // Hours_Used
+            // Total_Time
             // 
-            this.Hours_Used.Text = "Hours";
+            this.Total_Time.Text = "Total";
             // 
             // Date_Added
             // 
@@ -124,7 +124,7 @@ namespace trakr_sharp.Controls {
         private System.Windows.Forms.ColumnHeader Program_Name;
         private System.Windows.Forms.ColumnHeader Elapsed_Time;
         private System.Windows.Forms.ColumnHeader Date_Opened;
-        private System.Windows.Forms.ColumnHeader Hours_Used;
+        private System.Windows.Forms.ColumnHeader Total_Time;
         private System.Windows.Forms.ColumnHeader Date_Added;
         private System.Windows.Forms.Timer updateElapsedCol_Timer;
         private System.Windows.Forms.ColumnHeader Process_Name;

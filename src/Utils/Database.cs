@@ -38,7 +38,7 @@ namespace trakr_sharp.Utils {
                     ProcRecord record = new ProcRecord {
                         proc_name = name,
                         program_name = name.Substring(0, name.Length - 4),
-                        hours_used = 0,
+                        total_time = 0,
                         date_opened = DateTime.UtcNow.ToString("o"),
                         date_added = DateTime.UtcNow.ToString("o")
                     };
@@ -67,7 +67,7 @@ namespace trakr_sharp.Utils {
 
                 foreach (string proc_name in procTimePairs.Keys) {
                     ProcRecord proc_record = trackedCol.FindOne(record => record.proc_name == proc_name);
-                    proc_record.hours_used += procTimePairs[proc_name];
+                    proc_record.total_time += procTimePairs[proc_name];
                     proc_record.date_opened = DateTime.UtcNow.ToString("o");
 
                     trackedCol.Update(proc_record);
@@ -117,7 +117,7 @@ namespace trakr_sharp.Utils {
             procTable.Columns.Add("Program_Name");
             procTable.Columns.Add("Elapsed_Time");
             procTable.Columns.Add("Date_Opened");
-            procTable.Columns.Add("Hours_Used");
+            procTable.Columns.Add("Total_Time");
             procTable.Columns.Add("Date_Added");
             // Used in listView but not displayed in UI
             procTable.Columns.Add("Process_Name");
@@ -140,7 +140,7 @@ namespace trakr_sharp.Utils {
                 row["Program_Name"] = record.program_name;
                 row["Elapsed_Time"] = 0;
                 row["Date_Opened"] = Utils.Times.ISOToLogicalDateString(record.date_opened);
-                row["Hours_Used"] = record.hours_used;
+                row["Total_Time"] = record.total_time;
                 row["Date_Added"] = Utils.Times.ISOToShortDateString(record.date_added);
                 row["Process_Name"] = record.proc_name;
 
@@ -159,7 +159,7 @@ namespace trakr_sharp.Utils {
                 ProcRecord testRecord = new ProcRecord {
                     proc_name = "TestRecord.exe",
                     program_name = "TestRecord",
-                    hours_used = _RNG.Next(0, 32767),
+                    total_time = _RNG.Next(0, 32767),
                     date_opened = DateTime.UtcNow.ToString("o"),
                     date_added = DateTime.UtcNow.ToString("o")
                 };
@@ -169,7 +169,7 @@ namespace trakr_sharp.Utils {
 
                 // Query db for proc_name and hours_used
                 var result = trackedCol.Query()
-                    .Select(record => new { record.proc_name, record.hours_used })
+                    .Select(record => new { record.proc_name, record.total_time })
                     .ToList();
 
                 // Print results

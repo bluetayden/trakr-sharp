@@ -12,7 +12,7 @@ namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
         #region Definitions
         private const int Elapsed_Time_i = 2;
-        private const int Hours_Used_i = 4;
+        private const int Total_Time_i = 4;
         private const int Process_Name_i = 6;
         private const int Is_Running_i = 7;
         private const int Start_Time_i = 8;
@@ -52,13 +52,13 @@ namespace trakr_sharp.Controls {
 
             foreach (ListViewItem lv_row in this.listView.Items) {
                 if (RowMarkedRunning(lv_row)) {
-                    // Handle elapsed time col
+                    // Handle Elapsed_Time col
                     lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
                     lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToElapsedString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
 
-                    // Handle hours col
-                    lv_row.SubItems[Hours_Used_i].Tag = (long)lv_row.SubItems[Hours_Used_i].Tag + elapsedTime;
-                    lv_row.SubItems[Hours_Used_i].Text = Utils.Times.SecsToHoursString((long)lv_row.SubItems[Hours_Used_i].Tag);
+                    // Handle Total_Time col
+                    lv_row.SubItems[Total_Time_i].Tag = (long)lv_row.SubItems[Total_Time_i].Tag + elapsedTime;
+                    lv_row.SubItems[Total_Time_i].Text = Utils.Times.SecsToElapsedString((long)lv_row.SubItems[Total_Time_i].Tag);
                 }
             }
 
@@ -181,9 +181,9 @@ namespace trakr_sharp.Controls {
                     lv_row.SubItems.Add("-");
                     lv_row.SubItems[data_col].Tag = (long)0;
                 }
-                // Handle Hours_Used
-                else if (data_col == Hours_Used_i) {
-                    lv_row.SubItems.Add(Utils.Times.SecsToHoursString(long.Parse(data_row[data_col].ToString())));
+                // Handle Total_Time
+                else if (data_col == Total_Time_i) {
+                    lv_row.SubItems.Add(Utils.Times.SecsToElapsedString(long.Parse(data_row[data_col].ToString())));
                     lv_row.SubItems[data_col].Tag = long.Parse(data_row[data_col].ToString());
                 }
                 // Handle Is_Running

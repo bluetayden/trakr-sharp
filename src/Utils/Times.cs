@@ -19,19 +19,21 @@ namespace trakr_sharp.Utils {
         }
 
         public static string SecsToElapsedString(long secs) {
-            if (secs < 60) {
+            if (secs == 0) {
+                return "0";
+            }
+            else if (secs < 60) {
                 return String.Format("{0}s", secs);
             }
             else if (secs < 3600) {
                 return String.Format("{0}m", Math.Ceiling((double)secs / 60));
             }
             else {
-                return String.Format("{0}h", Math.Ceiling((double)secs / 3600));
-            }
-        }
+                int hours = (int)Math.Floor((double)secs / 3600);
+                int mins = (int)(secs - (hours * 3600))/60;
 
-        public static string SecsToHoursString(long secs) {
-            return ((float)secs / 3600).ToString("0.00");
+                return String.Format("{0}h {1}m", hours, mins);
+            }
         }
 
         public static string ISOToLogicalDateString(string ISO) {
