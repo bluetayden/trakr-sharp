@@ -41,14 +41,14 @@ namespace trakr_sharp {
         // Watches for when any new process is created
         private void WatchProcessCreations() {
             ManagementEventWatcher startWatch = new ManagementEventWatcher(
-                "SELECT * FROM __InstanceCreationEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_Process'");
+                "SELECT * FROM __InstanceCreationEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'");
             startWatch.EventArrived += startWatch_EventArrived;
             startWatch.Start();
         }
 
         private void WatchProcessDeletions() {
             ManagementEventWatcher stopWatch = new ManagementEventWatcher(
-                "SELECT * FROM __InstanceDeletionEvent WITHIN 5 WHERE TargetInstance ISA 'Win32_Process'");
+                "SELECT * FROM __InstanceDeletionEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'");
             stopWatch.EventArrived += stopWatch_EventArrived;
             stopWatch.Start();
         }
@@ -79,6 +79,7 @@ namespace trakr_sharp {
             }
 
             // Cleanup event args
+            targetInstance.Dispose();
             e.NewEvent.Dispose();
         }
 
@@ -103,6 +104,7 @@ namespace trakr_sharp {
             }
 
             // Cleanup event args
+            targetInstance.Dispose();
             e.NewEvent.Dispose();
         }
         #endregion

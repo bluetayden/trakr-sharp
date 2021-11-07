@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace trakr_sharp {
     public partial class AddProgramsForm : Form {
         #region Init
-        public delegate void OnDBUpdateDelegate(AddProgramsForm sender, string query); // Create delegator for public query event
+        public delegate void OnDBUpdateDelegate(AddProgramsForm sender, string msg); // Create delegator for public OnDBUPdate event
         public event OnDBUpdateDelegate OnDBUpdate; // Create instance of that event from delegator
 
         public AddProgramsForm() {
@@ -76,7 +76,7 @@ namespace trakr_sharp {
             // Add items in selectedProcListBox to db
             Utils.Database.InsertProcs(this.selectedProcList.getProcs());
             // Raise public event that db was altered
-            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " entries to database");
+            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " record(s) to the database");
 
             // Remove the items from _selectedProcs so they can't be accessed again
             this.selectedProcList.setProcs(new List<string>());

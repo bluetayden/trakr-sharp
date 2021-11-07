@@ -59,6 +59,21 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        // Updates the hours_used field of every relevant proc
+        public static void UpdateRecordTimes(Dictionary<string, Int32> procTimePairs) {
+            using (LiteDatabase db = ConnectToDatabase()) {
+                // Get 'tracked' collection from db
+                ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
+
+                foreach (string proc_name in procTimePairs.Keys) {
+                    ProcRecord proc_record = trackedCol.FindOne(record => record.proc_name == proc_name);
+                    proc_record.hours_used += procTimePairs[proc_name];
+
+                    trackedCol.Update(proc_record);
+                }
+            }
+        }
+
         public static List<string> GetProcessNameList() {
             List<string> procNames = new List<string>();
 
@@ -97,6 +112,7 @@ namespace trakr_sharp.Utils {
         public static DataTable GetDataTable() {
             // DataTable init
             DataTable procTable = new DataTable("tracked");
+            procTable.Columns.Add("Icon");
             procTable.Columns.Add("Program_Name");
             procTable.Columns.Add("Elapsed_Time");
             procTable.Columns.Add("Date_Opened");
@@ -119,6 +135,7 @@ namespace trakr_sharp.Utils {
             // Store allRecords in DataTable
             foreach (ProcRecord record in allRecords) {
                 DataRow row = procTable.NewRow();
+                row["Icon"] = null;
                 row["Program_Name"] = record.program_name;
                 row["Elapsed_Time"] = 0;
                 row["Date_Opened"] = DateTime.Parse(record.date_opened).ToShortDateString();
