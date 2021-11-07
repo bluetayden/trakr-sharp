@@ -48,7 +48,7 @@ namespace trakr_sharp {
             this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs())));
         }
 
-        private void trackingList_OnRequestDBWrite(Controls.TrackingList sender, Dictionary<string, Int32> procTimePairs) {
+        private void trackingList_OnRequestDBWrite(Controls.TrackingList sender, Dictionary<string, long> procTimePairs) {
             Utils.Database.UpdateRecordTimes(procTimePairs);
 
             string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);

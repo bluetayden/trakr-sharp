@@ -131,7 +131,7 @@ namespace trakr_sharp {
             this.MinimumSize = new System.Drawing.Size(640, 360);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "trakr";
+            this.Text = "trakr-sharp";
             this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainGridLayout.ResumeLayout(false);

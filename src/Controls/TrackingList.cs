@@ -20,7 +20,7 @@ namespace trakr_sharp.Controls {
 
         #region Init
         // Create delegator for public RequestDBWrite event
-        public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, int> procTimePairs);
+        public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, long> procTimePairs);
         // Create instance of that event from delegator
         public event RequestDBWriteDelegate RequestDBWrite;
 
@@ -48,17 +48,17 @@ namespace trakr_sharp.Controls {
             this.listView.BeginUpdate();
 
             // This logic only works for elapsed time need to fix updating hours used
-            Int32 elapsedTime = CalcElapsedTime();
+            long elapsedTime = CalcElapsedTime();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
                 if (RowMarkedRunning(lv_row)) {
                     // Handle elapsed time col
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (Int32)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
-                    lv_row.SubItems[Elapsed_Time_i].Text = Utils.Strings.SecsToElapsedString((Int32)lv_row.SubItems[Elapsed_Time_i].Tag);
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
+                    lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToElapsedString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
 
                     // Handle hours col
-                    lv_row.SubItems[Hours_Used_i].Tag = (Int32)lv_row.SubItems[Hours_Used_i].Tag + elapsedTime;
-                    lv_row.SubItems[Hours_Used_i].Text = Utils.Strings.SecsToHoursString((Int32)lv_row.SubItems[Hours_Used_i].Tag);
+                    lv_row.SubItems[Hours_Used_i].Tag = (long)lv_row.SubItems[Hours_Used_i].Tag + elapsedTime;
+                    lv_row.SubItems[Hours_Used_i].Text = Utils.Times.SecsToHoursString((long)lv_row.SubItems[Hours_Used_i].Tag);
                 }
             }
 
@@ -113,9 +113,9 @@ namespace trakr_sharp.Controls {
         }
 
         // Return the time since _lastTickTime and updates its value for future use
-        private Int32 CalcElapsedTime() {
+        private long CalcElapsedTime() {
             long currTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-            Int32 elapsedTime = (Int32)(DateTimeOffset.Now.ToUnixTimeSeconds() - _lastTickTime);
+            long elapsedTime = DateTimeOffset.Now.ToUnixTimeSeconds() - _lastTickTime;
 
             _lastTickTime = DateTimeOffset.Now.ToUnixTimeSeconds();
 
@@ -179,12 +179,12 @@ namespace trakr_sharp.Controls {
                 // Handle Elapsed_Time
                 if (data_col == Elapsed_Time_i) {
                     lv_row.SubItems.Add("-");
-                    lv_row.SubItems[data_col].Tag = (Int32)0;
+                    lv_row.SubItems[data_col].Tag = (long)0;
                 }
                 // Handle Hours_Used
                 else if (data_col == Hours_Used_i) {
-                    lv_row.SubItems.Add(Utils.Strings.SecsToHoursString(Int32.Parse(data_row[data_col].ToString())));
-                    lv_row.SubItems[data_col].Tag = Int32.Parse(data_row[data_col].ToString());
+                    lv_row.SubItems.Add(Utils.Times.SecsToHoursString(long.Parse(data_row[data_col].ToString())));
+                    lv_row.SubItems[data_col].Tag = long.Parse(data_row[data_col].ToString());
                 }
                 // Handle Is_Running
                 else if (data_col == Is_Running_i) {
@@ -207,7 +207,7 @@ namespace trakr_sharp.Controls {
 
         // Uses list of running procs (from ProcMonitor) to shade items in this.listView green
         public void updateRunningStates(List<string> running, bool raiseDBRequests = true) {
-            Dictionary<string, int> procTimePairs = new Dictionary<string, int>();
+            Dictionary<string, long> procTimePairs = new Dictionary<string, long>();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
                 // If an item in running is present in this.listView
@@ -225,8 +225,8 @@ namespace trakr_sharp.Controls {
                         lv_row.SubItems[Is_Running_i].Tag = 1;
 
                         // Save Start_Time
-                        lv_row.SubItems[Start_Time_i].Text = DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString();
-                        lv_row.SubItems[Start_Time_i].Tag = (Int32)DateTimeOffset.Now.ToUnixTimeSeconds();
+                        lv_row.SubItems[Start_Time_i].Text = Utils.Times.GetUTCNow().ToString();
+                        lv_row.SubItems[Start_Time_i].Tag = Utils.Times.GetUTCNow();
                     }
                 }
                 else {
@@ -235,13 +235,12 @@ namespace trakr_sharp.Controls {
 
                     // If lv_row was marked Is_Running, add process name and elapsed time to procTimePairs
                     if (raiseDBRequests && RowMarkedRunning(lv_row)) {
-                        procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, (Int32)lv_row.SubItems[Elapsed_Time_i].Tag);
-                        // Utils.SysCalls.Print((Int32)lv_row.SubItems[Elapsed_Time_i].Tag);
+                        procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, (long)lv_row.SubItems[Elapsed_Time_i].Tag);
                     }
 
                     // Reset Elapsed_Time to default value
                     lv_row.SubItems[Elapsed_Time_i].Text = "-";
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (Int32)0;
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)0;
                     // Reset Start_Time to default value
                     lv_row.SubItems[Start_Time_i].Text = "null";
                     lv_row.SubItems[Start_Time_i].Tag = -1;

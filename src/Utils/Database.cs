@@ -59,8 +59,8 @@ namespace trakr_sharp.Utils {
             }
         }
 
-        // Updates the hours_used field of every relevant proc
-        public static void UpdateRecordTimes(Dictionary<string, Int32> procTimePairs) {
+        // Updates the hours_used and date_opened field of every relevant proc
+        public static void UpdateRecordTimes(Dictionary<string, long> procTimePairs) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
@@ -68,6 +68,7 @@ namespace trakr_sharp.Utils {
                 foreach (string proc_name in procTimePairs.Keys) {
                     ProcRecord proc_record = trackedCol.FindOne(record => record.proc_name == proc_name);
                     proc_record.hours_used += procTimePairs[proc_name];
+                    proc_record.date_opened = DateTime.UtcNow.ToString("o");
 
                     trackedCol.Update(proc_record);
                 }
@@ -138,9 +139,9 @@ namespace trakr_sharp.Utils {
                 row["Icon"] = null;
                 row["Program_Name"] = record.program_name;
                 row["Elapsed_Time"] = 0;
-                row["Date_Opened"] = DateTime.Parse(record.date_opened).ToShortDateString();
+                row["Date_Opened"] = Utils.Times.ISOToLogicalDateString(record.date_opened);
                 row["Hours_Used"] = record.hours_used;
-                row["Date_Added"] = DateTime.Parse(record.date_added).ToShortDateString();
+                row["Date_Added"] = Utils.Times.ISOToShortDateString(record.date_added);
                 row["Process_Name"] = record.proc_name;
 
                 procTable.Rows.Add(row);
