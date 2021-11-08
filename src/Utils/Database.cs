@@ -60,7 +60,7 @@ namespace trakr_sharp.Utils {
         }
 
         // Updates the hours_used and date_opened field of every relevant proc
-        public static void UpdateRecordTimes(Dictionary<string, long> procTimePairs) {
+        public static void UpdateTotalTimes(Dictionary<string, long> procTimePairs) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");

@@ -43,9 +43,10 @@ namespace trakr_sharp {
         #endregion
 
         #region LocalEventHandlers
-        private void AddProgramsForm_FormClosed(object sender, FormClosedEventArgs e) {
-            // TO DO: RESOURCE CLEANUP
-            Utils.SysCalls.Print("AddProgramsForm closed");
+        private void AddProgramsForm_FormClosing(object sender, FormClosingEventArgs e) {
+            foreach (Control c in this.Controls) {
+                c.Dispose();
+            }
         }
 
         private void cancelButton_Click(object sender, EventArgs e) {

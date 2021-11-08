@@ -75,6 +75,12 @@
     <Compile Include="Controls\TrackingList.Designer.cs">
       <DependentUpon>TrackingList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TrackingSummary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\TrackingSummary.Designer.cs">
+      <DependentUpon>TrackingSummary.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\AddProgramsForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TrackingList.resx">
       <DependentUpon>TrackingList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\TrackingSummary.resx">
+      <DependentUpon>TrackingSummary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AddProgramsForm.resx">
       <DependentUpon>AddProgramsForm.cs</DependentUpon>

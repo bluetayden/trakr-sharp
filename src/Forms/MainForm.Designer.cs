@@ -31,6 +31,7 @@ namespace trakr_sharp {
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
             this.trackingList = new trakr_sharp.Controls.TrackingList();
+            this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
             this.SuspendLayout();
@@ -43,6 +44,7 @@ namespace trakr_sharp {
             this.mainGridLayout.Controls.Add(this.buttonLayout, 1, 1);
             this.mainGridLayout.Controls.Add(this.programConsole, 0, 1);
             this.mainGridLayout.Controls.Add(this.trackingList, 0, 0);
+            this.mainGridLayout.Controls.Add(this.trackingSummary, 1, 0);
             this.mainGridLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainGridLayout.Location = new System.Drawing.Point(0, 0);
             this.mainGridLayout.Name = "mainGridLayout";
@@ -122,6 +124,14 @@ namespace trakr_sharp {
             this.trackingList.Size = new System.Drawing.Size(462, 202);
             this.trackingList.TabIndex = 2;
             // 
+            // trackingSummary
+            // 
+            this.trackingSummary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackingSummary.Location = new System.Drawing.Point(471, 3);
+            this.trackingSummary.Name = "trackingSummary";
+            this.trackingSummary.Size = new System.Drawing.Size(150, 202);
+            this.trackingSummary.TabIndex = 3;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -132,6 +142,7 @@ namespace trakr_sharp {
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "trakr-sharp";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainGridLayout.ResumeLayout(false);
@@ -150,6 +161,7 @@ namespace trakr_sharp {
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.TextBox programConsole;
         private Controls.TrackingList trackingList;
+        private Controls.TrackingSummary trackingSummary;
     }
 }
 

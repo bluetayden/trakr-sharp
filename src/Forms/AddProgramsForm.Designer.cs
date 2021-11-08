@@ -190,7 +190,7 @@ namespace trakr_sharp {
             this.Name = "AddProgramsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add programs to trakr";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.AddProgramsForm_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AddProgramsForm_FormClosing);
             procListAndButtonPanel.ResumeLayout(false);
             addRemovePanel.ResumeLayout(false);
             applyCancelPanel.ResumeLayout(false);

@@ -16,6 +16,7 @@ namespace trakr_sharp.Controls {
         private const int Process_Name_i = 6;
         private const int Is_Running_i = 7;
         private const int Start_Time_i = 8;
+        private const int One_Min = 3600;
         #endregion
 
         #region Init
@@ -23,13 +24,11 @@ namespace trakr_sharp.Controls {
         public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, long> procTimePairs);
         // Create instance of that event from delegator
         public event RequestDBWriteDelegate RequestDBWrite;
-        private long _lastTickTime;
 
         public TrackingList() {
             InitializeComponent();
 
             updateElapsedCol_Timer.Start();
-            _lastTickTime = DateTimeOffset.Now.ToUnixTimeSeconds();
         }
 
         public void InitListView(DataTable trackedTable, List<string> running) {
@@ -61,6 +60,19 @@ namespace trakr_sharp.Controls {
             return selectedProcNames;
         }
 
+        public Dictionary<string, long> GetRunningProcTimePairs() {
+            Dictionary<string, long> procTimePairs = new Dictionary<string, long>();
+
+            foreach (ListViewItem lv_row in this.listView.Items) {
+                if (RowIsMarkedRunning(lv_row)) {
+                    long elapsedTime = CalcElapsedRowTime(lv_row);
+                    procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, elapsedTime);
+                }
+            }
+
+            return procTimePairs;
+        }
+
         // Resizes columns using fixed proportions
         public void ResizeColumnHeaders() {
             int width = this.listView.Width - 26;
@@ -89,19 +101,9 @@ namespace trakr_sharp.Controls {
             return false;
         }
 
-        private bool RowMarkedRunning(ListViewItem lv_row) {
+        private bool RowIsMarkedRunning(ListViewItem lv_row) {
             // If the Is_Running value for the row is 1 return true, else false
             return (int)lv_row.SubItems[Is_Running_i].Tag == 1;
-        }
-
-        // Return the time since _lastTickTime and updates its value for future use
-        private long CalcElapsedTime() {
-            long currTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-            long elapsedTime = currTime - _lastTickTime;
-
-            _lastTickTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-
-            return elapsedTime;
         }
 
         private long CalcElapsedRowTime(ListViewItem lv_row) {
@@ -155,14 +157,12 @@ namespace trakr_sharp.Controls {
 
         // Updates the values in the Elapsed_Time col using the time between now and the last updateElapsedCol_Timer_Tick call
         private void updateElapsedCol() {
-            long elapsedTime = CalcElapsedTime();
-
             this.listView.BeginUpdate();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
-                if (RowMarkedRunning(lv_row)) {
+                if (RowIsMarkedRunning(lv_row)) {
                     // Handle Elapsed_Time col
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + One_Min;
                     lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
                 }
             }
@@ -218,9 +218,9 @@ namespace trakr_sharp.Controls {
                     lv_row.BackColor = Color.PaleGreen;
 
                     // If the process wasn't marked as running in this.listView yet
-                    if (!RowMarkedRunning(lv_row)) {
+                    if (!RowIsMarkedRunning(lv_row)) {
                         // Update Elapsed_Time text to 0
-                        lv_row.SubItems[Elapsed_Time_i].Text = "0m";
+                        lv_row.SubItems[Elapsed_Time_i].Text = "0";
 
                         // Set Is_Running to 1
                         lv_row.SubItems[Is_Running_i].Text = "true";
@@ -236,7 +236,7 @@ namespace trakr_sharp.Controls {
                     lv_row.BackColor = Color.White;
 
                     // If lv_row was marked Is_Running, add process name and elapsed time to procTimePairs
-                    if (raiseDBRequests && RowMarkedRunning(lv_row)) {
+                    if (raiseDBRequests && RowIsMarkedRunning(lv_row)) {
                         long elapsedTime = CalcElapsedRowTime(lv_row);
                         procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, elapsedTime);
 

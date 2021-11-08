@@ -49,7 +49,7 @@ namespace trakr_sharp {
         }
 
         private void trackingList_OnRequestDBWrite(Controls.TrackingList sender, Dictionary<string, long> procTimePairs) {
-            Utils.Database.UpdateRecordTimes(procTimePairs);
+            Utils.Database.UpdateTotalTimes(procTimePairs);
 
             string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
             this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
@@ -84,7 +84,6 @@ namespace trakr_sharp {
 
                 // Update this.trackingList
                 deleteTrackingListItemsInvoke();
-
                 // Update _procMonitor
                 _procMonitor.UpdateTrackingFields();
 
@@ -93,6 +92,17 @@ namespace trakr_sharp {
                 Utils.SysCalls.Print(msg);
                 printToProgramConsole(msg);
             }
+        }
+
+        // Called before the form closes (saves any time information from this.trackingList to db)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            this.trackingList.RequestDBWrite -= trackingList_OnRequestDBWrite;
+
+            Dictionary<string, long> procTimePairs = this.trackingList.GetRunningProcTimePairs();
+            Utils.Database.UpdateTotalTimes(procTimePairs);
+
+            string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
+            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
         }
 
         // Called when the form is finished resizing
