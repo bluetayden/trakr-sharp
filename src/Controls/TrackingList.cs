@@ -23,7 +23,6 @@ namespace trakr_sharp.Controls {
         public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, long> procTimePairs);
         // Create instance of that event from delegator
         public event RequestDBWriteDelegate RequestDBWrite;
-
         private long _lastTickTime;
 
         public TrackingList() {
@@ -45,24 +44,7 @@ namespace trakr_sharp.Controls {
         #region LocalEventHandlers
         private void updateElapsedCol_Timer_Tick(object sender, EventArgs e) {
             updateElapsedCol_Timer.Stop();
-            this.listView.BeginUpdate();
-
-            // This logic only works for elapsed time need to fix updating hours used
-            long elapsedTime = CalcElapsedTime();
-
-            foreach (ListViewItem lv_row in this.listView.Items) {
-                if (RowMarkedRunning(lv_row)) {
-                    // Handle Elapsed_Time col
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
-                    lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToElapsedString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
-
-                    // Handle Total_Time col
-                    lv_row.SubItems[Total_Time_i].Tag = (long)lv_row.SubItems[Total_Time_i].Tag + elapsedTime;
-                    lv_row.SubItems[Total_Time_i].Text = Utils.Times.SecsToElapsedString((long)lv_row.SubItems[Total_Time_i].Tag);
-                }
-            }
-
-            this.listView.EndUpdate();
+            updateElapsedCol();
             updateElapsedCol_Timer.Start();
         }
         #endregion
@@ -115,13 +97,16 @@ namespace trakr_sharp.Controls {
         // Return the time since _lastTickTime and updates its value for future use
         private long CalcElapsedTime() {
             long currTime = DateTimeOffset.Now.ToUnixTimeSeconds();
-            long elapsedTime = DateTimeOffset.Now.ToUnixTimeSeconds() - _lastTickTime;
+            long elapsedTime = currTime - _lastTickTime;
 
             _lastTickTime = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             return elapsedTime;
         }
 
+        private long CalcElapsedRowTime(ListViewItem lv_row) {
+            return (Utils.Times.GetUTCNow() - (long)lv_row.SubItems[Start_Time_i].Tag);
+        }
         #endregion
 
         #region Macro
@@ -152,8 +137,8 @@ namespace trakr_sharp.Controls {
             this.listView.EndUpdate();
         }
 
-        // Deletes items from this.listView with a predicate
-        public void DeleteListViewItems() {
+        // Deletes selected items in this.listView
+        public void DeleteSelectedLVItems() {
             List<string> for_deletion = GetSelectedItems();
             this.listView.BeginUpdate();
 
@@ -162,6 +147,23 @@ namespace trakr_sharp.Controls {
                     if (lv_row.SubItems[Process_Name_i].Text == to_delete) {
                         this.listView.Items.Remove(lv_row);
                     }
+                }
+            }
+
+            this.listView.EndUpdate();
+        }
+
+        // Updates the values in the Elapsed_Time col using the time between now and the last updateElapsedCol_Timer_Tick call
+        private void updateElapsedCol() {
+            long elapsedTime = CalcElapsedTime();
+
+            this.listView.BeginUpdate();
+
+            foreach (ListViewItem lv_row in this.listView.Items) {
+                if (RowMarkedRunning(lv_row)) {
+                    // Handle Elapsed_Time col
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + elapsedTime;
+                    lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
                 }
             }
 
@@ -183,7 +185,7 @@ namespace trakr_sharp.Controls {
                 }
                 // Handle Total_Time
                 else if (data_col == Total_Time_i) {
-                    lv_row.SubItems.Add(Utils.Times.SecsToElapsedString(long.Parse(data_row[data_col].ToString())));
+                    lv_row.SubItems.Add(Utils.Times.SecsToHMSString(long.Parse(data_row[data_col].ToString())));
                     lv_row.SubItems[data_col].Tag = long.Parse(data_row[data_col].ToString());
                 }
                 // Handle Is_Running
@@ -235,7 +237,12 @@ namespace trakr_sharp.Controls {
 
                     // If lv_row was marked Is_Running, add process name and elapsed time to procTimePairs
                     if (raiseDBRequests && RowMarkedRunning(lv_row)) {
-                        procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, (long)lv_row.SubItems[Elapsed_Time_i].Tag);
+                        long elapsedTime = CalcElapsedRowTime(lv_row);
+                        procTimePairs.Add(lv_row.SubItems[Process_Name_i].Text, elapsedTime);
+
+                        // Update Total_Time to contain time the proc was running till now
+                        lv_row.SubItems[Total_Time_i].Tag = (long)lv_row.SubItems[Total_Time_i].Tag + elapsedTime;
+                        lv_row.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Total_Time_i].Tag);
                     }
 
                     // Reset Elapsed_Time to default value

@@ -18,21 +18,34 @@ namespace trakr_sharp.Utils {
             return d1 == d2;
         }
 
-        public static string SecsToElapsedString(long secs) {
-            if (secs == 0) {
+        public static string SecsToHMSString(long total_secs) {
+            if (total_secs == 0) {
                 return "0";
             }
-            else if (secs < 60) {
-                return String.Format("{0}s", secs);
+            else if (total_secs < 60) {
+                return String.Format("{0}s", total_secs);
             }
-            else if (secs < 3600) {
-                return String.Format("{0}m", Math.Ceiling((double)secs / 60));
+            else if (total_secs < 3600) {
+                int mins = (int)Math.Floor((double)(total_secs / 60));
+                int secs = (int)total_secs - (mins * 60);
+
+                if (secs > 0) {
+                    return String.Format("{0}m {1}s", mins, secs);
+                }
+                else {
+                    return String.Format("{0}m", mins);
+                }
             }
             else {
-                int hours = (int)Math.Floor((double)secs / 3600);
-                int mins = (int)(secs - (hours * 3600))/60;
+                int hours = (int)Math.Floor((double)total_secs / 3600);
+                int mins = (int)(total_secs - (hours * 3600))/60;
 
-                return String.Format("{0}h {1}m", hours, mins);
+                if (mins > 0) {
+                    return String.Format("{0}m {1}s", hours, mins);
+                }
+                else {
+                    return String.Format("{0}m", hours);
+                }
             }
         }
 

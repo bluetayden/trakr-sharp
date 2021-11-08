@@ -3,7 +3,7 @@
 
 ## Compiling
  Compiling requires Visual Studio and the '.NET desktop development' workload to be installed.  
- This repo makes use of WMI calls, meaning that you must run VS as an admin if you wish to debug.  
+ This repo makes use of WMI calls, meaning that you must run VS as an Admin if you wish to debug.  
  [VS Community 2019 was used for development]  
 
  Open `trakr-sharp.sln` (in Admin mode if required)  

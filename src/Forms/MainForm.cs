@@ -126,7 +126,7 @@ namespace trakr_sharp {
 
         // Invokes an update of this.trackingList where selected items are deleted
         private void deleteTrackingListItemsInvoke() {
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.DeleteListViewItems()));
+            this.BeginInvoke((MethodInvoker)(() => this.trackingList.DeleteSelectedLVItems()));
             this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs())));
         }
         #endregion
