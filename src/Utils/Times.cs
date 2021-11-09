@@ -10,6 +10,10 @@ namespace trakr_sharp.Utils {
             return DateTimeOffset.Now.ToUnixTimeSeconds();
         }
 
+        public static string GetCurrTimeStamp() {
+            return DateTime.Now.ToString("h:mm:ss");
+        }
+
         private static bool DatesAreInTheSameWeek(DateTime date1, DateTime date2) {
             var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
             var d1 = date1.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date1));
@@ -41,12 +45,18 @@ namespace trakr_sharp.Utils {
                 int mins = (int)(total_secs - (hours * 3600))/60;
 
                 if (mins > 0) {
-                    return String.Format("{0}m {1}s", hours, mins);
+                    return String.Format("{0}h {1}m", hours, mins);
                 }
                 else {
-                    return String.Format("{0}m", hours);
+                    return String.Format("{0}h", hours);
                 }
             }
+        }
+
+        public static string SecsToHMString(long secs) {
+            TimeSpan time = TimeSpan.FromSeconds(secs);
+
+            return time.ToString(@"hh\:mm");
         }
 
         public static string ISOToLogicalDateString(string ISO) {

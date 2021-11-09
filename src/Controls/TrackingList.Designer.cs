@@ -36,6 +36,7 @@ namespace trakr_sharp.Controls {
             this.Is_Running = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Start_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.updateElapsedCol_Timer = new System.Windows.Forms.Timer(this.components);
+            this.Process_Path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listView
@@ -48,6 +49,7 @@ namespace trakr_sharp.Controls {
             this.Total_Time,
             this.Date_Added,
             this.Process_Name,
+            this.Process_Path,
             this.Is_Running,
             this.Start_Time});
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -55,7 +57,7 @@ namespace trakr_sharp.Controls {
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 0);
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(598, 150);
+            this.listView.Size = new System.Drawing.Size(658, 150);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
@@ -106,13 +108,17 @@ namespace trakr_sharp.Controls {
             this.updateElapsedCol_Timer.Interval = 60000;
             this.updateElapsedCol_Timer.Tick += new System.EventHandler(this.updateElapsedCol_Timer_Tick);
             // 
+            // Process_Path
+            // 
+            this.Process_Path.Text = "Process_Path";
+            // 
             // TrackingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.listView);
             this.Name = "TrackingList";
-            this.Size = new System.Drawing.Size(598, 150);
+            this.Size = new System.Drawing.Size(658, 150);
             this.ResumeLayout(false);
 
         }
@@ -130,5 +136,6 @@ namespace trakr_sharp.Controls {
         private System.Windows.Forms.ColumnHeader Process_Name;
         private System.Windows.Forms.ColumnHeader Is_Running;
         private System.Windows.Forms.ColumnHeader Start_Time;
+        private System.Windows.Forms.ColumnHeader Process_Path;
     }
 }

@@ -18,7 +18,7 @@ namespace trakr_sharp {
             InitializeComponent();
 
             // Initialise this.runningProcListBox
-            this.runningProcList.setProcs(Utils.SysCalls.GetRunningUntrackedProcList());
+            this.runningProcList.setProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
 
             // Repopulate both procListBoxes
             repopulateProcListBoxes();
@@ -74,8 +74,11 @@ namespace trakr_sharp {
         }
 
         private void applyButton_Click(object sender, EventArgs e) {
-            // Add items in selectedProcListBox to db
-            Utils.Database.InsertProcs(this.selectedProcList.getProcs());
+            // Get dict of proc_name and proc_path and insert them into the db
+            Dictionary<string, string> procPathPairs = Utils.SysCalls.GetProcPathPairs(this.selectedProcList.getProcs());
+            Utils.Database.InsertProcPathPairs(procPathPairs);
+            Utils.SysCalls.CacheIconsToDisk(procPathPairs);
+
             // Raise public event that db was altered
             OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " record(s) to the database");
 

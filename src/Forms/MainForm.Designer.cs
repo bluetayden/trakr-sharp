@@ -30,6 +30,7 @@ namespace trakr_sharp {
             this.deleteButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
@@ -51,18 +52,19 @@ namespace trakr_sharp {
             this.mainGridLayout.RowCount = 2;
             this.mainGridLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.mainGridLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.mainGridLayout.Size = new System.Drawing.Size(624, 321);
+            this.mainGridLayout.Size = new System.Drawing.Size(644, 341);
             this.mainGridLayout.TabIndex = 0;
             // 
             // buttonLayout
             // 
+            this.buttonLayout.Controls.Add(this.settingsButton);
             this.buttonLayout.Controls.Add(this.editButton);
             this.buttonLayout.Controls.Add(this.deleteButton);
             this.buttonLayout.Controls.Add(this.addButton);
             this.buttonLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonLayout.Location = new System.Drawing.Point(471, 211);
+            this.buttonLayout.Location = new System.Drawing.Point(486, 224);
             this.buttonLayout.Name = "buttonLayout";
-            this.buttonLayout.Size = new System.Drawing.Size(150, 107);
+            this.buttonLayout.Size = new System.Drawing.Size(155, 114);
             this.buttonLayout.TabIndex = 0;
             this.buttonLayout.TabStop = false;
             this.buttonLayout.Text = "Tracking";
@@ -72,7 +74,7 @@ namespace trakr_sharp {
             this.editButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.editButton.Location = new System.Drawing.Point(3, 62);
             this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(144, 23);
+            this.editButton.Size = new System.Drawing.Size(149, 23);
             this.editButton.TabIndex = 2;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
@@ -82,7 +84,7 @@ namespace trakr_sharp {
             this.deleteButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.deleteButton.Location = new System.Drawing.Point(3, 39);
             this.deleteButton.Name = "deleteButton";
-            this.deleteButton.Size = new System.Drawing.Size(144, 23);
+            this.deleteButton.Size = new System.Drawing.Size(149, 23);
             this.deleteButton.TabIndex = 1;
             this.deleteButton.Text = "Delete";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -94,7 +96,7 @@ namespace trakr_sharp {
             this.addButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.addButton.Location = new System.Drawing.Point(3, 16);
             this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(144, 23);
+            this.addButton.Size = new System.Drawing.Size(149, 23);
             this.addButton.TabIndex = 0;
             this.addButton.Text = "Add";
             this.addButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -107,38 +109,52 @@ namespace trakr_sharp {
             this.programConsole.BackColor = System.Drawing.SystemColors.Window;
             this.programConsole.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.programConsole.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.programConsole.Location = new System.Drawing.Point(3, 211);
+            this.programConsole.Location = new System.Drawing.Point(3, 224);
             this.programConsole.Multiline = true;
             this.programConsole.Name = "programConsole";
             this.programConsole.ReadOnly = true;
             this.programConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.programConsole.Size = new System.Drawing.Size(462, 107);
+            this.programConsole.Size = new System.Drawing.Size(477, 114);
             this.programConsole.TabIndex = 1;
             this.programConsole.WordWrap = false;
+            // 
+            // settingsButton
+            // 
+            this.settingsButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.settingsButton.Location = new System.Drawing.Point(3, 85);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(149, 23);
+            this.settingsButton.TabIndex = 3;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
             // 
             // trackingList
             // 
             this.trackingList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.trackingList.Location = new System.Drawing.Point(3, 3);
             this.trackingList.Name = "trackingList";
-            this.trackingList.Size = new System.Drawing.Size(462, 202);
+            this.trackingList.Size = new System.Drawing.Size(477, 215);
             this.trackingList.TabIndex = 2;
             // 
             // trackingSummary
             // 
             this.trackingSummary.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackingSummary.Location = new System.Drawing.Point(471, 3);
+            this.trackingSummary.Location = new System.Drawing.Point(486, 3);
             this.trackingSummary.Name = "trackingSummary";
-            this.trackingSummary.Size = new System.Drawing.Size(150, 202);
+            this.trackingSummary.ProcIcon = null;
+            this.trackingSummary.RunningCount = 0;
+            this.trackingSummary.Size = new System.Drawing.Size(155, 215);
             this.trackingSummary.TabIndex = 3;
+            this.trackingSummary.TrackedCount = 0;
+            this.trackingSummary.Uptime = ((long)(0));
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(624, 321);
+            this.ClientSize = new System.Drawing.Size(644, 341);
             this.Controls.Add(this.mainGridLayout);
-            this.MinimumSize = new System.Drawing.Size(640, 360);
+            this.MinimumSize = new System.Drawing.Size(660, 380);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "trakr-sharp";
@@ -153,15 +169,15 @@ namespace trakr_sharp {
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel mainGridLayout;
-        private System.Windows.Forms.GroupBox buttonLayout;
         private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button editButton;
         private System.Windows.Forms.TextBox programConsole;
         private Controls.TrackingList trackingList;
         private Controls.TrackingSummary trackingSummary;
+        private System.Windows.Forms.Button settingsButton;
+        private System.Windows.Forms.TableLayoutPanel mainGridLayout;
+        private System.Windows.Forms.GroupBox buttonLayout;
     }
 }
 

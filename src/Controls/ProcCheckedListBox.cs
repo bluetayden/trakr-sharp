@@ -48,9 +48,7 @@ namespace trakr_sharp.Controls {
         #endregion
 
         #region PublicEventRaisers
-        /// <summary>
         /// Raises a public event if an item in this.checkboxList is changed, checkedIndex is the index of the item that was affected 
-        /// </summary>
         private void checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e) {
             this.BeginInvoke((MethodInvoker)(() => this.updateCheckedProcs(e.Index)));
             OnItemCheck?.Invoke(this, e.Index);

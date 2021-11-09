@@ -30,6 +30,9 @@ namespace trakr_sharp {
             this.trackingList.InitListView(Utils.Database.GetDataTable(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
 
+            // Update this.trackingSummary
+            updateTrackingSummary();
+
             // Get current window state for use in this.listView resizing later
             this._lastWindowState = this.WindowState;
 
@@ -41,11 +44,15 @@ namespace trakr_sharp {
 
         #region PublicEventHandlers
         private void procMonitor_OnTrackedProcEvent(ProcMonitor sender, string msg) {
-            Utils.SysCalls.Print(msg);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+            this.BeginInvoke((MethodInvoker)(() => {
+                Utils.SysCalls.Print(msg);
+                printToProgramConsole(msg);
 
-            // Only running colours need to be updated on this event
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs())));
+                // Update running colours of this.trackingList and this.trackingSummary
+                this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
+                // Update this.trackingSummary
+                updateTrackingSummary();
+            }));
         }
 
         private void trackingList_OnRequestDBWrite(Controls.TrackingList sender, Dictionary<string, long> procTimePairs) {
@@ -56,15 +63,18 @@ namespace trakr_sharp {
         }
 
         private void addProgramsForm_OnDBUpdate(AddProgramsForm sender, string msg) {
-            // Print msg that entries were added to db
-            Utils.SysCalls.Print(msg);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+            this.BeginInvoke((MethodInvoker)(() => {
+                // Print msg that entries were added to db
+                Utils.SysCalls.Print(msg);
+                printToProgramConsole(msg);
 
-            // Update _procMonitor
-            _procMonitor.UpdateTrackingFields();
-
-            // Update this.trackingList
-            addUniqueTrackingListItemsInvoke();
+                // Update _procMonitor
+                _procMonitor.UpdateTrackingFields();
+                // Update this.trackingList
+                addUniqueTrackingListItems();
+                // Update this.trackingSummary
+                updateTrackingSummary();
+            }));
         }
         #endregion
 
@@ -82,13 +92,15 @@ namespace trakr_sharp {
                 // Update db
                 Utils.Database.DeleteProcs(selectedItems);
 
-                // Update this.trackingList
-                deleteTrackingListItemsInvoke();
                 // Update _procMonitor
                 _procMonitor.UpdateTrackingFields();
+                // Update this.trackingList
+                deleteTrackingListItems();
+                // Update this.trackingSummary
+                updateTrackingSummary();
 
                 // Print msg
-                string msg = String.Format("Deleted {0} record(s) from the database", selectedItems.Count);
+                string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
                 Utils.SysCalls.Print(msg);
                 printToProgramConsole(msg);
             }
@@ -122,22 +134,33 @@ namespace trakr_sharp {
         #region Methods
         // Prints msg with a timestamp to MainForm's programConsole
         private void printToProgramConsole(string msg) {
-            string currTime = DateTime.Now.ToString("h:mm:ss");
+            string currTime = Utils.Times.GetCurrTimeStamp();
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
         }
 
-        // Invokes an update of this.trackingList where only new db items are added
-        private void addUniqueTrackingListItemsInvoke() {
-            using (DataTable trackedTable = Utils.Database.GetDataTable()) {
-                this.BeginInvoke((MethodInvoker)(() => this.trackingList.AddUniqueListViewItems(trackedTable)));
+        // Updates the TrackedCount and RunningCount fields of this.trackingSummary
+        private void updateTrackingSummary() {
+            if (this.trackingSummary.ProcIcon != null) {
+                this.trackingSummary.ProcIcon.Dispose();
             }
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs())));
+            this.trackingSummary.ProcIcon = Utils.SysCalls.GetProcImage(this.trackingList.GetShortestRunningProc());
+            this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
+            this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
+            this.trackingSummary.RerenderFields();
+        }
+
+        // Invokes an update of this.trackingList where only new db items are added
+        private void addUniqueTrackingListItems() {
+            using (DataTable trackedTable = Utils.Database.GetDataTable()) {
+                this.trackingList.AddUniqueListViewItems(trackedTable);
+            }
+            this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
         }
 
         // Invokes an update of this.trackingList where selected items are deleted
-        private void deleteTrackingListItemsInvoke() {
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.DeleteSelectedLVItems()));
-            this.BeginInvoke((MethodInvoker)(() => this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs())));
+        private void deleteTrackingListItems() {
+            this.trackingList.DeleteSelectedLVItems();
+            this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
         }
         #endregion
     }

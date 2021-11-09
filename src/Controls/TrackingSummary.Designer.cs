@@ -24,13 +24,15 @@ namespace trakr_sharp.Controls {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.GroupBox groupBox;
             System.Windows.Forms.TableLayoutPanel tableLayout;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TrackingSummary));
+            this.uptimeLabel = new System.Windows.Forms.Label();
             this.picturePanel = new System.Windows.Forms.Panel();
             this.trackingLabel = new System.Windows.Forms.Label();
             this.runningLabel = new System.Windows.Forms.Label();
-            this.uptimeLabel = new System.Windows.Forms.Label();
+            this.refreshUptime_Timer = new System.Windows.Forms.Timer(this.components);
             groupBox = new System.Windows.Forms.GroupBox();
             tableLayout = new System.Windows.Forms.TableLayoutPanel();
             groupBox.SuspendLayout();
@@ -43,7 +45,7 @@ namespace trakr_sharp.Controls {
             groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             groupBox.Location = new System.Drawing.Point(0, 0);
             groupBox.Name = "groupBox";
-            groupBox.Size = new System.Drawing.Size(150, 180);
+            groupBox.Size = new System.Drawing.Size(150, 210);
             groupBox.TabIndex = 0;
             groupBox.TabStop = false;
             groupBox.Text = "Summary";
@@ -64,8 +66,19 @@ namespace trakr_sharp.Controls {
             tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13F));
             tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13F));
             tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 13F));
-            tableLayout.Size = new System.Drawing.Size(144, 161);
+            tableLayout.Size = new System.Drawing.Size(144, 191);
             tableLayout.TabIndex = 0;
+            // 
+            // uptimeLabel
+            // 
+            this.uptimeLabel.AutoSize = true;
+            this.uptimeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.uptimeLabel.Location = new System.Drawing.Point(3, 164);
+            this.uptimeLabel.Name = "uptimeLabel";
+            this.uptimeLabel.Size = new System.Drawing.Size(138, 27);
+            this.uptimeLabel.TabIndex = 3;
+            this.uptimeLabel.Text = "Uptime: 00:00";
+            this.uptimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // picturePanel
             // 
@@ -74,41 +87,35 @@ namespace trakr_sharp.Controls {
             this.picturePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picturePanel.Location = new System.Drawing.Point(3, 3);
             this.picturePanel.Name = "picturePanel";
-            this.picturePanel.Size = new System.Drawing.Size(138, 92);
+            this.picturePanel.Size = new System.Drawing.Size(138, 110);
             this.picturePanel.TabIndex = 0;
             // 
             // trackingLabel
             // 
             this.trackingLabel.AutoSize = true;
             this.trackingLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackingLabel.Location = new System.Drawing.Point(3, 98);
+            this.trackingLabel.Location = new System.Drawing.Point(3, 116);
             this.trackingLabel.Name = "trackingLabel";
-            this.trackingLabel.Size = new System.Drawing.Size(138, 20);
+            this.trackingLabel.Size = new System.Drawing.Size(138, 24);
             this.trackingLabel.TabIndex = 1;
-            this.trackingLabel.Text = "Tracking 0 Processes";
+            this.trackingLabel.Text = "Tracking: 0";
             this.trackingLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // runningLabel
             // 
             this.runningLabel.AutoSize = true;
             this.runningLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.runningLabel.Location = new System.Drawing.Point(3, 118);
+            this.runningLabel.Location = new System.Drawing.Point(3, 140);
             this.runningLabel.Name = "runningLabel";
-            this.runningLabel.Size = new System.Drawing.Size(138, 20);
+            this.runningLabel.Size = new System.Drawing.Size(138, 24);
             this.runningLabel.TabIndex = 2;
-            this.runningLabel.Text = "0 Processes Running";
+            this.runningLabel.Text = "Running: 0";
             this.runningLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // uptimeLabel
+            // refreshUptime_Timer
             // 
-            this.uptimeLabel.AutoSize = true;
-            this.uptimeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.uptimeLabel.Location = new System.Drawing.Point(3, 138);
-            this.uptimeLabel.Name = "uptimeLabel";
-            this.uptimeLabel.Size = new System.Drawing.Size(138, 23);
-            this.uptimeLabel.TabIndex = 3;
-            this.uptimeLabel.Text = "Uptime 0:00";
-            this.uptimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.refreshUptime_Timer.Interval = 60000;
+            this.refreshUptime_Timer.Tick += new System.EventHandler(this.refreshUptime_Timer_Tick);
             // 
             // TrackingSummary
             // 
@@ -116,7 +123,7 @@ namespace trakr_sharp.Controls {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(groupBox);
             this.Name = "TrackingSummary";
-            this.Size = new System.Drawing.Size(150, 180);
+            this.Size = new System.Drawing.Size(150, 210);
             groupBox.ResumeLayout(false);
             tableLayout.ResumeLayout(false);
             tableLayout.PerformLayout();
@@ -130,5 +137,6 @@ namespace trakr_sharp.Controls {
         private System.Windows.Forms.Label uptimeLabel;
         private System.Windows.Forms.Label trackingLabel;
         private System.Windows.Forms.Label runningLabel;
+        private System.Windows.Forms.Timer refreshUptime_Timer;
     }
 }

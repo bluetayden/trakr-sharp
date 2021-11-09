@@ -12,11 +12,13 @@ namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
         #region Definitions
         private const int Elapsed_Time_i = 2;
+        private const int Date_Opened_i = 3;
         private const int Total_Time_i = 4;
         private const int Process_Name_i = 6;
-        private const int Is_Running_i = 7;
-        private const int Start_Time_i = 8;
-        private const int One_Min = 3600;
+        private const int Process_Path_i = 7;
+        private const int Is_Running_i = 8;
+        private const int Start_Time_i = 9;
+        private const int One_Min = 60;
         #endregion
 
         #region Init
@@ -73,6 +75,35 @@ namespace trakr_sharp.Controls {
             return procTimePairs;
         }
 
+        public string GetShortestRunningProc() {
+            try {
+                string name = this.listView.Items[0].SubItems[Process_Name_i].Text;
+                long shortest_time = 0;
+
+                foreach (ListViewItem lv_row in this.listView.Items) {
+                    if (RowIsMarkedRunning(lv_row)) {
+                        shortest_time = (long)lv_row.SubItems[Start_Time_i].Tag;
+                    }
+                }
+
+                foreach (ListViewItem lv_row in this.listView.Items) {
+                    if (RowIsMarkedRunning(lv_row)) {
+                        long row_time = CalcElapsedRowTime(lv_row);
+
+                        if (row_time < shortest_time) {
+                            shortest_time = row_time;
+                            name = lv_row.SubItems[Process_Name_i].Text;
+                        }
+                    }
+                }
+
+                return name;
+            }
+            catch (ArgumentOutOfRangeException) {
+                return "NO_PROC";
+            }
+        }
+
         // Resizes columns using fixed proportions
         public void ResizeColumnHeaders() {
             int width = this.listView.Width - 26;
@@ -87,6 +118,7 @@ namespace trakr_sharp.Controls {
         // Hides the Process_Name, Is_Running and Start_Time cols
         private void HideUtilCols() {
             this.listView.Columns[Process_Name_i].Width = 0;
+            this.listView.Columns[Process_Path_i].Width = 0;
             this.listView.Columns[Is_Running_i].Width = 0;
             this.listView.Columns[Start_Time_i].Width = 0;
         }
@@ -220,7 +252,10 @@ namespace trakr_sharp.Controls {
                     // If the process wasn't marked as running in this.listView yet
                     if (!RowIsMarkedRunning(lv_row)) {
                         // Update Elapsed_Time text to 0
-                        lv_row.SubItems[Elapsed_Time_i].Text = "0";
+                        lv_row.SubItems[Elapsed_Time_i].Text = "0m";
+
+                        // Change Opened To "Today"
+                        lv_row.SubItems[Date_Opened_i].Text = "Today";
 
                         // Set Is_Running to 1
                         lv_row.SubItems[Is_Running_i].Text = "true";

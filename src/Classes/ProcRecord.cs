@@ -6,5 +6,6 @@
         public long total_time { get; set; }
         public string date_opened { get; set; }
         public string date_added { get; set; }
+        public string proc_path { get; set; }
     }
 }

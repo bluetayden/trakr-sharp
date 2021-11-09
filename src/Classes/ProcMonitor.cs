@@ -20,7 +20,7 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region Methods
+        #region Get/Set
         // Used by MainForm to print a msg for trackedProcs that were already running before trakr started
         public string GetStartupString() {
             Utils.SysCalls.Print(_trackedProcs.Count + " processes are currently being tracked");
@@ -32,6 +32,16 @@ namespace trakr_sharp {
             return keyList;
         }
 
+        public int GetRunningCount() {
+            return _runningTrackedPairs.Count;
+        }
+
+        public int GetTrackedCount() {
+            return _trackedProcs.Count;
+        }
+        #endregion
+
+        #region Methods
         // Used to update _trackedProcs and _runningTrackedPairs when a db update ocurrs or on init
         public void UpdateTrackingFields() {
             _trackedProcs = Utils.Database.GetProcessNameList();

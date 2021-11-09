@@ -28,19 +28,20 @@ namespace trakr_sharp.Utils {
             }
         }
 
-        public static void InsertProcs(List<string> procNames) {
+        public static void InsertProcPathPairs(Dictionary<string, string> procPathPairs) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
 
-                foreach (string name in procNames) {
-                    // Create instance ('record') of ProcRecord using 'name'
+                foreach (string name in procPathPairs.Keys) {
+                    // Create instance ('record') of ProcRecord using proc_name and it's associated path
                     ProcRecord record = new ProcRecord {
                         proc_name = name,
                         program_name = name.Substring(0, name.Length - 4),
                         total_time = 0,
                         date_opened = DateTime.UtcNow.ToString("o"),
-                        date_added = DateTime.UtcNow.ToString("o")
+                        date_added = DateTime.UtcNow.ToString("o"),
+                        proc_path = procPathPairs[name]
                     };
 
                     // Insert record into db col
@@ -121,6 +122,7 @@ namespace trakr_sharp.Utils {
             procTable.Columns.Add("Date_Added");
             // Used in listView but not displayed in UI
             procTable.Columns.Add("Process_Name");
+            procTable.Columns.Add("Process_Path");
 
             // Get all records from db as list
             List<ProcRecord> allRecords = new List<ProcRecord>();
@@ -143,40 +145,12 @@ namespace trakr_sharp.Utils {
                 row["Total_Time"] = record.total_time;
                 row["Date_Added"] = Utils.Times.ISOToShortDateString(record.date_added);
                 row["Process_Name"] = record.proc_name;
+                row["Process_Path"] = record.proc_path;
 
                 procTable.Rows.Add(row);
             }
 
             return procTable;
-        }
-
-        public static void Test() {
-            using (LiteDatabase db = ConnectToDatabase()) {
-                // Get 'tracked' collection from db
-                ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
-
-                // Create test record
-                ProcRecord testRecord = new ProcRecord {
-                    proc_name = "TestRecord.exe",
-                    program_name = "TestRecord",
-                    total_time = _RNG.Next(0, 32767),
-                    date_opened = DateTime.UtcNow.ToString("o"),
-                    date_added = DateTime.UtcNow.ToString("o")
-                };
-
-                // Insert test record into db
-                trackedCol.Insert(testRecord);
-
-                // Query db for proc_name and hours_used
-                var result = trackedCol.Query()
-                    .Select(record => new { record.proc_name, record.total_time })
-                    .ToList();
-
-                // Print results
-                foreach (object obj in result) {
-                    Utils.SysCalls.Print(obj);
-                }
-            }
         }
     }
 }
