@@ -81,11 +81,17 @@
     <Compile Include="Controls\TrackingSummary.Designer.cs">
       <DependentUpon>TrackingSummary.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\AddProgramsForm.cs">
+    <Compile Include="Forms\AddRecordsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\AddProgramsForm.Designer.cs">
-      <DependentUpon>AddProgramsForm.cs</DependentUpon>
+    <Compile Include="Forms\AddRecordsForm.Designer.cs">
+      <DependentUpon>AddRecordsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EditRecordForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EditRecordForm.Designer.cs">
+      <DependentUpon>EditRecordForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -111,8 +117,11 @@
     <EmbeddedResource Include="Controls\TrackingSummary.resx">
       <DependentUpon>TrackingSummary.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\AddProgramsForm.resx">
-      <DependentUpon>AddProgramsForm.cs</DependentUpon>
+    <EmbeddedResource Include="Forms\AddRecordsForm.resx">
+      <DependentUpon>AddRecordsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EditRecordForm.resx">
+      <DependentUpon>EditRecordForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -142,9 +151,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(SolutionDir)\assets\**" 
-          Link="\assets\%(Filename)%(Extension)"
-          CopyToOutputDirectory="PreserveNewest" />
+    <None Include="$(SolutionDir)\assets\**" Link="\assets\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

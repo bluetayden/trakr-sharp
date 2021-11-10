@@ -26,11 +26,11 @@ namespace trakr_sharp {
         private void InitializeComponent() {
             this.mainGridLayout = new System.Windows.Forms.TableLayoutPanel();
             this.buttonLayout = new System.Windows.Forms.GroupBox();
+            this.settingsButton = new System.Windows.Forms.Button();
             this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
-            this.settingsButton = new System.Windows.Forms.Button();
             this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
@@ -69,6 +69,16 @@ namespace trakr_sharp {
             this.buttonLayout.TabStop = false;
             this.buttonLayout.Text = "Tracking";
             // 
+            // settingsButton
+            // 
+            this.settingsButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.settingsButton.Location = new System.Drawing.Point(3, 85);
+            this.settingsButton.Name = "settingsButton";
+            this.settingsButton.Size = new System.Drawing.Size(149, 23);
+            this.settingsButton.TabIndex = 3;
+            this.settingsButton.Text = "Settings";
+            this.settingsButton.UseVisualStyleBackColor = true;
+            // 
             // editButton
             // 
             this.editButton.Dock = System.Windows.Forms.DockStyle.Top;
@@ -78,10 +88,12 @@ namespace trakr_sharp {
             this.editButton.TabIndex = 2;
             this.editButton.Text = "Edit";
             this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // deleteButton
             // 
             this.deleteButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.deleteButton.Enabled = false;
             this.deleteButton.Location = new System.Drawing.Point(3, 39);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(149, 23);
@@ -117,16 +129,7 @@ namespace trakr_sharp {
             this.programConsole.Size = new System.Drawing.Size(477, 114);
             this.programConsole.TabIndex = 1;
             this.programConsole.WordWrap = false;
-            // 
-            // settingsButton
-            // 
-            this.settingsButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.settingsButton.Location = new System.Drawing.Point(3, 85);
-            this.settingsButton.Name = "settingsButton";
-            this.settingsButton.Size = new System.Drawing.Size(149, 23);
-            this.settingsButton.TabIndex = 3;
-            this.settingsButton.Text = "Settings";
-            this.settingsButton.UseVisualStyleBackColor = true;
+            this.programConsole.Enter += new System.EventHandler(this.programConsole_Enter);
             // 
             // trackingList
             // 

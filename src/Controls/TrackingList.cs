@@ -21,12 +21,14 @@ namespace trakr_sharp.Controls {
         private const int One_Min = 60;
         #endregion
 
-        #region Init
-        // Create delegator for public RequestDBWrite event
+        #region PublicEventRaisers
         public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, long> procTimePairs);
-        // Create instance of that event from delegator
         public event RequestDBWriteDelegate RequestDBWrite;
+        public delegate void OnItemSelectedDelegate(TrackingList sender, int selectedCount);
+        public event OnItemSelectedDelegate OnItemSelected;
+        #endregion
 
+        #region Init
         public TrackingList() {
             InitializeComponent();
 
@@ -47,6 +49,10 @@ namespace trakr_sharp.Controls {
             updateElapsedCol_Timer.Stop();
             updateElapsedCol();
             updateElapsedCol_Timer.Start();
+        }
+
+        private void listView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e) {
+            OnItemSelected?.Invoke(this, this.GetSelectedItems().Count);
         }
         #endregion
 
@@ -140,6 +146,10 @@ namespace trakr_sharp.Controls {
 
         private long CalcElapsedRowTime(ListViewItem lv_row) {
             return (Utils.Times.GetUTCNow() - (long)lv_row.SubItems[Start_Time_i].Tag);
+        }
+
+        public void ClearSelections() {
+            this.listView.SelectedItems.Clear();
         }
         #endregion
 

@@ -75,7 +75,7 @@ namespace trakr_sharp.Utils {
                 }
             }
 
-            // Add items that were not found by WMI (process likely closed while AddProgramsForm was open)
+            // Add items that were not found by WMI (process likely closed while AddRecordsForm was open)
             foreach (string proc_name in selectedProcs) {
                 if (!procPathPairs.ContainsKey(proc_name)) {
                     procPathPairs.Add(proc_name, "");

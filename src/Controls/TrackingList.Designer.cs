@@ -33,10 +33,10 @@ namespace trakr_sharp.Controls {
             this.Total_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Date_Added = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Process_Name = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Process_Path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Is_Running = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Start_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.updateElapsedCol_Timer = new System.Windows.Forms.Timer(this.components);
-            this.Process_Path = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // listView
@@ -61,6 +61,7 @@ namespace trakr_sharp.Controls {
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
+            this.listView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView_ItemSelectionChanged);
             // 
             // Program_Icon
             // 
@@ -95,6 +96,10 @@ namespace trakr_sharp.Controls {
             // 
             this.Process_Name.Text = "Process_Name";
             // 
+            // Process_Path
+            // 
+            this.Process_Path.Text = "Process_Path";
+            // 
             // Is_Running
             // 
             this.Is_Running.Text = "Is_Running";
@@ -107,10 +112,6 @@ namespace trakr_sharp.Controls {
             // 
             this.updateElapsedCol_Timer.Interval = 60000;
             this.updateElapsedCol_Timer.Tick += new System.EventHandler(this.updateElapsedCol_Timer_Tick);
-            // 
-            // Process_Path
-            // 
-            this.Process_Path.Text = "Process_Path";
             // 
             // TrackingList
             // 

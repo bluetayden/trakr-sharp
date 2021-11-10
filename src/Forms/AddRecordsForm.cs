@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
-    public partial class AddProgramsForm : Form {
+    public partial class AddRecordsForm : Form {
         #region Init
-        public delegate void OnDBUpdateDelegate(AddProgramsForm sender, string msg); // Create delegator for public OnDBUPdate event
+        public delegate void OnDBUpdateDelegate(AddRecordsForm sender, string msg); // Create delegator for public OnDBUPdate event
         public event OnDBUpdateDelegate OnDBUpdate; // Create instance of that event from delegator
 
-        public AddProgramsForm() {
+        public AddRecordsForm() {
             InitializeComponent();
 
             // Initialise this.runningProcListBox
@@ -43,7 +43,7 @@ namespace trakr_sharp {
         #endregion
 
         #region LocalEventHandlers
-        private void AddProgramsForm_FormClosing(object sender, FormClosingEventArgs e) {
+        private void AddRecordsForm_FormClosing(object sender, FormClosingEventArgs e) {
             foreach (Control c in this.Controls) {
                 c.Dispose();
             }

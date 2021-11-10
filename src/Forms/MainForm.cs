@@ -29,6 +29,7 @@ namespace trakr_sharp {
             // this.trackingList init
             this.trackingList.InitListView(Utils.Database.GetDataTable(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
+            this.trackingList.OnItemSelected += trackingList_OnItemSelected;
 
             // Update this.trackingSummary
             updateTrackingSummary();
@@ -62,7 +63,16 @@ namespace trakr_sharp {
             this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
         }
 
-        private void addProgramsForm_OnDBUpdate(AddProgramsForm sender, string msg) {
+        private void trackingList_OnItemSelected(Controls.TrackingList sender, int selectedCount) {
+            if (selectedCount > 0) {
+                this.deleteButton.Enabled = true;
+            }
+            else {
+                this.deleteButton.Enabled = false;
+            }
+        }
+
+        private void addRecordsForm_OnDBUpdate(AddRecordsForm sender, string msg) {
             this.BeginInvoke((MethodInvoker)(() => {
                 // Print msg that entries were added to db
                 Utils.SysCalls.Print(msg);
@@ -80,30 +90,31 @@ namespace trakr_sharp {
 
         #region LocalEventHandlers
         private void addButton_Click(object sender, EventArgs e) {
-            AddProgramsForm addProgramsForm = new AddProgramsForm();
-            addProgramsForm.Show();
-            addProgramsForm.OnDBUpdate += addProgramsForm_OnDBUpdate;
+            AddRecordsForm addRecordsForm = new AddRecordsForm();
+            addRecordsForm.Show();
+            addRecordsForm.OnDBUpdate += addRecordsForm_OnDBUpdate;
         }
 
         private void deleteButton_Click(object sender, EventArgs e) {
             List<string> selectedItems = trackingList.GetSelectedItems();
 
-            if (selectedItems.Count > 0) {
-                // Update db
-                Utils.Database.DeleteProcs(selectedItems);
+            // Update db
+            Utils.Database.DeleteProcs(selectedItems);
 
-                // Update _procMonitor
-                _procMonitor.UpdateTrackingFields();
-                // Update this.trackingList
-                deleteTrackingListItems();
-                // Update this.trackingSummary
-                updateTrackingSummary();
+            // Update _procMonitor
+            _procMonitor.UpdateTrackingFields();
+            // Update this.trackingList
+            deleteTrackingListItems();
+            // Update this.trackingSummary
+            updateTrackingSummary();
 
-                // Print msg
-                string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
-                Utils.SysCalls.Print(msg);
-                printToProgramConsole(msg);
-            }
+            // Print msg
+            string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
+            Utils.SysCalls.Print(msg);
+            printToProgramConsole(msg);
+
+            // Disable delete button
+            this.deleteButton.Enabled = false;
         }
 
         // Called before the form closes (saves any time information from this.trackingList to db)
@@ -129,11 +140,20 @@ namespace trakr_sharp {
                 _lastWindowState = this.WindowState;
             }
         }
+
+        private void programConsole_Enter(object sender, EventArgs e) {
+            this.trackingList.ClearSelections();
+        }
         #endregion
 
         #region Methods
         // Prints msg with a timestamp to MainForm's programConsole
         private void printToProgramConsole(string msg) {
+            // Clear console if getting close to character limit
+            if (this.programConsole.Text.Length >= 32000) {
+                this.programConsole.Text = "";
+            }
+
             string currTime = Utils.Times.GetCurrTimeStamp();
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
         }
@@ -163,5 +183,10 @@ namespace trakr_sharp {
             this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
         }
         #endregion
+
+        private void editButton_Click(object sender, EventArgs e) {
+            EditRecordForm editRecordForm = new EditRecordForm();
+            editRecordForm.Show();
+        }
     }
 }
