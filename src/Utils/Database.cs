@@ -76,6 +76,16 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        // Updates an existing record with new values (called from EditRecordForm)
+        public static void UpdateRecord(ProcRecord record) {
+            using (LiteDatabase db = ConnectToDatabase()) {
+                // Get 'tracked' collection from db
+                ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
+
+                trackedCol.Update(record);
+            }
+        }
+
         public static List<string> GetProcessNameList() {
             List<string> procNames = new List<string>();
 
@@ -108,6 +118,14 @@ namespace trakr_sharp.Utils {
             }
 
             return allRecords;
+        }
+
+        public static ProcRecord GetProcRecord(string name) {
+            using (LiteDatabase db = ConnectToDatabase()) {
+                // Get 'tracked' collection from db
+                ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
+                return trackedCol.FindOne(record => record.proc_name == name);
+            }
         }
 
         // Convert db entries to a DataTable for display in a ListView

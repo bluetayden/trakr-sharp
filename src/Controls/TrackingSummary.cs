@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
     public partial class TrackingSummary : UserControl {
-        public Image ProcIcon { get; set; }
+        public Bitmap ProcIcon { get; set; }
         public int TrackedCount { get; set; }
         public int RunningCount { get; set; }
         public long Uptime { get; set; }

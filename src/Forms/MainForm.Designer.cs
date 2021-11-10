@@ -82,6 +82,7 @@ namespace trakr_sharp {
             // editButton
             // 
             this.editButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.editButton.Enabled = false;
             this.editButton.Location = new System.Drawing.Point(3, 62);
             this.editButton.Name = "editButton";
             this.editButton.Size = new System.Drawing.Size(149, 23);

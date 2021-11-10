@@ -11,9 +11,11 @@ using System.Windows.Forms;
 namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
         #region Definitions
+        private const int Program_Name_i = 1;
         private const int Elapsed_Time_i = 2;
         private const int Date_Opened_i = 3;
         private const int Total_Time_i = 4;
+        private const int Date_Added_i = 5;
         private const int Process_Name_i = 6;
         private const int Process_Path_i = 7;
         private const int Is_Running_i = 8;
@@ -208,6 +210,34 @@ namespace trakr_sharp.Controls {
                     lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
                 }
             }
+
+            this.listView.EndUpdate();
+        }
+
+        // Updates the values in a single row of this.listView (called from EditRecordForm)
+        public void updateLVRow(ProcRecord newRecord) {
+            this.listView.BeginUpdate();
+
+            ListViewItem recordRow = new ListViewItem();
+            foreach (ListViewItem lv_row in this.listView.Items) {
+                if (lv_row.SubItems[Process_Name_i].Text == newRecord.proc_name) {
+                    recordRow = lv_row;
+                }
+            }
+
+            // Prog name
+            recordRow.SubItems[Program_Name_i].Text = newRecord.program_name;
+            // Opened
+            if (!RowIsMarkedRunning(recordRow)) { 
+                recordRow.SubItems[Date_Opened_i].Text = Utils.Times.ISOToLogicalDateString(newRecord.date_opened);
+            }
+            // Total
+            recordRow.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString(newRecord.total_time);
+            recordRow.SubItems[Total_Time_i].Tag = newRecord.total_time;
+            // Added
+            recordRow.SubItems[Date_Added_i].Text = Utils.Times.ISOToShortDateString(newRecord.date_added);
+            // Path
+            recordRow.SubItems[Process_Path_i].Text = newRecord.proc_path;
 
             this.listView.EndUpdate();
         }

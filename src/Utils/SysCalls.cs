@@ -112,7 +112,7 @@ namespace trakr_sharp.Utils {
             return trackedPairs;
         }
 
-        private static Icon GetIconFromPath(string path) {
+        public static Icon GetIconFromPath(string path) {
             Icon ico = null;
 
             try {
@@ -125,17 +125,22 @@ namespace trakr_sharp.Utils {
             return ico;
         }
 
-        public static void CacheIconsToDisk(Dictionary<string, string> procPathPairs) {
+        public static void CacheIconsToDisk(Dictionary<string, string> procPathPairs, bool overwrite=false) {
             // Create cache folder if not exists
             System.IO.Directory.CreateDirectory("cache");
 
             foreach (string name in procPathPairs.Keys) {
                 string imgPath = String.Format("cache/{0}.png", name.Substring(0, name.Length - 4));
 
-                // If icon not already cached
-                if (!System.IO.File.Exists(imgPath)) {
+                // If icon not already cached, or overwrite is true
+                if (!System.IO.File.Exists(imgPath) || overwrite) {
                     // Get icon from path
                     using (Icon ico = GetIconFromPath(procPathPairs[name])) {
+                        // If the icon does already exist in the cache, delete it to prevent GDI error
+                        if (System.IO.File.Exists(imgPath)) {
+                            System.IO.File.Delete(imgPath);
+                        }
+
                         // If the icon was successfully found, save it to cache
                         if (ico != null) {
                             ico.ToBitmap().Save(imgPath);
@@ -146,23 +151,31 @@ namespace trakr_sharp.Utils {
         }
 
         // Retrieves an image from the cache folder using a proc_name
-        public static Image GetProcImage(string name) {
+        public static Bitmap GetProcBitmap(string name) {
+            Bitmap retImg;
+
             if (name == "NO_PROC") {
-                return Image.FromFile("assets/proc_icon_missing.png");
+                using (Bitmap img = new Bitmap("assets/proc_icon_missing.png")) {
+                    retImg = new Bitmap(img);
+                    return retImg;
+                }
             }
             else {
                 string imgPath = String.Format("cache/{0}.png", name.Substring(0, name.Length - 4));
-                Image img = null;
 
                 // If icon in cache
                 if (System.IO.File.Exists(imgPath)) {
-                    img = Image.FromFile(imgPath);
+                    using (Bitmap img = new Bitmap(imgPath)) {
+                        retImg = new Bitmap(img);
+                        return retImg;
+                    }
                 }
                 else {
-                    img = Image.FromFile("assets/proc_icon_default.png");
+                    using (Bitmap img = new Bitmap("assets/proc_icon_default.png")) {
+                        retImg = new Bitmap(img);
+                        return retImg;
+                    }
                 }
-
-                return img;
             }
         }
 

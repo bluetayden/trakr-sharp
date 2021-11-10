@@ -76,19 +76,35 @@ namespace trakr_sharp {
         private void applyButton_Click(object sender, EventArgs e) {
             // Get dict of proc_name and proc_path and insert them into the db
             Dictionary<string, string> procPathPairs = Utils.SysCalls.GetProcPathPairs(this.selectedProcList.getProcs());
-            Utils.Database.InsertProcPathPairs(procPathPairs);
-            Utils.SysCalls.CacheIconsToDisk(procPathPairs);
 
-            // Raise public event that db was altered
-            OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " record(s) to the database");
+            try {
+                Utils.Database.InsertProcPathPairs(procPathPairs);
+                Utils.SysCalls.CacheIconsToDisk(procPathPairs);
 
-            // Remove the items from _selectedProcs so they can't be accessed again
-            this.selectedProcList.setProcs(new List<string>());
+                // Raise public event that db was altered
+                OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " record(s) to the database");
 
-            // Repopulate listboxes to reflect changes in _selectedProcs
-            repopulateProcListBoxes();
-            // Enable/Disable buttons accordingly
-            handleButtonEnabling();
+                // Show success message
+                MessageBox.Show(this, "Added " + this.selectedProcList.getProcs().Count + " " +
+                    "record(s) to trakr", "Records successfully added",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Remove the items from _selectedProcs so they can't be accessed again
+                this.selectedProcList.setProcs(new List<string>());
+
+                // Repopulate listboxes to reflect changes in _selectedProcs
+                repopulateProcListBoxes();
+                // Enable/Disable buttons accordingly
+                handleButtonEnabling();
+            }
+            catch (Exception ex) {
+                // Show error message
+                MessageBox.Show(ex.ToString(), "Error adding records",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                // Reenable Apply button
+                this.applyButton.Enabled = true;
+            }
         }
         #endregion
 

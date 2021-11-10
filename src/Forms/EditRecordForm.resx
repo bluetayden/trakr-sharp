@@ -129,4 +129,17 @@
   <metadata name="pathIconGroupBox.GenerateMember" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="procIconBox.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABGdBTUEAALGPC/xhBQAAAM9JREFUaEPt
+        2DEOwkAMBdHcA64PN4MqnAHsfoW0+6Q4II/0S2Ycyt2apmma5gvX2D32jL0PXjaznTcskT98xUbyI5c3
+        LH1Efv1IWLG8ZZpHbCSrWN4yzUhUuWlGkspNM5JUbpqRpHLTsADhPgsQ7rMA4T4LEO6zAOE+CxDuswDh
+        PgsQ7rMA4T4LEO6zAOE+CxDuswDhPgsQ7rMA4T4LEO6zAOE+CxDuswDhPgsQ7v/8w9aZnhZvsWnO8ri7
+        xy6xJaqf1/OfXz6+aZqm+Xe27QOsgD7a5UdbkgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

@@ -64,11 +64,17 @@ namespace trakr_sharp {
         }
 
         private void trackingList_OnItemSelected(Controls.TrackingList sender, int selectedCount) {
-            if (selectedCount > 0) {
+            if (selectedCount == 1) {
                 this.deleteButton.Enabled = true;
+                this.editButton.Enabled = true;
+            }
+            else if (selectedCount > 1) {
+                this.deleteButton.Enabled = true;
+                this.editButton.Enabled = false;
             }
             else {
                 this.deleteButton.Enabled = false;
+                this.editButton.Enabled = false;
             }
         }
 
@@ -86,35 +92,68 @@ namespace trakr_sharp {
                 updateTrackingSummary();
             }));
         }
+
+        private void addRecordsForm_FormClosed(object sender, FormClosedEventArgs e) {
+            this.addButton.Enabled = true;
+        }
         #endregion
 
         #region LocalEventHandlers
         private void addButton_Click(object sender, EventArgs e) {
+            // Disable add button
+            this.addButton.Enabled = false;
+
+            // Create addRecordsForm
             AddRecordsForm addRecordsForm = new AddRecordsForm();
-            addRecordsForm.Show();
+            // Subscribe to events
             addRecordsForm.OnDBUpdate += addRecordsForm_OnDBUpdate;
+            addRecordsForm.FormClosed += addRecordsForm_FormClosed;
+            // Execute form
+            addRecordsForm.Show();
+        }
+
+        private void editButton_Click(object sender, EventArgs e) {
+            string recordName = this.trackingList.GetSelectedItems()[0];
+            EditRecordForm editRecordForm = new EditRecordForm(recordName);
+            editRecordForm.ShowDialog();
+
+            if (editRecordForm.DialogResult == DialogResult.Cancel) {
+                ProcRecord newRecord = Utils.Database.GetProcRecord(recordName);
+                this.trackingList.updateLVRow(newRecord);
+            }
         }
 
         private void deleteButton_Click(object sender, EventArgs e) {
+            // Get selected items
             List<string> selectedItems = trackingList.GetSelectedItems();
 
-            // Update db
-            Utils.Database.DeleteProcs(selectedItems);
+            // Generate confirmation msg
+            string confirmationMsg = "The following records will be deleted: \r\n\r\n\t" +
+                                     string.Join("\r\n\t", selectedItems) +
+                                     "\r\n\r\nThis process cannot be undone. Continue?\r\n";
+            // User confirmation before deletion
+            DialogResult userResp = MessageBox.Show(confirmationMsg, "Confirm record deletion",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
-            // Update _procMonitor
-            _procMonitor.UpdateTrackingFields();
-            // Update this.trackingList
-            deleteTrackingListItems();
-            // Update this.trackingSummary
-            updateTrackingSummary();
+            if (userResp == DialogResult.OK) {
+                // Update db
+                Utils.Database.DeleteProcs(selectedItems);
 
-            // Print msg
-            string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
-            Utils.SysCalls.Print(msg);
-            printToProgramConsole(msg);
+                // Update _procMonitor
+                _procMonitor.UpdateTrackingFields();
+                // Update this.trackingList
+                deleteTrackingListItems();
+                // Update this.trackingSummary
+                updateTrackingSummary();
 
-            // Disable delete button
-            this.deleteButton.Enabled = false;
+                // Print msg
+                string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
+                Utils.SysCalls.Print(msg);
+                printToProgramConsole(msg);
+
+                // Disable delete button
+                this.deleteButton.Enabled = false;
+            }
         }
 
         // Called before the form closes (saves any time information from this.trackingList to db)
@@ -163,7 +202,7 @@ namespace trakr_sharp {
             if (this.trackingSummary.ProcIcon != null) {
                 this.trackingSummary.ProcIcon.Dispose();
             }
-            this.trackingSummary.ProcIcon = Utils.SysCalls.GetProcImage(this.trackingList.GetShortestRunningProc());
+            this.trackingSummary.ProcIcon = Utils.SysCalls.GetProcBitmap(this.trackingList.GetShortestRunningProc());
             this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
             this.trackingSummary.RerenderFields();
@@ -183,10 +222,5 @@ namespace trakr_sharp {
             this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
         }
         #endregion
-
-        private void editButton_Click(object sender, EventArgs e) {
-            EditRecordForm editRecordForm = new EditRecordForm();
-            editRecordForm.Show();
-        }
     }
 }
