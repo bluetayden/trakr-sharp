@@ -27,8 +27,8 @@ namespace trakr_sharp {
             this.mainGridLayout = new System.Windows.Forms.TableLayoutPanel();
             this.buttonLayout = new System.Windows.Forms.GroupBox();
             this.settingsButton = new System.Windows.Forms.Button();
-            this.editButton = new System.Windows.Forms.Button();
             this.deleteButton = new System.Windows.Forms.Button();
+            this.editButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
             this.trackingList = new trakr_sharp.Controls.TrackingList();
@@ -58,8 +58,8 @@ namespace trakr_sharp {
             // buttonLayout
             // 
             this.buttonLayout.Controls.Add(this.settingsButton);
-            this.buttonLayout.Controls.Add(this.editButton);
             this.buttonLayout.Controls.Add(this.deleteButton);
+            this.buttonLayout.Controls.Add(this.editButton);
             this.buttonLayout.Controls.Add(this.addButton);
             this.buttonLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonLayout.Location = new System.Drawing.Point(486, 224);
@@ -79,30 +79,30 @@ namespace trakr_sharp {
             this.settingsButton.Text = "Settings";
             this.settingsButton.UseVisualStyleBackColor = true;
             // 
-            // editButton
-            // 
-            this.editButton.Dock = System.Windows.Forms.DockStyle.Top;
-            this.editButton.Enabled = false;
-            this.editButton.Location = new System.Drawing.Point(3, 62);
-            this.editButton.Name = "editButton";
-            this.editButton.Size = new System.Drawing.Size(149, 23);
-            this.editButton.TabIndex = 2;
-            this.editButton.Text = "Edit";
-            this.editButton.UseVisualStyleBackColor = true;
-            this.editButton.Click += new System.EventHandler(this.editButton_Click);
-            // 
             // deleteButton
             // 
             this.deleteButton.Dock = System.Windows.Forms.DockStyle.Top;
             this.deleteButton.Enabled = false;
-            this.deleteButton.Location = new System.Drawing.Point(3, 39);
+            this.deleteButton.Location = new System.Drawing.Point(3, 62);
             this.deleteButton.Name = "deleteButton";
             this.deleteButton.Size = new System.Drawing.Size(149, 23);
-            this.deleteButton.TabIndex = 1;
+            this.deleteButton.TabIndex = 2;
             this.deleteButton.Text = "Delete";
-            this.deleteButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             this.deleteButton.UseVisualStyleBackColor = true;
             this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
+            // editButton
+            // 
+            this.editButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.editButton.Enabled = false;
+            this.editButton.Location = new System.Drawing.Point(3, 39);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(149, 23);
+            this.editButton.TabIndex = 1;
+            this.editButton.Text = "Edit";
+            this.editButton.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.editButton.UseVisualStyleBackColor = true;
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
             // 
             // addButton
             // 
@@ -173,9 +173,9 @@ namespace trakr_sharp {
         }
 
         #endregion
-        private System.Windows.Forms.Button deleteButton;
-        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Button editButton;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button deleteButton;
         private System.Windows.Forms.TextBox programConsole;
         private Controls.TrackingList trackingList;
         private Controls.TrackingSummary trackingSummary;

@@ -37,6 +37,9 @@ namespace trakr_sharp.Controls {
             this.Is_Running = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Start_Time = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.updateElapsedCol_Timer = new System.Windows.Forms.Timer(this.components);
+            this.lvRowContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.stopLoggingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lvRowContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView
@@ -62,6 +65,7 @@ namespace trakr_sharp.Controls {
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             this.listView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.listView_ItemSelectionChanged);
+            this.listView.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listView_MouseClick);
             // 
             // Program_Icon
             // 
@@ -113,6 +117,20 @@ namespace trakr_sharp.Controls {
             this.updateElapsedCol_Timer.Interval = 60000;
             this.updateElapsedCol_Timer.Tick += new System.EventHandler(this.updateElapsedCol_Timer_Tick);
             // 
+            // lvRowContextMenu
+            // 
+            this.lvRowContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.stopLoggingToolStripMenuItem});
+            this.lvRowContextMenu.Name = "lvRowContextMenu";
+            this.lvRowContextMenu.Size = new System.Drawing.Size(146, 26);
+            // 
+            // stopLoggingToolStripMenuItem
+            // 
+            this.stopLoggingToolStripMenuItem.Name = "stopLoggingToolStripMenuItem";
+            this.stopLoggingToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.stopLoggingToolStripMenuItem.Text = "Stop Logging";
+            this.stopLoggingToolStripMenuItem.Click += new System.EventHandler(this.stopLoggingToolStripMenuItem_Click);
+            // 
             // TrackingList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -120,6 +138,7 @@ namespace trakr_sharp.Controls {
             this.Controls.Add(this.listView);
             this.Name = "TrackingList";
             this.Size = new System.Drawing.Size(658, 150);
+            this.lvRowContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -138,5 +157,7 @@ namespace trakr_sharp.Controls {
         private System.Windows.Forms.ColumnHeader Is_Running;
         private System.Windows.Forms.ColumnHeader Start_Time;
         private System.Windows.Forms.ColumnHeader Process_Path;
+        private System.Windows.Forms.ContextMenuStrip lvRowContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem stopLoggingToolStripMenuItem;
     }
 }

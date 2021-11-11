@@ -65,7 +65,7 @@ namespace trakr_sharp {
                 Utils.Database.UpdateRecord(this.record);
                 
                 // Show success message
-                MessageBox.Show("The " + this.record.proc_name + " record has been updated", "Record successfuly saved",
+                MessageBox.Show(this.record.proc_name + " record has been updated", "Record successfuly saved",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Close the form
@@ -112,7 +112,14 @@ namespace trakr_sharp {
 
             // Set total time pickers
             this.hoursCounter.Value = Math.Floor((decimal)(record.total_time / 3600));
-            this.minsCounter.Value = Math.Floor(record.total_time - (this.hoursCounter.Value * 3600))/60;
+
+            decimal mins = Math.Floor(record.total_time - (this.hoursCounter.Value * 3600)) / 60;
+            if (mins > 59) {
+                this.minsCounter.Value = 59;
+            }
+            else {
+                this.minsCounter.Value = (int)mins;
+            }
 
             // Set date pickers
             DateTime lastOpenedDate = DateTime.Parse(record.date_opened);

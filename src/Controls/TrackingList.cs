@@ -28,6 +28,8 @@ namespace trakr_sharp.Controls {
         public event RequestDBWriteDelegate RequestDBWrite;
         public delegate void OnItemSelectedDelegate(TrackingList sender, int selectedCount);
         public event OnItemSelectedDelegate OnItemSelected;
+        public delegate void RequestProcStopDelegate(TrackingList sender, List<string> procNames);
+        public event RequestProcStopDelegate RequestProcStop;
         #endregion
 
         #region Init
@@ -55,6 +57,28 @@ namespace trakr_sharp.Controls {
 
         private void listView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e) {
             OnItemSelected?.Invoke(this, this.GetSelectedItems().Count);
+        }
+
+        // Opens context menu when an item in this.listView is right clicked
+        private void listView_MouseClick(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Right) {
+                var focusedItem = this.listView.FocusedItem;
+                if (focusedItem != null && focusedItem.Bounds.Contains(e.Location)) {
+                    lvRowContextMenu.Show(Cursor.Position);
+                }
+            }
+        }
+
+        // Raises public event requesting procMonitor to mark the selected procs that are marked running, as closed
+        private void stopLoggingToolStripMenuItem_Click(object sender, EventArgs e) {
+            List<string> runningProcNames = new List<string>();
+
+            foreach (ListViewItem lv_row in this.listView.Items) {
+                if (RowIsMarkedRunning(lv_row) && this.listView.SelectedItems.Contains(lv_row)) {
+                    runningProcNames.Add(lv_row.SubItems[Process_Name_i].Text);
+                }
+            }
+            RequestProcStop?.Invoke(this, runningProcNames);
         }
         #endregion
 
@@ -85,7 +109,7 @@ namespace trakr_sharp.Controls {
 
         public string GetShortestRunningProc() {
             try {
-                string name = this.listView.Items[0].SubItems[Process_Name_i].Text;
+                string name = "NO_PROC";
                 long shortest_time = 0;
 
                 foreach (ListViewItem lv_row in this.listView.Items) {

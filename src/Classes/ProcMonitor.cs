@@ -48,17 +48,30 @@ namespace trakr_sharp {
             _runningTrackedPairs = Utils.SysCalls.GetRunningTrackedPairs();
         }
 
+        // Forces the instance counts of the provided procs to zero
+        public void ForceCountsToZero(List<string> procNames) {
+            foreach (string name in procNames) {
+                if (_runningTrackedPairs.ContainsKey(name)) {
+                    // remove key from _runningTrackedPairs
+                    _runningTrackedPairs.Remove(name);
+                    // print process stopped
+                    Utils.SysCalls.Print(name + " stopped");
+                    OnTrackedProcEvent?.Invoke(this, name + " stopped");
+                }
+            }
+        }
+
         // Watches for when any new process is created
         private void WatchProcessCreations() {
             ManagementEventWatcher startWatch = new ManagementEventWatcher(
-                "SELECT * FROM __InstanceCreationEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'");
+                "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
             startWatch.EventArrived += startWatch_EventArrived;
             startWatch.Start();
         }
 
         private void WatchProcessDeletions() {
             ManagementEventWatcher stopWatch = new ManagementEventWatcher(
-                "SELECT * FROM __InstanceDeletionEvent WITHIN 3 WHERE TargetInstance ISA 'Win32_Process'");
+                "SELECT * FROM __InstanceDeletionEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
             stopWatch.EventArrived += stopWatch_EventArrived;
             stopWatch.Start();
         }

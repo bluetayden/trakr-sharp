@@ -30,6 +30,7 @@ namespace trakr_sharp {
             this.trackingList.InitListView(Utils.Database.GetDataTable(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
             this.trackingList.OnItemSelected += trackingList_OnItemSelected;
+            this.trackingList.RequestProcStop += trackingList_OnRequestProcStop;
 
             // Update this.trackingSummary
             updateTrackingSummary();
@@ -76,6 +77,11 @@ namespace trakr_sharp {
                 this.deleteButton.Enabled = false;
                 this.editButton.Enabled = false;
             }
+        }
+
+        private void trackingList_OnRequestProcStop(Controls.TrackingList sender, List<string> procNames) {
+            _procMonitor.ForceCountsToZero(procNames);
+            this.trackingList.updateRunningStates(_procMonitor.GetRunningProcs());
         }
 
         private void addRecordsForm_OnDBUpdate(AddRecordsForm sender, string msg) {
@@ -202,6 +208,7 @@ namespace trakr_sharp {
             if (this.trackingSummary.ProcIcon != null) {
                 this.trackingSummary.ProcIcon.Dispose();
             }
+
             this.trackingSummary.ProcIcon = Utils.SysCalls.GetProcBitmap(this.trackingList.GetShortestRunningProc());
             this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
