@@ -78,6 +78,7 @@ namespace trakr_sharp {
             this.settingsButton.TabIndex = 3;
             this.settingsButton.Text = "Settings";
             this.settingsButton.UseVisualStyleBackColor = true;
+            this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
             // 
             // deleteButton
             // 

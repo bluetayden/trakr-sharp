@@ -1,20 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Drawing2D;
 
 using System.Data;
 using System.Management;
 using System.Diagnostics;
+using System.IO;
+
+using Newtonsoft.Json;
 
 namespace trakr_sharp.Utils {
     class SysCalls {
+        private static readonly string _settingsJsonPath = "user_data/settings.json";
+
         private static readonly string[] _ignoredProcs = new string[] {"System Idle Process", "explorer.exe", "smss.exe",
             "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System",
             "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
+
+        // Creates a json to store user settings if it doens't exist
+        public static void InitUserSettings() {
+            // Create user_data folder if not exists
+            Directory.CreateDirectory("user_data");
+
+            // Create settings.json if not exists
+            if (!File.Exists(_settingsJsonPath)) {
+                UserSettings userSettings = new UserSettings {
+                    CloseBehaviour = 1,
+                    RunOnStartup = false,
+                    ShowUtilCols = false
+                };
+
+                // Convert userSettings to json string and write to "user_data/settings.json"
+                using (StreamWriter file = File.CreateText(_settingsJsonPath)) {
+                    JsonSerializer serializer = new JsonSerializer();
+                    serializer.Serialize(file, userSettings);
+                }
+            }
+        }
+
+        // Reads "user_data/settings.json" and returns a UserSettings object
+        public static UserSettings ReadUserSettings() {
+            UserSettings userSettings;
+
+            // Deserialize JSON in "user_data/settings.json" and save to 'userSettings'
+            using (StreamReader file = File.OpenText(_settingsJsonPath)) {
+                JsonSerializer serializer = new JsonSerializer();
+                userSettings = (UserSettings)serializer.Deserialize(file, typeof(UserSettings));
+            }
+
+            return userSettings;
+        }
+
+        // Writes changes to "user_data/settings.json"
+        public static void UpdateUserSettings(UserSettings newUserSettings) {
+            // Read "user_data/settings/json" and save deserialzied obj in jsonObj
+            string diskString = File.ReadAllText(_settingsJsonPath);
+            dynamic diskUserSettings = JsonConvert.DeserializeObject(diskString);
+
+            // Write changes from newUserSettings to jsonUserSettings
+            diskUserSettings["CloseBehaviour"] = newUserSettings.CloseBehaviour;
+            diskUserSettings["RunOnStartup"] = newUserSettings.RunOnStartup;
+            diskUserSettings["ShowUtilCols"] = newUserSettings.ShowUtilCols;
+
+            // Write changes to back to file
+            string outputJson = JsonConvert.SerializeObject(diskUserSettings);
+            File.WriteAllText(_settingsJsonPath, outputJson);
+        }
 
         // List of currently running processes on the device
         public static List<string> GetRunningProcNameList(bool incDuplicates = false) {

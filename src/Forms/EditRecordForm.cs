@@ -18,7 +18,7 @@ namespace trakr_sharp {
             InitializeComponent();
 
             this.record = Utils.Database.GetProcRecord(proc_name);
-            SetTextBoxesToDefault();
+            SetControlValuesToOriginal();
 
             this.progNameTextBox.Select();
             SubscribeToValueChanges();
@@ -126,7 +126,7 @@ namespace trakr_sharp {
         #endregion
 
         #region Methods
-        private void SetTextBoxesToDefault() {
+        private void SetControlValuesToOriginal() {
             // Set name boxes
             this.progNameTextBox.Text = record.program_name;
             this.procNameTextBox.Text = record.proc_name;

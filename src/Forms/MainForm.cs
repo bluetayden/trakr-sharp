@@ -19,8 +19,9 @@ namespace trakr_sharp {
         public MainForm() {
             InitializeComponent();
 
-            // Database init
+            // Database and UserSettings init
             Utils.Database.Init();
+            Utils.SysCalls.InitUserSettings();
 
             // Proc monitor instance init
             _procMonitor = new ProcMonitor();
@@ -160,6 +161,11 @@ namespace trakr_sharp {
                 // Disable delete button
                 this.deleteButton.Enabled = false;
             }
+        }
+
+        private void settingsButton_Click(object sender, EventArgs e) {
+            SettingsForm settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
         }
 
         // Called before the form closes (saves any time information from this.trackingList to db)

@@ -83,7 +83,7 @@ namespace trakr_sharp {
             applyCancelPanel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             applyCancelPanel.Controls.Add(this.applyButton);
             applyCancelPanel.Controls.Add(this.cancelButton);
-            applyCancelPanel.Location = new System.Drawing.Point(300, 290);
+            applyCancelPanel.Location = new System.Drawing.Point(300, 286);
             applyCancelPanel.Margin = new System.Windows.Forms.Padding(0);
             applyCancelPanel.Name = "applyCancelPanel";
             applyCancelPanel.Size = new System.Drawing.Size(164, 35);
@@ -118,7 +118,7 @@ namespace trakr_sharp {
             nameGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             nameGroupBox.Location = new System.Drawing.Point(3, 3);
             nameGroupBox.Name = "nameGroupBox";
-            nameGroupBox.Size = new System.Drawing.Size(452, 77);
+            nameGroupBox.Size = new System.Drawing.Size(452, 76);
             nameGroupBox.TabIndex = 0;
             nameGroupBox.TabStop = false;
             nameGroupBox.Text = "Name";
@@ -138,14 +138,14 @@ namespace trakr_sharp {
             this.nameFieldLayout.RowCount = 2;
             this.nameFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.nameFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.nameFieldLayout.Size = new System.Drawing.Size(446, 58);
+            this.nameFieldLayout.Size = new System.Drawing.Size(446, 57);
             this.nameFieldLayout.TabIndex = 1;
             // 
             // procNameLabel
             // 
             this.procNameLabel.AutoSize = true;
             this.procNameLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.procNameLabel.Location = new System.Drawing.Point(3, 29);
+            this.procNameLabel.Location = new System.Drawing.Point(3, 28);
             this.procNameLabel.Name = "procNameLabel";
             this.procNameLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.procNameLabel.Size = new System.Drawing.Size(83, 29);
@@ -160,7 +160,7 @@ namespace trakr_sharp {
             this.progNameLabel.Location = new System.Drawing.Point(3, 0);
             this.progNameLabel.Name = "progNameLabel";
             this.progNameLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.progNameLabel.Size = new System.Drawing.Size(83, 29);
+            this.progNameLabel.Size = new System.Drawing.Size(83, 28);
             this.progNameLabel.TabIndex = 0;
             this.progNameLabel.Text = "Program Name";
             this.progNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -177,7 +177,7 @@ namespace trakr_sharp {
             // 
             this.procNameTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.procNameTextBox.Enabled = false;
-            this.procNameTextBox.Location = new System.Drawing.Point(92, 32);
+            this.procNameTextBox.Location = new System.Drawing.Point(92, 31);
             this.procNameTextBox.Name = "procNameTextBox";
             this.procNameTextBox.ReadOnly = true;
             this.procNameTextBox.Size = new System.Drawing.Size(351, 20);
@@ -187,9 +187,9 @@ namespace trakr_sharp {
             // 
             timeDateGroupBox.Controls.Add(this.timeDateFieldLayout);
             timeDateGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            timeDateGroupBox.Location = new System.Drawing.Point(3, 86);
+            timeDateGroupBox.Location = new System.Drawing.Point(3, 85);
             timeDateGroupBox.Name = "timeDateGroupBox";
-            timeDateGroupBox.Size = new System.Drawing.Size(452, 110);
+            timeDateGroupBox.Size = new System.Drawing.Size(452, 108);
             timeDateGroupBox.TabIndex = 1;
             timeDateGroupBox.TabStop = false;
             timeDateGroupBox.Text = "Time and Date";
@@ -212,14 +212,14 @@ namespace trakr_sharp {
             this.timeDateFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.timeDateFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.timeDateFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.timeDateFieldLayout.Size = new System.Drawing.Size(446, 91);
+            this.timeDateFieldLayout.Size = new System.Drawing.Size(446, 89);
             this.timeDateFieldLayout.TabIndex = 0;
             // 
             // dateAddedLabel
             // 
             this.dateAddedLabel.AutoSize = true;
             this.dateAddedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dateAddedLabel.Location = new System.Drawing.Point(3, 60);
+            this.dateAddedLabel.Location = new System.Drawing.Point(3, 58);
             this.dateAddedLabel.Name = "dateAddedLabel";
             this.dateAddedLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.dateAddedLabel.Size = new System.Drawing.Size(83, 31);
@@ -234,7 +234,7 @@ namespace trakr_sharp {
             this.totalTimeLabel.Location = new System.Drawing.Point(3, 0);
             this.totalTimeLabel.Name = "totalTimeLabel";
             this.totalTimeLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.totalTimeLabel.Size = new System.Drawing.Size(83, 30);
+            this.totalTimeLabel.Size = new System.Drawing.Size(83, 29);
             this.totalTimeLabel.TabIndex = 0;
             this.totalTimeLabel.Text = "Time Used";
             this.totalTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -243,10 +243,10 @@ namespace trakr_sharp {
             // 
             this.dateOpenedLabel.AutoSize = true;
             this.dateOpenedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dateOpenedLabel.Location = new System.Drawing.Point(3, 30);
+            this.dateOpenedLabel.Location = new System.Drawing.Point(3, 29);
             this.dateOpenedLabel.Name = "dateOpenedLabel";
             this.dateOpenedLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.dateOpenedLabel.Size = new System.Drawing.Size(83, 30);
+            this.dateOpenedLabel.Size = new System.Drawing.Size(83, 29);
             this.dateOpenedLabel.TabIndex = 0;
             this.dateOpenedLabel.Text = "Last Opened";
             this.dateOpenedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -267,7 +267,7 @@ namespace trakr_sharp {
             this.totalTimeCounterLayout.Name = "totalTimeCounterLayout";
             this.totalTimeCounterLayout.RowCount = 1;
             this.totalTimeCounterLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.totalTimeCounterLayout.Size = new System.Drawing.Size(351, 24);
+            this.totalTimeCounterLayout.Size = new System.Drawing.Size(351, 23);
             this.totalTimeCounterLayout.TabIndex = 5;
             // 
             // hoursCounter
@@ -302,7 +302,7 @@ namespace trakr_sharp {
             this.hoursLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hoursLabel.Location = new System.Drawing.Point(138, 0);
             this.hoursLabel.Name = "hoursLabel";
-            this.hoursLabel.Size = new System.Drawing.Size(33, 24);
+            this.hoursLabel.Size = new System.Drawing.Size(33, 23);
             this.hoursLabel.TabIndex = 2;
             this.hoursLabel.Text = "hours";
             this.hoursLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -313,7 +313,7 @@ namespace trakr_sharp {
             this.minsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.minsLabel.Location = new System.Drawing.Point(312, 0);
             this.minsLabel.Name = "minsLabel";
-            this.minsLabel.Size = new System.Drawing.Size(36, 24);
+            this.minsLabel.Size = new System.Drawing.Size(36, 23);
             this.minsLabel.TabIndex = 3;
             this.minsLabel.Text = "mins";
             this.minsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -321,7 +321,7 @@ namespace trakr_sharp {
             // dateOpenedTimePicker
             // 
             this.dateOpenedTimePicker.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dateOpenedTimePicker.Location = new System.Drawing.Point(92, 33);
+            this.dateOpenedTimePicker.Location = new System.Drawing.Point(92, 32);
             this.dateOpenedTimePicker.Name = "dateOpenedTimePicker";
             this.dateOpenedTimePicker.Size = new System.Drawing.Size(351, 20);
             this.dateOpenedTimePicker.TabIndex = 6;
@@ -329,7 +329,7 @@ namespace trakr_sharp {
             // dateAddedTimePicker
             // 
             this.dateAddedTimePicker.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dateAddedTimePicker.Location = new System.Drawing.Point(92, 63);
+            this.dateAddedTimePicker.Location = new System.Drawing.Point(92, 61);
             this.dateAddedTimePicker.Name = "dateAddedTimePicker";
             this.dateAddedTimePicker.Size = new System.Drawing.Size(351, 20);
             this.dateAddedTimePicker.TabIndex = 7;
@@ -338,9 +338,9 @@ namespace trakr_sharp {
             // 
             pathIconGroupBox.Controls.Add(this.pathIconFieldLayout);
             pathIconGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            pathIconGroupBox.Location = new System.Drawing.Point(3, 202);
+            pathIconGroupBox.Location = new System.Drawing.Point(3, 199);
             pathIconGroupBox.Name = "pathIconGroupBox";
-            pathIconGroupBox.Size = new System.Drawing.Size(452, 79);
+            pathIconGroupBox.Size = new System.Drawing.Size(452, 78);
             pathIconGroupBox.TabIndex = 2;
             pathIconGroupBox.TabStop = false;
             pathIconGroupBox.Text = "Path and Icon";
@@ -360,14 +360,14 @@ namespace trakr_sharp {
             this.pathIconFieldLayout.RowCount = 2;
             this.pathIconFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.pathIconFieldLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.pathIconFieldLayout.Size = new System.Drawing.Size(446, 60);
+            this.pathIconFieldLayout.Size = new System.Drawing.Size(446, 59);
             this.pathIconFieldLayout.TabIndex = 0;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
             this.label7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label7.Location = new System.Drawing.Point(3, 30);
+            this.label7.Location = new System.Drawing.Point(3, 29);
             this.label7.Name = "label7";
             this.label7.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
             this.label7.Size = new System.Drawing.Size(83, 30);
@@ -382,7 +382,7 @@ namespace trakr_sharp {
             this.pathLabel.Location = new System.Drawing.Point(3, 0);
             this.pathLabel.Name = "pathLabel";
             this.pathLabel.Padding = new System.Windows.Forms.Padding(0, 0, 0, 6);
-            this.pathLabel.Size = new System.Drawing.Size(83, 30);
+            this.pathLabel.Size = new System.Drawing.Size(83, 29);
             this.pathLabel.TabIndex = 0;
             this.pathLabel.Text = "Path";
             this.pathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -403,7 +403,7 @@ namespace trakr_sharp {
             this.pathBrowseLayout.RowCount = 1;
             this.pathBrowseLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.pathBrowseLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.pathBrowseLayout.Size = new System.Drawing.Size(357, 30);
+            this.pathBrowseLayout.Size = new System.Drawing.Size(357, 29);
             this.pathBrowseLayout.TabIndex = 8;
             // 
             // procPathTextBox
@@ -443,7 +443,7 @@ namespace trakr_sharp {
             // 
             this.procIconBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("procIconBox.BackgroundImage")));
             this.procIconBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.procIconBox.Location = new System.Drawing.Point(92, 33);
+            this.procIconBox.Location = new System.Drawing.Point(92, 32);
             this.procIconBox.Name = "procIconBox";
             this.procIconBox.Size = new System.Drawing.Size(24, 24);
             this.procIconBox.TabIndex = 9;
@@ -461,7 +461,7 @@ namespace trakr_sharp {
             this.mainLayout.RowCount = 2;
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-            this.mainLayout.Size = new System.Drawing.Size(464, 325);
+            this.mainLayout.Size = new System.Drawing.Size(464, 321);
             this.mainLayout.TabIndex = 0;
             // 
             // fieldsTable
@@ -478,7 +478,7 @@ namespace trakr_sharp {
             this.fieldsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.53868F));
             this.fieldsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40.92265F));
             this.fieldsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 29.53868F));
-            this.fieldsTable.Size = new System.Drawing.Size(458, 284);
+            this.fieldsTable.Size = new System.Drawing.Size(458, 280);
             this.fieldsTable.TabIndex = 5;
             // 
             // openFileDialog
@@ -493,7 +493,7 @@ namespace trakr_sharp {
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(464, 325);
+            this.ClientSize = new System.Drawing.Size(464, 321);
             this.Controls.Add(this.mainLayout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
