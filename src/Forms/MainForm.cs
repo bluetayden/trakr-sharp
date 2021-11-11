@@ -139,7 +139,7 @@ namespace trakr_sharp {
                                      "\r\n\r\nThis process cannot be undone. Continue?\r\n";
             // User confirmation before deletion
             DialogResult userResp = MessageBox.Show(confirmationMsg, "Confirm record deletion",
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
 
             if (userResp == DialogResult.OK) {
                 // Update db

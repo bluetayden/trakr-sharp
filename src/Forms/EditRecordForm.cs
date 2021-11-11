@@ -12,7 +12,7 @@ namespace trakr_sharp {
     public partial class EditRecordForm : Form {
         #region Init
         private ProcRecord record { get; set; }
-        private Bitmap tempProcIcon { get; set; }
+        private Image tempProcIcon { get; set; }
 
         public EditRecordForm(string proc_name) {
             InitializeComponent();
@@ -91,11 +91,32 @@ namespace trakr_sharp {
                 this.procPathTextBox.Text = this.openFileDialog.FileName;
                 this.openFileDialog.FileName = "";
 
-                // Attempt to get icon from selected path
-                tempProcIcon = Utils.SysCalls.GetIconFromPath(procPathTextBox.Text).ToBitmap();
-                // Set procIconBox to the newly loaded icon
-                this.procIconBox.BackgroundImage.Dispose();
-                this.procIconBox.BackgroundImage = tempProcIcon;
+                SetTempIconFromPath();
+            }
+        }
+
+        private void detectButton_Click(object sender, EventArgs e) {
+            Dictionary<string, string> procPathPair = 
+                Utils.SysCalls.GetProcPathPairs(new List<string>() { this.record.proc_name });
+
+            string path = procPathPair[record.proc_name];
+
+            if (path != "") {
+                // Set procPathTextBox to the selected file
+                this.procPathTextBox.Text = path;
+
+                SetTempIconFromPath();
+
+                // Show success message
+                MessageBox.Show(this.record.proc_name + " found at\r\n" + path,
+                    "Path found successfully",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else {
+                // Show error message
+                MessageBox.Show("Ensure " + record.proc_name + " is running before clicking 'Detect'",
+                    "Path could not be detected",
+                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -142,6 +163,18 @@ namespace trakr_sharp {
             this.dateOpenedTimePicker.ValueChanged += onControlValueChanged;
 
             this.procPathTextBox.TextChanged += onControlValueChanged;
+            this.procIconBox.BackgroundImageChanged += onControlValueChanged;
+        }
+
+        private void SetTempIconFromPath() {
+            // Attempt to get icon from selected path
+            if (tempProcIcon != null) {
+                tempProcIcon.Dispose();
+            }
+            tempProcIcon = Utils.SysCalls.GetIconFromPath(procPathTextBox.Text).ToBitmap();
+            // Set procIconBox to the newly loaded icon
+            this.procIconBox.BackgroundImage.Dispose();
+            this.procIconBox.BackgroundImage = tempProcIcon;
         }
         #endregion
     }

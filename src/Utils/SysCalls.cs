@@ -52,7 +52,7 @@ namespace trakr_sharp.Utils {
             return filteredProcs.ToList();
         }
 
-        // Dict that contains paths to exe files with provided proc_names as a key
+        // Return a dict that contains paths to exe files with proc_names as keys. (Uses selectedProcs as a predicate).
         public static Dictionary<string, string> GetProcPathPairs(List<string> selectedProcs) {
             Dictionary<string, string> procPathPairs = new Dictionary<string, string>();
 

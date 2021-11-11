@@ -426,6 +426,7 @@ namespace trakr_sharp {
             this.detectButton.TabIndex = 8;
             this.detectButton.Text = "Detect";
             this.detectButton.UseVisualStyleBackColor = true;
+            this.detectButton.Click += new System.EventHandler(this.detectButton_Click);
             // 
             // browseButton
             // 
