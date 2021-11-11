@@ -73,6 +73,23 @@ namespace trakr_sharp {
             this.searchBox.clearQueryBox();
         }
 
+        // Resets the contents of this.runningProcList and this.selectedProcList
+        // allows for this.runningProcList to contain an up to date list of running system procs
+        private void refreshButton_Click(object sender, EventArgs e) {
+            // Reset both proc lists
+            this.runningProcList.resetControl();
+            this.selectedProcList.resetControl();
+
+            // Reinitialise this.runningProcListBox and repopulate both lists
+            this.runningProcList.setProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
+            repopulateProcListBoxes();
+
+            // Clear searchBox
+            this.searchBox.clearQueryBox();
+
+            handleButtonEnabling();
+        }
+
         private void applyButton_Click(object sender, EventArgs e) {
             // Get dict of proc_name and proc_path and insert them into the db
             Dictionary<string, string> procPathPairs = Utils.SysCalls.GetProcPathPairs(this.selectedProcList.getProcs());

@@ -141,6 +141,14 @@ namespace trakr_sharp.Controls {
 
             Utils.SysCalls.Print("Restored checkedListBox checks");
         }
+
+        // Resets the values of the control
+        public void resetControl() {
+            this._procs = new List<string>();
+            this._checkedProcs = new List<string>();
+
+            this.checkedListBox.Items.Clear();
+        }
         #endregion
     }
 }
