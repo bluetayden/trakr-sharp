@@ -203,7 +203,7 @@ namespace trakr_sharp.Utils {
         }
 
         // Retrieves an image from the cache folder using a proc_name
-        public static Bitmap GetProcBitmap(string name) {
+        public static Bitmap GetIconFromCache(string name) {
             Bitmap retImg;
 
             if (name == "NO_PROC") {

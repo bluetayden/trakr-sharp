@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ProcData.cs" />
     <Compile Include="Classes\ProcMonitor.cs" />
     <Compile Include="Classes\UserSettings.cs" />
     <Compile Include="Controls\ProcCheckedListBox.cs">
@@ -73,9 +74,7 @@
     <Compile Include="Controls\SearchBox.Designer.cs">
       <DependentUpon>SearchBox.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TrackingList.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Controls\TrackingList.cs" />
     <Compile Include="Controls\TrackingList.Designer.cs">
       <DependentUpon>TrackingList.cs</DependentUpon>
     </Compile>

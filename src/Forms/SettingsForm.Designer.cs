@@ -249,6 +249,7 @@ namespace trakr_sharp {
             this.Name = "SettingsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SettingsForm_FormClosing);
             this.applyCancelPanel.ResumeLayout(false);
             this.mainLayout.ResumeLayout(false);
             this.optionLayout.ResumeLayout(false);

@@ -11,7 +11,6 @@ using LiteDB;
 namespace trakr_sharp.Utils {
     class Database {
         private static readonly string _databasePath = "user_data/tracking.db";
-        private static Random _RNG = new Random();
 
         private static LiteDatabase ConnectToDatabase() {
             return new LiteDatabase(_databasePath);
@@ -128,20 +127,14 @@ namespace trakr_sharp.Utils {
             }
         }
 
-        // Convert db entries to a DataTable for display in a ListView
-        public static DataTable GetDataTable() {
-            // DataTable init
-            DataTable procTable = new DataTable("tracked");
-            procTable.Columns.Add("Icon");
-            procTable.Columns.Add("Program_Name");
-            procTable.Columns.Add("Elapsed_Time");
-            procTable.Columns.Add("Date_Opened");
-            procTable.Columns.Add("Total_Time");
-            procTable.Columns.Add("Date_Added");
-            // Used in listView but not displayed in UI
-            procTable.Columns.Add("Process_Name");
-            procTable.Columns.Add("Process_Path");
+        public static ProcData GetProcData(string name) {
+            ProcRecord record = GetProcRecord(name);
 
+            return record.ToProcData();
+        }
+
+        // Convert db entries to List<ProcData> for display in TrackingList
+        public static List<ProcData> GetProcDataList() {
             // Get all records from db as list
             List<ProcRecord> allRecords = new List<ProcRecord>();
 
@@ -153,22 +146,15 @@ namespace trakr_sharp.Utils {
                 allRecords = trackedCol.FindAll().ToList();
             }
 
-            // Store allRecords in DataTable
-            foreach (ProcRecord record in allRecords) {
-                DataRow row = procTable.NewRow();
-                row["Icon"] = null;
-                row["Program_Name"] = record.program_name;
-                row["Elapsed_Time"] = 0;
-                row["Date_Opened"] = Utils.Times.ISOToLogicalDateString(record.date_opened);
-                row["Total_Time"] = record.total_time;
-                row["Date_Added"] = Utils.Times.ISOToShortDateString(record.date_added);
-                row["Process_Name"] = record.proc_name;
-                row["Process_Path"] = record.proc_path;
+            // Convert each ProcRecord to ProcData
+            List<ProcData> allData = new List<ProcData>();
 
-                procTable.Rows.Add(row);
+            foreach (ProcRecord record in allRecords) {
+                ProcData new_data = record.ToProcData();
+                allData.Add(new_data);
             }
 
-            return procTable;
+            return allData;
         }
     }
 }

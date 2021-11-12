@@ -150,7 +150,7 @@ namespace trakr_sharp {
 
             // Set proc/icon fields
             this.procPathTextBox.Text = record.proc_path;
-            this.procIconBox.BackgroundImage = Utils.SysCalls.GetProcBitmap(record.proc_name);
+            this.procIconBox.BackgroundImage = Utils.SysCalls.GetIconFromCache(record.proc_name);
         }
 
         private void SubscribeToValueChanges() {

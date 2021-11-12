@@ -24,6 +24,19 @@ namespace trakr_sharp {
         #endregion
 
         #region LocalEventHandlers
+        private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e) {
+            foreach (Control c in this.Controls) {
+                c.Dispose();
+            }
+
+            this.Dispose();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e) {
+            this.DialogResult = DialogResult.Cancel;
+            this.Dispose();
+        }
+
         private void applyButton_Click(object sender, EventArgs e) {
             this._userSettings.CloseBehaviour = this.closeBehaviourComboBox.SelectedIndex;
             this._userSettings.RunOnStartup = this.startupBehaviourCheckbox.Checked;

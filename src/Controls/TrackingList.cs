@@ -7,8 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Reflection;
 
 namespace trakr_sharp.Controls {
+    // Reflection class required to prevent flickering during resize events
+    public static class ControlExtensions {
+        public static void DoubleBuffering(this Control control, bool enable) {
+            PropertyInfo doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
+        }
+    }
+
+    // TrackingList Implementation
     public partial class TrackingList : UserControl {
         #region Definitions
         private const int Program_Name_i = 1;
@@ -20,6 +31,9 @@ namespace trakr_sharp.Controls {
         private const int Process_Path_i = 7;
         private const int Is_Running_i = 8;
         private const int Start_Time_i = 9;
+
+        private const int IconColWidth = 28;
+
         private const int One_Min = 60;
         #endregion
 
@@ -33,17 +47,21 @@ namespace trakr_sharp.Controls {
         #endregion
 
         #region Init
+        private int _imgIndex = 0;
+
         public TrackingList() {
             InitializeComponent();
 
+            this.listView.DoubleBuffering(true);
             updateElapsedCol_Timer.Start();
         }
 
-        public void InitListView(DataTable trackedTable, List<string> running) {
-            InitListItems(trackedTable);
-            updateRunningStates(running, false);
-            ResizeColumnHeaders();
+        public void InitListView(List<ProcData> procDataList, List<string> running) {
+            // Add all items from db to this.listView and update running states
+            InitListItems(procDataList);
+            UpdateRunningStates(running, false);
 
+            ResizeColumnHeaders();
             // HideUtilCols();
         }
         #endregion
@@ -138,9 +156,9 @@ namespace trakr_sharp.Controls {
 
         // Resizes columns using fixed proportions
         public void ResizeColumnHeaders() {
-            int width = this.listView.Width - 26;
+            int width = this.listView.Width - (IconColWidth + 3);
 
-            listView.Columns[0].Width = 24;
+            listView.Columns[0].Width = IconColWidth;
             listView.Columns[1].Width = (int)(width * 0.3);
             for (int i = 2; i < this.listView.Columns.Count; i++) {
                 listView.Columns[i].Width = (int)(width * 0.175);
@@ -167,7 +185,7 @@ namespace trakr_sharp.Controls {
 
         private bool RowIsMarkedRunning(ListViewItem lv_row) {
             // If the Is_Running value for the row is 1 return true, else false
-            return (int)lv_row.SubItems[Is_Running_i].Tag == 1;
+            return (bool)lv_row.SubItems[Is_Running_i].Tag;
         }
 
         private long CalcElapsedRowTime(ListViewItem lv_row) {
@@ -181,26 +199,30 @@ namespace trakr_sharp.Controls {
 
         #region Macro
         // Clears and updates this.listView using db values, used during initialisation only
-        public void InitListItems(DataTable trackedTable) {
-            this.listView.BeginUpdate();
-            this.listView.Items.Clear();
+        public void InitListItems(List<ProcData> procDataList) {
+            // Init SmallImageList to an empty ImageList with dimensions of 18,18
+            ImageList smallImgList = new ImageList();
+            smallImgList.ImageSize = new Size(18, 18);
+            this.listView.SmallImageList = smallImgList;
 
-            // Loop through each row in DataTable
-            foreach (DataRow data_row in trackedTable.Rows) {
-                AddListViewItem(data_row);
+            // Add all items from procDataList to this.listView
+            this.listView.BeginUpdate();
+
+            foreach (ProcData procData in procDataList) {
+                AddLVItem(procData);
             }
 
             this.listView.EndUpdate();
         }
 
         // Adds new (unique) entries to this.listView from the db
-        public void AddUniqueListViewItems(DataTable trackedTable) {
+        public void AddUniqueLVItems(List<ProcData> procDataList) {
             this.listView.BeginUpdate();
 
             // Loop through each row in DataTable
-            foreach (DataRow data_row in trackedTable.Rows) {
-                if (!LVContainsProcName(data_row["Process_Name"].ToString())) {
-                    AddListViewItem(data_row);
+            foreach (ProcData procData in procDataList) {
+                if (!LVContainsProcName(procData.Process_Name)) {
+                    AddLVItem(procData);
                 }
             }
 
@@ -238,73 +260,58 @@ namespace trakr_sharp.Controls {
             this.listView.EndUpdate();
         }
 
-        // Updates the values in a single row of this.listView (called from EditRecordForm)
-        public void updateLVRow(ProcRecord newRecord) {
+        // Updates the values in a single row of this.listView (called from EditRecordForm) [Rewrite this later]
+        public void UpdateLVItem(ProcData newProcData) {
             this.listView.BeginUpdate();
 
+            // Find the lv item that matches the name of newProcData
             ListViewItem recordRow = new ListViewItem();
             foreach (ListViewItem lv_row in this.listView.Items) {
-                if (lv_row.SubItems[Process_Name_i].Text == newRecord.proc_name) {
+                if (lv_row.SubItems[Process_Name_i].Text == newProcData.Process_Name) {
                     recordRow = lv_row;
+                    break;
                 }
             }
 
+            // Icon
+            Bitmap resizedIcon = new Bitmap(newProcData.Icon, 18, 18);
+            this.listView.SmallImageList.Images[recordRow.ImageIndex] = resizedIcon;
+            resizedIcon.Dispose();
             // Prog name
-            recordRow.SubItems[Program_Name_i].Text = newRecord.program_name;
+            recordRow.SubItems[Program_Name_i].Text = newProcData.Program_Name;
             // Opened
-            if (!RowIsMarkedRunning(recordRow)) { 
-                recordRow.SubItems[Date_Opened_i].Text = Utils.Times.ISOToLogicalDateString(newRecord.date_opened);
+            if (!RowIsMarkedRunning(recordRow)) {
+                recordRow.SubItems[Date_Opened_i].Text = Utils.Times.ISOToLogicalDateString(newProcData.Date_Opened);
             }
             // Total
-            recordRow.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString(newRecord.total_time);
-            recordRow.SubItems[Total_Time_i].Tag = newRecord.total_time;
+            recordRow.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString(newProcData.Total_Time);
+            recordRow.SubItems[Total_Time_i].Tag = newProcData.Total_Time;
             // Added
-            recordRow.SubItems[Date_Added_i].Text = Utils.Times.ISOToShortDateString(newRecord.date_added);
+            recordRow.SubItems[Date_Added_i].Text = Utils.Times.ISOToShortDateString(newProcData.Date_Added);
             // Path
-            recordRow.SubItems[Process_Path_i].Text = newRecord.proc_path;
+            recordRow.SubItems[Process_Path_i].Text = newProcData.Process_Path;
 
             this.listView.EndUpdate();
         }
         #endregion
 
         #region Micro
-        private void AddListViewItem(DataRow data_row) {
-            // Create a new LVItem instance
-            ListViewItem lv_row = new ListViewItem(data_row[0].ToString());
+        private void AddLVItem(ProcData procData) {
+            // Convert procData to a ListViewItem
+            ListViewItem lv_row = procData.ToLVItem();
 
-            // Add values from DataTable to each column in the LV item
-            for (int data_col = 1; data_col < this.listView.Columns.Count; data_col++) {
-                // Handle Elapsed_Time
-                if (data_col == Elapsed_Time_i) {
-                    lv_row.SubItems.Add("-");
-                    lv_row.SubItems[data_col].Tag = (long)0;
-                }
-                // Handle Total_Time
-                else if (data_col == Total_Time_i) {
-                    lv_row.SubItems.Add(Utils.Times.SecsToHMSString(long.Parse(data_row[data_col].ToString())));
-                    lv_row.SubItems[data_col].Tag = long.Parse(data_row[data_col].ToString());
-                }
-                // Handle Is_Running
-                else if (data_col == Is_Running_i) {
-                    lv_row.SubItems.Add("false");
-                    lv_row.SubItems[data_col].Tag = 0;
-                }
-                // Handle Start_Time
-                else if (data_col == Start_Time_i) {
-                    lv_row.SubItems.Add("null");
-                    lv_row.SubItems[data_col].Tag = -1;
-                }
-                else {
-                    lv_row.SubItems.Add(data_row[data_col].ToString());
-                }
-            }
+            // Set lv_row's ImageIndex
+            lv_row.ImageIndex = _imgIndex;
+            _imgIndex++;
 
-            // Add the item to this.listView
-            listView.Items.Add(lv_row);
+            // Add icon from procData to this.listView.SmallImageList
+            this.listView.SmallImageList.Images.Add(procData.Icon);
+
+            this.listView.Items.Add(lv_row);
         }
 
-        // Uses list of running procs (from ProcMonitor) to shade items in this.listView green
-        public void updateRunningStates(List<string> running, bool raiseDBRequests = true) {
+        // Uses list of running procs (from ProcMonitor) to shade items in this.listView green [Rewrite this later]
+        public void UpdateRunningStates(List<string> running, bool raiseDBRequests = true) {
             Dictionary<string, long> procTimePairs = new Dictionary<string, long>();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
@@ -322,8 +329,8 @@ namespace trakr_sharp.Controls {
                         lv_row.SubItems[Date_Opened_i].Text = "Today";
 
                         // Set Is_Running to 1
-                        lv_row.SubItems[Is_Running_i].Text = "true";
-                        lv_row.SubItems[Is_Running_i].Tag = 1;
+                        lv_row.SubItems[Is_Running_i].Text = "True";
+                        lv_row.SubItems[Is_Running_i].Tag = true;
 
                         // Save Start_Time
                         lv_row.SubItems[Start_Time_i].Text = Utils.Times.GetUTCNow().ToString();
@@ -351,8 +358,8 @@ namespace trakr_sharp.Controls {
                     lv_row.SubItems[Start_Time_i].Text = "null";
                     lv_row.SubItems[Start_Time_i].Tag = -1;
                     // Reset Is_Running to default value
-                    lv_row.SubItems[Is_Running_i].Tag = 0;
-                    lv_row.SubItems[Is_Running_i].Text = "false";
+                    lv_row.SubItems[Is_Running_i].Tag = false;
+                    lv_row.SubItems[Is_Running_i].Text = "False";
                 }
             }
 

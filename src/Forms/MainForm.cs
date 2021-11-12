@@ -28,7 +28,7 @@ namespace trakr_sharp {
             _procMonitor.OnTrackedProcEvent += procMonitor_OnTrackedProcEvent;
 
             // this.trackingList init
-            this.trackingList.InitListView(Utils.Database.GetDataTable(), this._procMonitor.GetRunningProcs());
+            this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
             this.trackingList.OnItemSelected += trackingList_OnItemSelected;
             this.trackingList.RequestProcStop += trackingList_OnRequestProcStop;
@@ -52,7 +52,7 @@ namespace trakr_sharp {
                 printToProgramConsole(msg);
 
                 // Update running colours of this.trackingList and this.trackingSummary
-                this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
+                this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
                 // Update this.trackingSummary
                 updateTrackingSummary();
             }));
@@ -61,7 +61,7 @@ namespace trakr_sharp {
         private void trackingList_OnRequestDBWrite(Controls.TrackingList sender, Dictionary<string, long> procTimePairs) {
             Utils.Database.UpdateTotalTimes(procTimePairs);
 
-            string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
+            string msg = string.Format("Updated times for {0} database record(s)", procTimePairs.Count);
             this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
         }
 
@@ -82,7 +82,7 @@ namespace trakr_sharp {
 
         private void trackingList_OnRequestProcStop(Controls.TrackingList sender, List<string> procNames) {
             _procMonitor.ForceCountsToZero(procNames);
-            this.trackingList.updateRunningStates(_procMonitor.GetRunningProcs());
+            this.trackingList.UpdateRunningStates(_procMonitor.GetRunningProcs());
         }
 
         private void addRecordsForm_OnDBUpdate(AddRecordsForm sender, string msg) {
@@ -125,8 +125,9 @@ namespace trakr_sharp {
             editRecordForm.ShowDialog();
 
             if (editRecordForm.DialogResult == DialogResult.Cancel) {
-                ProcRecord newRecord = Utils.Database.GetProcRecord(recordName);
-                this.trackingList.updateLVRow(newRecord);
+                ProcData newData = Utils.Database.GetProcData(recordName);
+                this.trackingList.UpdateLVItem(newData);
+                updateTrackingSummary();
             }
         }
 
@@ -215,7 +216,7 @@ namespace trakr_sharp {
                 this.trackingSummary.ProcIcon.Dispose();
             }
 
-            this.trackingSummary.ProcIcon = Utils.SysCalls.GetProcBitmap(this.trackingList.GetShortestRunningProc());
+            this.trackingSummary.ProcIcon = Utils.SysCalls.GetIconFromCache(this.trackingList.GetShortestRunningProc());
             this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
             this.trackingSummary.RerenderFields();
@@ -223,16 +224,14 @@ namespace trakr_sharp {
 
         // Invokes an update of this.trackingList where only new db items are added
         private void addUniqueTrackingListItems() {
-            using (DataTable trackedTable = Utils.Database.GetDataTable()) {
-                this.trackingList.AddUniqueListViewItems(trackedTable);
-            }
-            this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
+            this.trackingList.AddUniqueLVItems(Utils.Database.GetProcDataList());
+            this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
         }
 
         // Invokes an update of this.trackingList where selected items are deleted
         private void deleteTrackingListItems() {
             this.trackingList.DeleteSelectedLVItems();
-            this.trackingList.updateRunningStates(this._procMonitor.GetRunningProcs());
+            this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
         }
         #endregion
     }

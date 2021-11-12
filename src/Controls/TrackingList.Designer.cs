@@ -44,6 +44,7 @@ namespace trakr_sharp.Controls {
             // 
             // listView
             // 
+            this.listView.AutoArrange = false;
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Program_Icon,
             this.Program_Name,
@@ -60,6 +61,7 @@ namespace trakr_sharp.Controls {
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 0);
             this.listView.Name = "listView";
+            this.listView.ShowGroups = false;
             this.listView.Size = new System.Drawing.Size(658, 150);
             this.listView.TabIndex = 0;
             this.listView.UseCompatibleStateImageBehavior = false;
@@ -70,7 +72,7 @@ namespace trakr_sharp.Controls {
             // Program_Icon
             // 
             this.Program_Icon.Text = "";
-            this.Program_Icon.Width = 24;
+            this.Program_Icon.Width = 28;
             // 
             // Program_Name
             // 
