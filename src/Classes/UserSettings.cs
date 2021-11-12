@@ -1,11 +1,11 @@
 ﻿namespace trakr_sharp {
     class UserSettings {
-        #region Definitions
-        private const int Close = 0;
-        private const int Minimize = 1;
-        #endregion
+        public enum CloseBehaviour {
+            Close = 0,
+            Minimize = 1
+        }
 
-        public int CloseBehaviour { get; set; }
+        public CloseBehaviour OnClose { get; set; }
         public bool RunOnStartup { get; set; }
         public bool ShowUtilCols { get; set; }
     }

@@ -38,7 +38,7 @@ namespace trakr_sharp {
         }
 
         private void applyButton_Click(object sender, EventArgs e) {
-            this._userSettings.CloseBehaviour = this.closeBehaviourComboBox.SelectedIndex;
+            this._userSettings.OnClose = (UserSettings.CloseBehaviour)this.closeBehaviourComboBox.SelectedIndex;
             this._userSettings.RunOnStartup = this.startupBehaviourCheckbox.Checked;
             this._userSettings.ShowUtilCols = this.showUtilityColsCheckbox.Checked;
 
@@ -64,7 +64,7 @@ namespace trakr_sharp {
 
         #region Methods
         private void SetControlValuesToOriginal() {
-            this.closeBehaviourComboBox.SelectedIndex = _userSettings.CloseBehaviour;
+            this.closeBehaviourComboBox.SelectedIndex = ((int)_userSettings.OnClose);
             this.startupBehaviourCheckbox.Checked = _userSettings.RunOnStartup;
             this.showUtilityColsCheckbox.Checked = _userSettings.ShowUtilCols;
         }

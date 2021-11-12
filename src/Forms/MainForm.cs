@@ -14,7 +14,9 @@ namespace trakr_sharp {
     public partial class MainForm : Form {
         #region Init
         private ProcMonitor _procMonitor;
+        private UserSettings _userSettings;
         private FormWindowState _lastWindowState;
+        private bool _forceClose = false;
 
         public MainForm() {
             InitializeComponent();
@@ -27,11 +29,15 @@ namespace trakr_sharp {
             _procMonitor = new ProcMonitor();
             _procMonitor.OnTrackedProcEvent += procMonitor_OnTrackedProcEvent;
 
+            // Get current user settings
+            _userSettings = Utils.SysCalls.ReadUserSettings();
+
             // this.trackingList init
             this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
             this.trackingList.OnItemSelected += trackingList_OnItemSelected;
             this.trackingList.RequestProcStop += trackingList_OnRequestProcStop;
+            handleShowingUtilCols();
 
             // Update this.trackingSummary
             updateTrackingSummary();
@@ -105,6 +111,60 @@ namespace trakr_sharp {
         }
         #endregion
 
+        #region WindowEventHandlers
+        // Called when the main form truly closes (saves any time information from this.trackingList to db)
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
+            this.trackingList.RequestDBWrite -= trackingList_OnRequestDBWrite;
+
+            Dictionary<string, long> procTimePairs = this.trackingList.GetRunningProcTimePairs();
+            Utils.Database.UpdateTotalTimes(procTimePairs);
+
+            string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
+            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+        }
+
+        // Called when the main form is closed (will either hide the form or close it depending on user preference)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+            // If user settings choose to minimize instead of close, and the close request didn't come from 'Exit trakr'
+            if (_userSettings.OnClose == UserSettings.CloseBehaviour.Minimize && !_forceClose) {
+                // Cancel close event
+                e.Cancel = true;
+                // Hide Main Form
+                this.Hide();
+            }
+        }
+
+        // Called when the form is finished resizing
+        private void MainForm_ResizeEnd(object sender, EventArgs e) {
+            if (this.WindowState != FormWindowState.Minimized) {
+                this.trackingList.ResizeColumnHeaders();
+            }
+        }
+
+        // Called whenever form is resized, but only applied when form is maximized or unmaximized
+        private void MainForm_Resize(object sender, EventArgs e) {
+            if (this.WindowState != _lastWindowState && this.WindowState != FormWindowState.Minimized) {
+                this.trackingList.ResizeColumnHeaders();
+                _lastWindowState = this.WindowState;
+            }
+        }
+
+        // Called when the trakr tray icon is clicked (the main form is shown again)
+        private void sysTrayIcon_MouseClick(object sender, MouseEventArgs e) {
+            if (e.Button == MouseButtons.Left) {
+                WindowState = FormWindowState.Normal;
+                this.Show();
+            }
+        }
+
+        // Called when the exit button on the tray icon tool strip is clicked
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+            // Set flag to force close in case MainForm is currently in normal state
+            this._forceClose = true;
+            this.Close();
+        }
+        #endregion
+
         #region LocalEventHandlers
         private void addButton_Click(object sender, EventArgs e) {
             // Disable add button
@@ -167,29 +227,13 @@ namespace trakr_sharp {
         private void settingsButton_Click(object sender, EventArgs e) {
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.ShowDialog();
-        }
 
-        // Called before the form closes (saves any time information from this.trackingList to db)
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            this.trackingList.RequestDBWrite -= trackingList_OnRequestDBWrite;
+            // When settingsForm closed, update _userSettings
+            if (settingsForm.DialogResult == DialogResult.Cancel) {
+                _userSettings = Utils.SysCalls.ReadUserSettings();
 
-            Dictionary<string, long> procTimePairs = this.trackingList.GetRunningProcTimePairs();
-            Utils.Database.UpdateTotalTimes(procTimePairs);
-
-            string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
-        }
-
-        // Called when the form is finished resizing
-        private void MainForm_ResizeEnd(object sender, EventArgs e) {
-            this.trackingList.ResizeColumnHeaders();
-        }
-
-        // Called whenever form is resized, but only applied when form is maximized or unmaximized
-        private void MainForm_Resize(object sender, EventArgs e) {
-            if (this.WindowState != _lastWindowState) {
-                this.trackingList.ResizeColumnHeaders();
-                _lastWindowState = this.WindowState;
+                // Show util cols if settings now require it
+                handleShowingUtilCols();
             }
         }
 
@@ -210,6 +254,16 @@ namespace trakr_sharp {
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
         }
 
+        // Shows or hides the util cols of this.trackingList if settings require it
+        private void handleShowingUtilCols() {
+            if (_userSettings.ShowUtilCols) {
+                this.trackingList.ShowUtilCols();
+            }
+            else {
+                this.trackingList.HideUtilCols();
+            }
+        }
+
         // Updates the TrackedCount and RunningCount fields of this.trackingSummary
         private void updateTrackingSummary() {
             if (this.trackingSummary.ProcIcon != null) {
@@ -226,12 +280,16 @@ namespace trakr_sharp {
         private void addUniqueTrackingListItems() {
             this.trackingList.AddUniqueLVItems(Utils.Database.GetProcDataList());
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
+
+            this.trackingList.ResizeColumnHeaders();
         }
 
         // Invokes an update of this.trackingList where selected items are deleted
         private void deleteTrackingListItems() {
             this.trackingList.DeleteSelectedLVItems();
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
+
+            this.trackingList.ResizeColumnHeaders();
         }
         #endregion
     }

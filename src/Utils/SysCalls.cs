@@ -26,7 +26,7 @@ namespace trakr_sharp.Utils {
             // Create settings.json if not exists
             if (!File.Exists(_settingsJsonPath)) {
                 UserSettings userSettings = new UserSettings {
-                    CloseBehaviour = 1,
+                    OnClose = UserSettings.CloseBehaviour.Close,
                     RunOnStartup = false,
                     ShowUtilCols = false
                 };
@@ -59,7 +59,7 @@ namespace trakr_sharp.Utils {
             dynamic diskUserSettings = JsonConvert.DeserializeObject(diskString);
 
             // Write changes from newUserSettings to jsonUserSettings
-            diskUserSettings["CloseBehaviour"] = newUserSettings.CloseBehaviour;
+            diskUserSettings["OnClose"] = (int)newUserSettings.OnClose;
             diskUserSettings["RunOnStartup"] = newUserSettings.RunOnStartup;
             diskUserSettings["ShowUtilCols"] = newUserSettings.ShowUtilCols;
 

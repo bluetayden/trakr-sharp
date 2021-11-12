@@ -77,7 +77,7 @@ namespace trakr_sharp.Utils {
         }
 
         public static string ISOToShortDateString(string ISO) {
-            return DateTime.Parse(ISO).ToShortDateString();
+            return DateTime.Parse(ISO).ToString("dd/MM/yy");
         }
     }
 }

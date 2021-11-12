@@ -10,15 +10,6 @@ using System.Windows.Forms;
 using System.Reflection;
 
 namespace trakr_sharp.Controls {
-    // Reflection class required to prevent flickering during resize events
-    public static class ControlExtensions {
-        public static void DoubleBuffering(this Control control, bool enable) {
-            PropertyInfo doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            doubleBufferPropertyInfo.SetValue(control, enable, null);
-        }
-    }
-
     // TrackingList Implementation
     public partial class TrackingList : UserControl {
         #region Definitions
@@ -62,7 +53,6 @@ namespace trakr_sharp.Controls {
             UpdateRunningStates(running, false);
 
             ResizeColumnHeaders();
-            // HideUtilCols();
         }
         #endregion
 
@@ -112,6 +102,7 @@ namespace trakr_sharp.Controls {
             return selectedProcNames;
         }
 
+        // A Dict containing proc names and the amount of time the proc has been open
         public Dictionary<string, long> GetRunningProcTimePairs() {
             Dictionary<string, long> procTimePairs = new Dictionary<string, long>();
 
@@ -125,6 +116,8 @@ namespace trakr_sharp.Controls {
             return procTimePairs;
         }
 
+        // Gets the name of the process that has been running for the shortest amount of time
+        // If no procs are in the list returns "NO_PROC"
         public string GetShortestRunningProc() {
             try {
                 string name = "NO_PROC";
@@ -156,21 +149,31 @@ namespace trakr_sharp.Controls {
 
         // Resizes columns using fixed proportions
         public void ResizeColumnHeaders() {
-            int width = this.listView.Width - (IconColWidth + 3);
+            int endMargin = this.listView.Items.Count > 9 ? 20 : 3;
+            int width = this.listView.Width - (IconColWidth + endMargin);
 
             listView.Columns[0].Width = IconColWidth;
             listView.Columns[1].Width = (int)(width * 0.3);
-            for (int i = 2; i < this.listView.Columns.Count; i++) {
+            // -4 to avoid scaling utility cols
+            for (int i = 2; i < this.listView.Columns.Count - 4; i++) {
                 listView.Columns[i].Width = (int)(width * 0.175);
             }
         }
 
         // Hides the Process_Name, Is_Running and Start_Time cols
-        private void HideUtilCols() {
+        public void HideUtilCols() {
             this.listView.Columns[Process_Name_i].Width = 0;
             this.listView.Columns[Process_Path_i].Width = 0;
             this.listView.Columns[Is_Running_i].Width = 0;
             this.listView.Columns[Start_Time_i].Width = 0;
+        }
+
+        // Shows the Process_Name, Is_Running and Start_Time cols
+        public void ShowUtilCols() {
+            this.listView.Columns[Process_Name_i].Width = -2;
+            this.listView.Columns[Process_Path_i].Width = -2;
+            this.listView.Columns[Is_Running_i].Width = -2;
+            this.listView.Columns[Start_Time_i].Width = -2;
         }
 
         private bool LVContainsProcName(string proc_name) {
@@ -371,4 +374,15 @@ namespace trakr_sharp.Controls {
         }
         #endregion
     }
+
+    #region DoubleBufferFix
+    // Reflection class required to prevent flickering during resize events
+    public static class ControlExtensions {
+        public static void DoubleBuffering(this Control control, bool enable) {
+            PropertyInfo doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
+        }
+    }
+    #endregion
 }

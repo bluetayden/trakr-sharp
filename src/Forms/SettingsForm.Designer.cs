@@ -180,8 +180,8 @@ namespace trakr_sharp {
             this.closeBehaviourComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.closeBehaviourComboBox.FormattingEnabled = true;
             this.closeBehaviourComboBox.Items.AddRange(new object[] {
-            "Minimize to task tray",
-            "Close trakr"});
+            "Close trakr",
+            "Minimize to system tray"});
             this.closeBehaviourComboBox.Location = new System.Drawing.Point(186, 3);
             this.closeBehaviourComboBox.Name = "closeBehaviourComboBox";
             this.closeBehaviourComboBox.Size = new System.Drawing.Size(177, 21);

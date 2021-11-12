@@ -24,6 +24,8 @@ namespace trakr_sharp {
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.mainGridLayout = new System.Windows.Forms.TableLayoutPanel();
             this.buttonLayout = new System.Windows.Forms.GroupBox();
             this.settingsButton = new System.Windows.Forms.Button();
@@ -31,10 +33,15 @@ namespace trakr_sharp {
             this.editButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
+            this.sysTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.sysTrayIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.trakrToolStripMenuLabel = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trackingList = new trakr_sharp.Controls.TrackingList();
             this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
+            this.sysTrayIconContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainGridLayout
@@ -133,6 +140,38 @@ namespace trakr_sharp {
             this.programConsole.WordWrap = false;
             this.programConsole.Enter += new System.EventHandler(this.programConsole_Enter);
             // 
+            // sysTrayIcon
+            // 
+            this.sysTrayIcon.ContextMenuStrip = this.sysTrayIconContextMenu;
+            this.sysTrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("sysTrayIcon.Icon")));
+            this.sysTrayIcon.Text = "trakr";
+            this.sysTrayIcon.Visible = true;
+            this.sysTrayIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.sysTrayIcon_MouseClick);
+            // 
+            // sysTrayIconContextMenu
+            // 
+            this.sysTrayIconContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.trakrToolStripMenuLabel,
+            this.exitToolStripMenuItem});
+            this.sysTrayIconContextMenu.Name = "sysTrayIconContextMenu";
+            this.sysTrayIconContextMenu.Size = new System.Drawing.Size(181, 70);
+            // 
+            // trakrToolStripMenuLabel
+            // 
+            this.trakrToolStripMenuLabel.Enabled = false;
+            this.trakrToolStripMenuLabel.Image = ((System.Drawing.Image)(resources.GetObject("trakrToolStripMenuLabel.Image")));
+            this.trakrToolStripMenuLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.trakrToolStripMenuLabel.Name = "trakrToolStripMenuLabel";
+            this.trakrToolStripMenuLabel.Size = new System.Drawing.Size(180, 22);
+            this.trakrToolStripMenuLabel.Text = "trakr";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit trakr";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
             // trackingList
             // 
             this.trackingList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -151,7 +190,7 @@ namespace trakr_sharp {
             this.trackingSummary.Size = new System.Drawing.Size(155, 215);
             this.trackingSummary.TabIndex = 3;
             this.trackingSummary.TrackedCount = 0;
-            this.trackingSummary.Uptime = ((long)(0));
+            this.trackingSummary.Uptime = ((long)(360));
             // 
             // MainForm
             // 
@@ -164,11 +203,13 @@ namespace trakr_sharp {
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "trakr-sharp";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.ResizeEnd += new System.EventHandler(this.MainForm_ResizeEnd);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.mainGridLayout.ResumeLayout(false);
             this.mainGridLayout.PerformLayout();
             this.buttonLayout.ResumeLayout(false);
+            this.sysTrayIconContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -183,6 +224,10 @@ namespace trakr_sharp {
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.TableLayoutPanel mainGridLayout;
         private System.Windows.Forms.GroupBox buttonLayout;
+        private System.Windows.Forms.NotifyIcon sysTrayIcon;
+        private System.Windows.Forms.ContextMenuStrip sysTrayIconContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem trakrToolStripMenuLabel;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 
