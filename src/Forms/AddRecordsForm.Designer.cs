@@ -29,6 +29,7 @@ namespace trakr_sharp {
             System.Windows.Forms.TableLayoutPanel mainLayout;
             System.Windows.Forms.Panel refreshPanel;
             System.Windows.Forms.Panel applyCancelPanel;
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddRecordsForm));
             this.addButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
             this.runningProcList = new trakr_sharp.Controls.ProcCheckedListBox();
@@ -65,7 +66,7 @@ namespace trakr_sharp {
             procListAndButtonPanel.Name = "procListAndButtonPanel";
             procListAndButtonPanel.RowCount = 1;
             procListAndButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            procListAndButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 158F));
+            procListAndButtonPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 163F));
             procListAndButtonPanel.Size = new System.Drawing.Size(458, 163);
             procListAndButtonPanel.TabIndex = 3;
             // 
@@ -231,6 +232,7 @@ namespace trakr_sharp {
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 236);
             this.Controls.Add(mainLayout);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(480, 275);
             this.Name = "AddRecordsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

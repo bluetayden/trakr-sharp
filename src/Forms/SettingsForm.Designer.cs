@@ -66,7 +66,7 @@ namespace trakr_sharp {
             this.cancelButton.Location = new System.Drawing.Point(3, 3);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 1;
+            this.cancelButton.TabIndex = 3;
             this.cancelButton.Text = "Cancel";
             this.cancelButton.UseVisualStyleBackColor = true;
             // 
@@ -77,7 +77,7 @@ namespace trakr_sharp {
             this.applyButton.Location = new System.Drawing.Point(80, 3);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
-            this.applyButton.TabIndex = 0;
+            this.applyButton.TabIndex = 4;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
@@ -171,7 +171,7 @@ namespace trakr_sharp {
             this.startupBehaviourCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
             this.startupBehaviourCheckbox.Name = "startupBehaviourCheckbox";
             this.startupBehaviourCheckbox.Size = new System.Drawing.Size(176, 27);
-            this.startupBehaviourCheckbox.TabIndex = 3;
+            this.startupBehaviourCheckbox.TabIndex = 1;
             this.startupBehaviourCheckbox.UseVisualStyleBackColor = true;
             // 
             // closeBehaviourComboBox
@@ -185,7 +185,7 @@ namespace trakr_sharp {
             this.closeBehaviourComboBox.Location = new System.Drawing.Point(186, 3);
             this.closeBehaviourComboBox.Name = "closeBehaviourComboBox";
             this.closeBehaviourComboBox.Size = new System.Drawing.Size(177, 21);
-            this.closeBehaviourComboBox.TabIndex = 2;
+            this.closeBehaviourComboBox.TabIndex = 0;
             // 
             // displayGroupBox
             // 
@@ -222,7 +222,7 @@ namespace trakr_sharp {
             this.showUtilityColsCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
             this.showUtilityColsCheckbox.Name = "showUtilityColsCheckbox";
             this.showUtilityColsCheckbox.Size = new System.Drawing.Size(176, 29);
-            this.showUtilityColsCheckbox.TabIndex = 1;
+            this.showUtilityColsCheckbox.TabIndex = 2;
             this.showUtilityColsCheckbox.UseVisualStyleBackColor = true;
             // 
             // showUtilityColsLabel

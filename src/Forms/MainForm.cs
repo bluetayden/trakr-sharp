@@ -282,16 +282,31 @@ namespace trakr_sharp {
             }
         }
 
-        // Updates the TrackedCount and RunningCount fields of this.trackingSummary
+        // Updates the TrackedCount and RunningCount fields of this.trackingSummary (also updates the system tray icon text)
         private void updateTrackingSummary() {
             if (this.trackingSummary.ProcIcon != null) {
                 this.trackingSummary.ProcIcon.Dispose();
             }
 
-            this.trackingSummary.ProcIcon = Utils.SysCalls.GetIconFromCache(this.trackingList.GetShortestRunningProc());
+            string mostRecentProc = this.trackingList.GetShortestRunningProc();
+            this.trackingSummary.ProcIcon = Utils.SysCalls.GetIconFromCache(mostRecentProc);
+            this.trackingSummary.ProcName = mostRecentProc;
             this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
             this.trackingSummary.RerenderFields();
+
+            updateSysTrayIconText();
+        }
+
+        private void updateSysTrayIconText() {
+            string msg = string.Format("Tracking: {0}\r\nActive: {1}\r\n\r\nRecent:\r\n{2}",
+                this.trackingSummary.TrackedCount, this.trackingSummary.RunningCount, this.trackingSummary.ProcName);
+
+            if (msg.Length > 64) {
+                msg = msg.Substring(0, 63);
+            }
+
+            this.sysTrayIcon.Text = msg;
         }
 
         // Invokes an update of this.trackingList where only new db items are added

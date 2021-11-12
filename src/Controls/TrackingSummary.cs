@@ -11,6 +11,7 @@ using System.Windows.Forms;
 namespace trakr_sharp.Controls {
     public partial class TrackingSummary : UserControl {
         public Bitmap ProcIcon { get; set; }
+        public string ProcName { get; set; }
         public int TrackedCount { get; set; }
         public int RunningCount { get; set; }
         public long Uptime { get; set; }

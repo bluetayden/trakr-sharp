@@ -33,12 +33,12 @@ namespace trakr_sharp {
             this.editButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
             this.programConsole = new System.Windows.Forms.TextBox();
-            this.trackingList = new trakr_sharp.Controls.TrackingList();
-            this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.sysTrayIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.sysTrayIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trakrToolStripMenuLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.trackingList = new trakr_sharp.Controls.TrackingList();
+            this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
             this.sysTrayIconContextMenu.SuspendLayout();
@@ -139,26 +139,6 @@ namespace trakr_sharp {
             this.programConsole.TabIndex = 1;
             this.programConsole.Enter += new System.EventHandler(this.programConsole_Enter);
             // 
-            // trackingList
-            // 
-            this.trackingList.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackingList.Location = new System.Drawing.Point(3, 3);
-            this.trackingList.Name = "trackingList";
-            this.trackingList.Size = new System.Drawing.Size(477, 215);
-            this.trackingList.TabIndex = 2;
-            // 
-            // trackingSummary
-            // 
-            this.trackingSummary.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.trackingSummary.Location = new System.Drawing.Point(486, 3);
-            this.trackingSummary.Name = "trackingSummary";
-            this.trackingSummary.ProcIcon = null;
-            this.trackingSummary.RunningCount = 0;
-            this.trackingSummary.Size = new System.Drawing.Size(155, 215);
-            this.trackingSummary.TabIndex = 3;
-            this.trackingSummary.TrackedCount = 0;
-            this.trackingSummary.Uptime = ((long)(0));
-            // 
             // sysTrayIcon
             // 
             this.sysTrayIcon.ContextMenuStrip = this.sysTrayIconContextMenu;
@@ -191,12 +171,34 @@ namespace trakr_sharp {
             this.exitToolStripMenuItem.Text = "Exit trakr";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // trackingList
+            // 
+            this.trackingList.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackingList.Location = new System.Drawing.Point(3, 3);
+            this.trackingList.Name = "trackingList";
+            this.trackingList.Size = new System.Drawing.Size(477, 215);
+            this.trackingList.TabIndex = 2;
+            // 
+            // trackingSummary
+            // 
+            this.trackingSummary.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trackingSummary.Location = new System.Drawing.Point(486, 3);
+            this.trackingSummary.Name = "trackingSummary";
+            this.trackingSummary.ProcIcon = null;
+            this.trackingSummary.ProcName = null;
+            this.trackingSummary.RunningCount = 0;
+            this.trackingSummary.Size = new System.Drawing.Size(155, 215);
+            this.trackingSummary.TabIndex = 3;
+            this.trackingSummary.TrackedCount = 0;
+            this.trackingSummary.Uptime = ((long)(0));
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(644, 341);
             this.Controls.Add(this.mainGridLayout);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(660, 380);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
