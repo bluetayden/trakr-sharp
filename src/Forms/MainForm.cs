@@ -8,13 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using System.Threading;
-
 namespace trakr_sharp {
     public partial class MainForm : Form {
         #region Init
         private ProcMonitor _procMonitor;
         private UserSettings _userSettings;
+        private KeyboardListener _keyListener;
+
+        private readonly Keys _screenshotKey = Keys.F12;
         private FormWindowState _lastWindowState;
         private bool _forceClose = false;
 
@@ -31,6 +32,11 @@ namespace trakr_sharp {
 
             // Get current user settings
             _userSettings = Utils.SysCalls.ReadUserSettings();
+
+            // Setup keyboard listener and init screenshots folder
+            Utils.SysCalls.InitScreenshots();
+            _keyListener = new KeyboardListener();
+            _keyListener.KeyDown += _keyListener_KeyDown;
 
             // this.trackingList init
             this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
@@ -112,15 +118,17 @@ namespace trakr_sharp {
         #endregion
 
         #region WindowEventHandlers
-        // Called when the main form truly closes (saves any time information from this.trackingList to db)
+        // Called when the main form truly closes
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
+            // Unsubscribe from trackingList db requests
             this.trackingList.RequestDBWrite -= trackingList_OnRequestDBWrite;
 
+            // Write information from all running procs in trackingList to db
             Dictionary<string, long> procTimePairs = this.trackingList.GetRunningProcTimePairs();
             Utils.Database.UpdateTotalTimes(procTimePairs);
 
-            string msg = String.Format("Updated times for {0} database record(s)", procTimePairs.Count);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+            // Stop application completely
+            Application.Exit();
         }
 
         // Called when the main form is closed (will either hide the form or close it depending on user preference)
@@ -162,6 +170,16 @@ namespace trakr_sharp {
             // Set flag to force close in case MainForm is currently in normal state
             this._forceClose = true;
             this.Close();
+        }
+
+        // Called on any keypress
+        private void _keyListener_KeyDown(Keys key) {
+            if (key == _screenshotKey) {
+                Utils.SysCalls.Print("Screenshot key pressed (F12)");
+
+                string msg = Utils.SysCalls.TakeScreenshot();
+                printToProgramConsole(msg);
+            }
         }
         #endregion
 

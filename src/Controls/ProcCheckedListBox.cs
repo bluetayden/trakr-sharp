@@ -89,7 +89,7 @@ namespace trakr_sharp.Controls {
             this.checkedListBox.Items.Clear();
 
             // Add each proc in _runningProcs to checkedListBox if contains query
-            if (query != "") {
+            if (!string.IsNullOrWhiteSpace(query)) {
                 IEnumerable<string> filteredProcs = this._procs.Where(proc => proc.ToLower().Contains(query));
                 this.repopulateListBox(filteredProcs);
             }

@@ -86,7 +86,7 @@ namespace trakr_sharp {
             this.openFileDialog.ShowDialog();
 
             // If a file was picked
-            if (this.openFileDialog.FileName != "") {
+            if (!string.IsNullOrWhiteSpace(this.openFileDialog.FileName)) {
                 // Set procPathTextBox to the selected file
                 this.procPathTextBox.Text = this.openFileDialog.FileName;
                 this.openFileDialog.FileName = "";
@@ -101,7 +101,7 @@ namespace trakr_sharp {
 
             string path = procPathPair[record.proc_name];
 
-            if (path != "") {
+            if (!string.IsNullOrWhiteSpace(path)) {
                 // Set procPathTextBox to the selected file
                 this.procPathTextBox.Text = path;
 
@@ -114,7 +114,7 @@ namespace trakr_sharp {
             }
             else {
                 // Show error message
-                MessageBox.Show("Ensure " + record.proc_name + " is running before clicking 'Detect'",
+                MessageBox.Show("Path/File is innaccessible or " + record.proc_name + " is not running.",
                     "Path could not be detected",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

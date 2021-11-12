@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 using System.Data;
 using System.Management;
@@ -13,6 +15,7 @@ using Newtonsoft.Json;
 namespace trakr_sharp.Utils {
     class SysCalls {
         private static readonly string _settingsJsonPath = "user_data/settings.json";
+        private static readonly string _screenshotsPath = "user_data/screenshots";
 
         private static readonly string[] _ignoredProcs = new string[] {"System Idle Process", "explorer.exe", "smss.exe",
             "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System",
@@ -66,6 +69,31 @@ namespace trakr_sharp.Utils {
             // Write changes to back to file
             string outputJson = JsonConvert.SerializeObject(diskUserSettings);
             File.WriteAllText(_settingsJsonPath, outputJson);
+        }
+
+        public static void InitScreenshots() {
+            // Create user_data folder if not exists
+            Directory.CreateDirectory(_screenshotsPath);
+        }
+
+        public static string TakeScreenshot() {
+            string fileName = Guid.NewGuid().ToString() + ".png";
+            string filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
+
+            try {
+                Rectangle bounds = Screen.GetBounds(Point.Empty);
+                using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) {
+                    using (Graphics g = Graphics.FromImage(bitmap)) {
+                        g.CopyFromScreen(Point.Empty, Point.Empty, bounds.Size);
+                    }
+                    bitmap.Save(filePath, ImageFormat.Png);
+                }
+
+                return string.Format("Screenshot saved to {0}", filePath);
+            }
+            catch (Exception) {
+                return "Failed to save screenshot";
+            }
         }
 
         // List of currently running processes on the device
