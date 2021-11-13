@@ -18,27 +18,27 @@ namespace trakr_sharp {
             InitializeComponent();
 
             // Initialise this.runningProcListBox
-            this.runningProcList.setProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
+            this.runningProcList.SetProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
 
             // Repopulate both procListBoxes
-            repopulateProcListBoxes();
+            RepopulateProcListBoxes();
         }
         #endregion
 
         #region PublicEventHandlers
         // Called when this.searchBox raises a public valid query event
         private void searchBox_OnValidQuery(Controls.SearchBox sender, string query) {
-            this.runningProcList.queryItems(query);
+            this.runningProcList.QueryItems(query);
         }
 
         // Called whenever an item in runningProcListBox is checked
         private void runningProcList_OnItemCheck(Controls.ProcCheckedListBox sender, int changedIndex) {
-            this.BeginInvoke((MethodInvoker)(() => handleButtonEnabling()));
+            this.BeginInvoke((MethodInvoker)(() => HandleButtonEnabling()));
         }
 
         // Called whenever an item in selectedProcListBox is checked
         private void selectedProcList_OnItemCheck(Controls.ProcCheckedListBox sender, int changedIndex) {
-            this.BeginInvoke((MethodInvoker)(() => handleButtonEnabling()));
+            this.BeginInvoke((MethodInvoker)(() => HandleButtonEnabling()));
         }
         #endregion
 
@@ -55,9 +55,9 @@ namespace trakr_sharp {
 
         private void addButton_Click(object sender, EventArgs e) {
             // Update _runningProcs and _selectedProcs
-            updateProcListFieldsForAddition();
+            UpdateProcListFieldsForAddition();
             // Repopulate the list boxes with their updated _procs fields
-            repopulateProcListBoxes();
+            RepopulateProcListBoxes();
 
             // Clear searchBox
             this.searchBox.clearQueryBox();
@@ -65,9 +65,9 @@ namespace trakr_sharp {
 
         private void removeButton_Click(object sender, EventArgs e) {
             // Update _runningProcs and _selectedProcs
-            updateProcListFieldsForRemoval();
+            UpdateProcListFieldsForRemoval();
             // Repopulate the list boxes with their updated _procs fields
-            repopulateProcListBoxes();
+            RepopulateProcListBoxes();
 
             // Clear searchBox
             this.searchBox.clearQueryBox();
@@ -77,42 +77,42 @@ namespace trakr_sharp {
         // allows for this.runningProcList to contain an up to date list of running system procs
         private void refreshButton_Click(object sender, EventArgs e) {
             // Reset both proc lists
-            this.runningProcList.resetControl();
-            this.selectedProcList.resetControl();
+            this.runningProcList.ResetControl();
+            this.selectedProcList.ResetControl();
 
             // Reinitialise this.runningProcListBox and repopulate both lists
-            this.runningProcList.setProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
-            repopulateProcListBoxes();
+            this.runningProcList.SetProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
+            RepopulateProcListBoxes();
 
             // Clear searchBox
             this.searchBox.clearQueryBox();
 
-            handleButtonEnabling();
+            HandleButtonEnabling();
         }
 
         private void applyButton_Click(object sender, EventArgs e) {
             // Get dict of proc_name and proc_path and insert them into the db
-            Dictionary<string, string> procPathPairs = Utils.SysCalls.GetProcPathPairs(this.selectedProcList.getProcs());
+            Dictionary<string, string> procPathPairs = Utils.SysCalls.GetProcPathPairs(this.selectedProcList.GetProcs());
 
             try {
                 Utils.Database.InsertProcPathPairs(procPathPairs);
                 Utils.SysCalls.CacheIconsToDisk(procPathPairs);
 
                 // Raise public event that db was altered
-                OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.getProcs().Count + " record(s) to the database");
+                OnDBUpdate?.Invoke(this, "Added " + this.selectedProcList.GetProcs().Count + " record(s) to the database");
 
                 // Show success message
-                MessageBox.Show(this, "Added " + this.selectedProcList.getProcs().Count + " " +
+                MessageBox.Show(this, "Added " + this.selectedProcList.GetProcs().Count + " " +
                     "record(s) to trakr", "Records successfully added",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 // Remove the items from _selectedProcs so they can't be accessed again
-                this.selectedProcList.setProcs(new List<string>());
+                this.selectedProcList.SetProcs(new List<string>());
 
                 // Repopulate listboxes to reflect changes in _selectedProcs
-                repopulateProcListBoxes();
+                RepopulateProcListBoxes();
                 // Enable/Disable buttons accordingly
-                handleButtonEnabling();
+                HandleButtonEnabling();
             }
             catch (Exception ex) {
                 // Show error message
@@ -127,43 +127,43 @@ namespace trakr_sharp {
 
         #region UI_Updates
         // Updates _runningProcs and _selectedProcs for an addition action
-        private void updateProcListFieldsForAddition() {
+        private void UpdateProcListFieldsForAddition() {
             // Update for selectedProcListBox._selectedProcs to contain runningProcListBox._selectedProcs
-            this.selectedProcList.addProcs(this.runningProcList.getCheckedProcs());
+            this.selectedProcList.AddProcs(this.runningProcList.GetCheckedProcs());
             // Update _runningProcs to remove any of runningProcListBox's checked items 
-            this.runningProcList.removeCheckedItemsFromProcs();
+            this.runningProcList.RemoveCheckedItemsFromProcs();
 
             Utils.SysCalls.Print("Updated proc list fields (addition)");
         }
 
         // Updates _runningProcs and _selectedProcs for a removal action
-        private void updateProcListFieldsForRemoval() {
+        private void UpdateProcListFieldsForRemoval() {
             // Update for runningProcListBox._procs to contain selectedProcListBox._selectedProcs
-            this.runningProcList.addProcs(this.selectedProcList.getCheckedProcs());
+            this.runningProcList.AddProcs(this.selectedProcList.GetCheckedProcs());
             // Update to remove any of selectedProcListBox's checked items
-            this.selectedProcList.removeCheckedItemsFromProcs();
+            this.selectedProcList.RemoveCheckedItemsFromProcs();
 
             Utils.SysCalls.Print("Updated proc list fields (removal)");
         }
 
         // Repopulates this.runningProcList and this.selectedProcList with their _proc fields
-        private void repopulateProcListBoxes() {
-            this.runningProcList.repopulateListBox();
-            this.selectedProcList.repopulateListBox();
+        private void RepopulateProcListBoxes() {
+            this.runningProcList.RepopulateListBox();
+            this.selectedProcList.RepopulateListBox();
 
-            handleButtonEnabling();
+            HandleButtonEnabling();
         }
 
         // Controls enabling/disabling of buttons depending on listBox selections/population
-        private void handleButtonEnabling() {
+        private void HandleButtonEnabling() {
             // Add button
-            this.addButton.Enabled = this.runningProcList.getCheckedProcs().Count > 0;
+            this.addButton.Enabled = this.runningProcList.GetCheckedProcs().Count > 0;
 
             // Remove button
-            this.removeButton.Enabled = this.selectedProcList.getCheckedProcs().Count > 0;
+            this.removeButton.Enabled = this.selectedProcList.GetCheckedProcs().Count > 0;
 
             // Apply button
-            this.applyButton.Enabled = this.selectedProcList.getProcs().Count > 0;
+            this.applyButton.Enabled = this.selectedProcList.GetProcs().Count > 0;
         }
         #endregion
     }

@@ -35,24 +35,24 @@ namespace trakr_sharp {
 
             // Init screenshots folder and setup keyboard listener if needed
             Utils.SysCalls.InitScreenshots();
-            handleKeyboardListenerSetup();
+            HandleKeyboardListenerSetup();
 
             // this.trackingList init
             this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
             this.trackingList.OnItemSelected += trackingList_OnItemSelected;
             this.trackingList.RequestProcStop += trackingList_OnRequestProcStop;
-            handleShowingUtilCols();
+            HandleShowingUtilCols();
 
             // Update this.trackingSummary
-            updateTrackingSummary();
+            UpdateTrackingSummary();
 
             // Get current window state for use in this.listView resizing later
             this._lastWindowState = this.WindowState;
 
             // Print greeting to programConsole
-            printToProgramConsole("Welcome to trakr");
-            printToProgramConsole(_procMonitor.GetStartupString() + "\r\n");
+            PrintToProgramConsole("Welcome to trakr");
+            PrintToProgramConsole(_procMonitor.GetStartupString() + "\r\n");
         }
         #endregion
 
@@ -60,12 +60,12 @@ namespace trakr_sharp {
         private void procMonitor_OnTrackedProcEvent(ProcMonitor sender, string msg) {
             this.BeginInvoke((MethodInvoker)(() => {
                 Utils.SysCalls.Print(msg);
-                printToProgramConsole(msg);
+                PrintToProgramConsole(msg);
 
                 // Update running colours of this.trackingList and this.trackingSummary
                 this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
                 // Update this.trackingSummary
-                updateTrackingSummary();
+                UpdateTrackingSummary();
             }));
         }
 
@@ -73,7 +73,7 @@ namespace trakr_sharp {
             Utils.Database.UpdateTotalTimes(procTimePairs);
 
             string msg = string.Format("Updated times for {0} database record(s)", procTimePairs.Count);
-            this.BeginInvoke((MethodInvoker)(() => printToProgramConsole(msg)));
+            this.BeginInvoke((MethodInvoker)(() => PrintToProgramConsole(msg)));
         }
 
         private void trackingList_OnItemSelected(Controls.TrackingList sender, int selectedCount) {
@@ -100,14 +100,14 @@ namespace trakr_sharp {
             this.BeginInvoke((MethodInvoker)(() => {
                 // Print msg that entries were added to db
                 Utils.SysCalls.Print(msg);
-                printToProgramConsole(msg);
+                PrintToProgramConsole(msg);
 
                 // Update _procMonitor
                 _procMonitor.UpdateTrackingFields();
                 // Update this.trackingList
-                addUniqueTrackingListItems();
+                AddUniqueTrackingListItems();
                 // Update this.trackingSummary
-                updateTrackingSummary();
+                UpdateTrackingSummary();
             }));
         }
 
@@ -170,7 +170,7 @@ namespace trakr_sharp {
                 Utils.SysCalls.Print("Screenshot key pressed (F12)");
 
                 string msg = Utils.SysCalls.TakeScreenshot();
-                printToProgramConsole(msg);
+                PrintToProgramConsole(msg);
             }
         }
         #endregion
@@ -186,6 +186,16 @@ namespace trakr_sharp {
 
         private void fileExitMenuBarItem_Click(object sender, EventArgs e) {
             quitToolStripMenuItem.PerformClick();
+        }
+
+        private void helpReadmeMenuBarItem_Click(object sender, EventArgs e) {
+            bool success = Utils.SysCalls.OpenReadme();
+
+            // Show error message if failed to open README file
+            if (!success) {
+                MessageBox.Show("README.md is either in use or could not be found.", "Failed to open Readme",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            }
         }
 
         private void helpAboutMenuBarItem_Click(object sender, EventArgs e) {
@@ -223,7 +233,7 @@ namespace trakr_sharp {
             if (editRecordForm.DialogResult == DialogResult.Cancel) {
                 ProcData newData = Utils.Database.GetProcData(recordName);
                 this.trackingList.UpdateLVItem(newData);
-                updateTrackingSummary();
+                UpdateTrackingSummary();
             }
         }
 
@@ -246,14 +256,14 @@ namespace trakr_sharp {
                 // Update _procMonitor
                 _procMonitor.UpdateTrackingFields();
                 // Update this.trackingList
-                deleteTrackingListItems();
+                DeleteTrackingListItems();
                 // Update this.trackingSummary
-                updateTrackingSummary();
+                UpdateTrackingSummary();
 
                 // Print msg
                 string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
                 Utils.SysCalls.Print(msg);
-                printToProgramConsole(msg);
+                PrintToProgramConsole(msg);
 
                 // Disable delete button
                 this.deleteButton.Enabled = false;
@@ -269,10 +279,10 @@ namespace trakr_sharp {
                 _userSettings = Utils.SysCalls.ReadUserSettings();
 
                 // Show util cols if setting enabled
-                handleShowingUtilCols();
+                HandleShowingUtilCols();
 
                 // Disable/Enable screenshots if setting changed
-                handleKeyboardListenerSetup();
+                HandleKeyboardListenerSetup();
             }
         }
 
@@ -283,7 +293,7 @@ namespace trakr_sharp {
 
         #region Methods
         // Prints msg with a timestamp to MainForm's programConsole
-        private void printToProgramConsole(string msg) {
+        private void PrintToProgramConsole(string msg) {
             // Clear console if getting close to character limit
             if (this.programConsole.Text.Length >= 32000) {
                 this.programConsole.Text = "";
@@ -294,7 +304,7 @@ namespace trakr_sharp {
         }
 
         // Shows or hides the util cols of this.trackingList if user settings require it
-        private void handleShowingUtilCols() {
+        private void HandleShowingUtilCols() {
             if (_userSettings.ShowUtilCols) {
                 this.trackingList.ShowUtilCols();
             }
@@ -304,7 +314,7 @@ namespace trakr_sharp {
         }
 
         // Creates keyboard listener or disables it depending on user settings
-        private void handleKeyboardListenerSetup() {
+        private void HandleKeyboardListenerSetup() {
             // If screenshots enabled and _keyListener not assigned to an object yet
             if (_userSettings.EnableScreenshots && _keyListener == null) {
                 _keyListener = new KeyboardListener();
@@ -319,7 +329,7 @@ namespace trakr_sharp {
         }
 
         // Updates the TrackedCount and RunningCount fields of this.trackingSummary (also updates the system tray icon text)
-        private void updateTrackingSummary() {
+        private void UpdateTrackingSummary() {
             if (this.trackingSummary.ProcIcon != null) {
                 this.trackingSummary.ProcIcon.Dispose();
             }
@@ -331,10 +341,10 @@ namespace trakr_sharp {
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
             this.trackingSummary.RerenderFields();
 
-            updateSysTrayIconText();
+            UpdateSysTrayIconText();
         }
 
-        private void updateSysTrayIconText() {
+        private void UpdateSysTrayIconText() {
             string msg = string.Format("Tracking: {0}\r\nRunning: {1}\r\n\r\nRecent:\r\n{2}",
                 this.trackingSummary.TrackedCount, this.trackingSummary.RunningCount, this.trackingSummary.ProcName);
 
@@ -346,7 +356,7 @@ namespace trakr_sharp {
         }
 
         // Invokes an update of this.trackingList where only new db items are added
-        private void addUniqueTrackingListItems() {
+        private void AddUniqueTrackingListItems() {
             this.trackingList.AddUniqueLVItems(Utils.Database.GetProcDataList());
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
 
@@ -354,22 +364,12 @@ namespace trakr_sharp {
         }
 
         // Invokes an update of this.trackingList where selected items are deleted
-        private void deleteTrackingListItems() {
+        private void DeleteTrackingListItems() {
             this.trackingList.DeleteSelectedLVItems();
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
 
             this.trackingList.ResizeColumnHeaders();
         }
         #endregion
-
-        private void helpReadmeMenuBarItem_Click(object sender, EventArgs e) {
-            bool success = Utils.SysCalls.OpenReadme();
-            
-            // Show error message if failed to open README file
-            if (!success){
-                MessageBox.Show("README.md is either in use or could not be found.", "Failed to open Readme",
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
-            }
-        }
     }
 }

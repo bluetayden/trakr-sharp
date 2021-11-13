@@ -61,7 +61,7 @@ namespace trakr_sharp {
             }
         }
 
-        private void onControlValueChanged(object sender, EventArgs e) {
+        private void OnControlValueChanged(object sender, EventArgs e) {
             this.applyButton.Enabled = true;
         }
         #endregion
@@ -75,10 +75,10 @@ namespace trakr_sharp {
         }
 
         private void SubscribeToValueChanges() {
-            this.closeBehaviourComboBox.SelectedValueChanged += onControlValueChanged; 
-            this.startupBehaviourCheckbox.CheckedChanged += onControlValueChanged;
-            this.enableScreenshotsCheckbox.CheckedChanged += onControlValueChanged;
-            this.showUtilityColsCheckbox.CheckedChanged += onControlValueChanged; 
+            this.closeBehaviourComboBox.SelectedValueChanged += OnControlValueChanged; 
+            this.startupBehaviourCheckbox.CheckedChanged += OnControlValueChanged;
+            this.enableScreenshotsCheckbox.CheckedChanged += OnControlValueChanged;
+            this.showUtilityColsCheckbox.CheckedChanged += OnControlValueChanged; 
         }
         #endregion
     }

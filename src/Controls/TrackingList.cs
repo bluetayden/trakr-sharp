@@ -63,7 +63,7 @@ namespace trakr_sharp.Controls {
         #region LocalEventHandlers
         private void updateElapsedCol_Timer_Tick(object sender, EventArgs e) {
             updateElapsedCol_Timer.Stop();
-            updateElapsedCol();
+            UpdateElapsedCol();
             updateElapsedCol_Timer.Start();
         }
 
@@ -230,8 +230,9 @@ namespace trakr_sharp.Controls {
         // Clears and updates this.listView using db values, used during initialisation only
         public void InitListItems(List<ProcData> procDataList) {
             // Init SmallImageList to an empty ImageList with dimensions of 18,18
-            ImageList smallImgList = new ImageList();
-            smallImgList.ImageSize = new Size(18, 18);
+            ImageList smallImgList = new ImageList {
+                ImageSize = new Size(18, 18)
+            };
             this.listView.SmallImageList = smallImgList;
 
             // Add all items from procDataList to this.listView
@@ -275,7 +276,7 @@ namespace trakr_sharp.Controls {
         }
 
         // Updates the values in the Elapsed_Time col using the time between now and the last updateElapsedCol_Timer_Tick call
-        private void updateElapsedCol() {
+        private void UpdateElapsedCol() {
             this.listView.BeginUpdate();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
