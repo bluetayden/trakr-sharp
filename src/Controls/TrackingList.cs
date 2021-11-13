@@ -10,7 +10,6 @@ using System.Windows.Forms;
 using System.Reflection;
 
 namespace trakr_sharp.Controls {
-    // TrackingList Implementation
     public partial class TrackingList : UserControl {
         #region Definitions
         private const int Program_Name_i = 1;
@@ -39,6 +38,7 @@ namespace trakr_sharp.Controls {
 
         #region Init
         private int _imgIndex = 0;
+        private ListViewColumnSorter _lvColumnSorter;
 
         public TrackingList() {
             InitializeComponent();
@@ -51,6 +51,10 @@ namespace trakr_sharp.Controls {
             // Add all items from db to this.listView and update running states
             InitListItems(procDataList);
             UpdateRunningStates(running, false);
+
+            // Assign a LVColumnSorter to this.listView for column sorting when needed
+            _lvColumnSorter = new ListViewColumnSorter();
+            this.listView.ListViewItemSorter = _lvColumnSorter;
 
             ResizeColumnHeaders();
         }
@@ -75,6 +79,28 @@ namespace trakr_sharp.Controls {
                     lvRowContextMenu.Show(Cursor.Position);
                 }
             }
+        }
+
+        // Called whenever a column in this.listView is clicked. Sorts items depending on column content.
+        private void listView_ColumnClick(object sender, ColumnClickEventArgs e) {
+            // Determine if clicked column is already the column that is being sorted.
+            if (e.Column == _lvColumnSorter.SortColumn) {
+                // Reverse the current sort direction for this column.
+                if (_lvColumnSorter.Order == SortOrder.Ascending) {
+                    _lvColumnSorter.Order = SortOrder.Descending;
+                }
+                else {
+                    _lvColumnSorter.Order = SortOrder.Ascending;
+                }
+            }
+            else {
+                // Set the column number that is to be sorted; default to ascending.
+                _lvColumnSorter.SortColumn = e.Column;
+                _lvColumnSorter.Order = SortOrder.Ascending;
+            }
+
+            // Perform the sort with these new sort options.
+            this.listView.Sort();
         }
 
         // Raises public event requesting procMonitor to mark the selected procs that are marked running, as closed
@@ -327,6 +353,7 @@ namespace trakr_sharp.Controls {
                     if (!RowIsMarkedRunning(lv_row)) {
                         // Update Elapsed_Time text to 0
                         lv_row.SubItems[Elapsed_Time_i].Text = "0m";
+                        lv_row.SubItems[Elapsed_Time_i].Tag = (long)0;
 
                         // Change Opened To "Today"
                         lv_row.SubItems[Date_Opened_i].Text = "Today";
@@ -356,10 +383,10 @@ namespace trakr_sharp.Controls {
 
                     // Reset Elapsed_Time to default value
                     lv_row.SubItems[Elapsed_Time_i].Text = "-";
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)0;
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)-1;
                     // Reset Start_Time to default value
                     lv_row.SubItems[Start_Time_i].Text = "null";
-                    lv_row.SubItems[Start_Time_i].Tag = -1;
+                    lv_row.SubItems[Start_Time_i].Tag = (long)-1;
                     // Reset Is_Running to default value
                     lv_row.SubItems[Is_Running_i].Tag = false;
                     lv_row.SubItems[Is_Running_i].Text = "False";

@@ -5,8 +5,9 @@ using System.Windows.Forms;
 namespace trakr_sharp {
 
     /// <summary>
-    /// A Smaller version of the implementations provided here: https://stackoverflow.com/a/34290332/17313384
-    ///                                                         https://stackoverflow.com/a/62509480/17313384
+    /// This implementation was taken directly from the links below and shortened slightly: 
+    /// https://stackoverflow.com/a/34290332/17313384                                             
+    /// https://stackoverflow.com/a/62509480/17313384
     /// </summary>
 
     public class KeyboardListener : IDisposable {

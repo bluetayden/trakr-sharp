@@ -29,7 +29,7 @@ namespace trakr_sharp {
             // Handle Program_Name [1]
             lv_item.SubItems.Add(this.Program_Name);
             // Handle Elapsed_Time [2]
-            lv_item.SubItems.Add(this.Elapsed_Time == 0 ? "-" : this.Elapsed_Time.ToString());
+            lv_item.SubItems.Add(this.Elapsed_Time == -1 ? "-" : this.Elapsed_Time.ToString());
             lv_item.SubItems[2].Tag = this.Elapsed_Time;
             // Handle Date_Opened [3]
             lv_item.SubItems.Add(Utils.Times.ISOToLogicalDateString(this.Date_Opened));

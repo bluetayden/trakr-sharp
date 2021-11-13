@@ -76,6 +76,21 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        public static DateTime LogicalDateStringToDateTime(string logical) {
+            if (logical == "Today") {
+                return DateTime.Now;
+            }
+            else if (logical.EndsWith("d")) {
+                // Remove 'd' from string and parse int
+                int days = int.Parse(logical.Substring(0, logical.Length - 1));
+
+                return DateTime.Now.AddDays(-days);
+            }
+            else {
+                return DateTime.Parse(logical);
+            }
+        }
+
         public static string ISOToShortDateString(string ISO) {
             return DateTime.Parse(ISO).ToString("dd/MM/yy");
         }

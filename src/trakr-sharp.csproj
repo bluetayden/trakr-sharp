@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\KeyboardListener.cs" />
+    <Compile Include="Classes\ListViewColumnSorter.cs" />
     <Compile Include="Classes\ProcData.cs" />
     <Compile Include="Classes\ProcMonitor.cs" />
     <Compile Include="Classes\UserSettings.cs" />
