@@ -18,7 +18,7 @@
  
   ## Usage
   * After downloading the latest release, extract all contents to a folder and run `trakr-sharp.exe`. Click on the 'Add' button to start tracking any processes you would like.  
-  * If desired the settings page provides options to minimise trakr to the app to tray on close, and the enabling of a global screenshot key (F12).  
+  * If desired the settings page provides the option to minimize trakr to the app tray on close, as well as a flag to enable the global screenshot key (F12).  
   * Screenshots and the database used for storing times can be found in the `user_data` folder, located at the root where you launch the app.  
   * If you'd like to edit a particular record, select it in the main window and click on the 'Edit' button.  
   * There are some instances where an app may keep a background process running after you close it. In the event you would like to stop counting this time towards your total usage value, right click on the entry in the tracking list and select 'Stop Logging'. 
