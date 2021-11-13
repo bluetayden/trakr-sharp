@@ -16,6 +16,7 @@ namespace trakr_sharp.Utils {
     class SysCalls {
         private static readonly string _settingsJsonPath = "user_data/settings.json";
         private static readonly string _screenshotsPath = "user_data/screenshots";
+        private static readonly string _readmePath = "README.md";
 
         private static readonly string[] _ignoredProcs = new string[] {"System Idle Process", "explorer.exe", "smss.exe",
             "taskmgr.exe", "spoolsv.exe", "lsass.exe", "csrss.exe", "winlogon.exe", "svchost.exe", "System",
@@ -102,6 +103,28 @@ namespace trakr_sharp.Utils {
             }
             catch (Exception) {
                 return "Failed to save screenshot";
+            }
+        }
+
+        // Opens the "README.md" file with notepad
+        public static bool OpenReadme() {
+            try {
+                Process.Start("notepad.exe", _readmePath);
+                return true;
+            }
+            catch(Exception) {
+                return false;
+            }
+        }
+
+        // Opens the trakr-sharp repo link in a browser window
+        public static bool OpenRepoLink() {
+            try {
+                Process.Start("https://github.com/bluetayden/trakr-sharp");
+                return true;
+            }
+            catch (Exception) {
+                return false;
             }
         }
 

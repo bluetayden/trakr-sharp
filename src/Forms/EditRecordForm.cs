@@ -27,6 +27,14 @@ namespace trakr_sharp {
 
         #region LocalEventHandlers
         private void EditRecordForm_FormClosing(object sender, FormClosingEventArgs e) {
+            if (this.tempProcIcon != null) {
+                this.tempProcIcon.Dispose();
+            }
+
+            if (this.procIconBox.BackgroundImage != null) {
+                this.procIconBox.BackgroundImage.Dispose();
+            }
+
             foreach (Control c in this.Controls) {
                 c.Dispose();
             }
@@ -36,7 +44,6 @@ namespace trakr_sharp {
 
         private void cancelButton_Click(object sender, EventArgs e) {
             this.DialogResult = DialogResult.Cancel;
-            this.Dispose();
         }
 
         private void applyButton_Click(object sender, EventArgs e) {

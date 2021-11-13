@@ -39,6 +39,16 @@ namespace trakr_sharp {
             this.sysTrayIconContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.trakrToolStripMenuLabel = new System.Windows.Forms.ToolStripMenuItem();
             this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuBar = new System.Windows.Forms.MainMenu(this.components);
+            this.fileMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.fileAddMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.fileSettingsMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.menuItem3 = new System.Windows.Forms.MenuItem();
+            this.fileExitMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.helpMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.helpReadmeMenuBarItem = new System.Windows.Forms.MenuItem();
+            this.menuItem5 = new System.Windows.Forms.MenuItem();
+            this.helpAboutMenuBarItem = new System.Windows.Forms.MenuItem();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
             this.sysTrayIconContextMenu.SuspendLayout();
@@ -59,7 +69,7 @@ namespace trakr_sharp {
             this.mainGridLayout.RowCount = 2;
             this.mainGridLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.mainGridLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 35F));
-            this.mainGridLayout.Size = new System.Drawing.Size(644, 341);
+            this.mainGridLayout.Size = new System.Drawing.Size(644, 340);
             this.mainGridLayout.TabIndex = 0;
             // 
             // buttonLayout
@@ -71,7 +81,7 @@ namespace trakr_sharp {
             this.buttonLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonLayout.Location = new System.Drawing.Point(486, 224);
             this.buttonLayout.Name = "buttonLayout";
-            this.buttonLayout.Size = new System.Drawing.Size(155, 114);
+            this.buttonLayout.Size = new System.Drawing.Size(155, 113);
             this.buttonLayout.TabIndex = 0;
             this.buttonLayout.TabStop = false;
             this.buttonLayout.Text = "Tracking";
@@ -135,7 +145,7 @@ namespace trakr_sharp {
             this.programConsole.Name = "programConsole";
             this.programConsole.ReadOnly = true;
             this.programConsole.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.programConsole.Size = new System.Drawing.Size(477, 114);
+            this.programConsole.Size = new System.Drawing.Size(477, 113);
             this.programConsole.TabIndex = 1;
             this.programConsole.Enter += new System.EventHandler(this.programConsole_Enter);
             // 
@@ -174,7 +184,7 @@ namespace trakr_sharp {
             this.trakrToolStripMenuLabel,
             this.quitToolStripMenuItem});
             this.sysTrayIconContextMenu.Name = "sysTrayIconContextMenu";
-            this.sysTrayIconContextMenu.Size = new System.Drawing.Size(181, 70);
+            this.sysTrayIconContextMenu.Size = new System.Drawing.Size(125, 48);
             // 
             // trakrToolStripMenuLabel
             // 
@@ -182,24 +192,90 @@ namespace trakr_sharp {
             this.trakrToolStripMenuLabel.Image = ((System.Drawing.Image)(resources.GetObject("trakrToolStripMenuLabel.Image")));
             this.trakrToolStripMenuLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.trakrToolStripMenuLabel.Name = "trakrToolStripMenuLabel";
-            this.trakrToolStripMenuLabel.Size = new System.Drawing.Size(180, 22);
+            this.trakrToolStripMenuLabel.Size = new System.Drawing.Size(124, 22);
             this.trakrToolStripMenuLabel.Text = "trakr";
             // 
             // quitToolStripMenuItem
             // 
             this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-            this.quitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.quitToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.quitToolStripMenuItem.Text = "Quit trakr";
             this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+            // 
+            // menuBar
+            // 
+            this.menuBar.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.fileMenuBarItem,
+            this.helpMenuBarItem});
+            // 
+            // fileMenuBarItem
+            // 
+            this.fileMenuBarItem.Index = 0;
+            this.fileMenuBarItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.fileAddMenuBarItem,
+            this.fileSettingsMenuBarItem,
+            this.menuItem3,
+            this.fileExitMenuBarItem});
+            this.fileMenuBarItem.Text = "File";
+            // 
+            // fileAddMenuBarItem
+            // 
+            this.fileAddMenuBarItem.Index = 0;
+            this.fileAddMenuBarItem.Text = "Add";
+            this.fileAddMenuBarItem.Click += new System.EventHandler(this.fileAddMenuBarItem_Click);
+            // 
+            // fileSettingsMenuBarItem
+            // 
+            this.fileSettingsMenuBarItem.Index = 1;
+            this.fileSettingsMenuBarItem.Text = "Settings";
+            this.fileSettingsMenuBarItem.Click += new System.EventHandler(this.fileSettingsMenuBarItem_Click);
+            // 
+            // menuItem3
+            // 
+            this.menuItem3.Index = 2;
+            this.menuItem3.Text = "-";
+            // 
+            // fileExitMenuBarItem
+            // 
+            this.fileExitMenuBarItem.Index = 3;
+            this.fileExitMenuBarItem.Text = "Exit";
+            this.fileExitMenuBarItem.Click += new System.EventHandler(this.fileExitMenuBarItem_Click);
+            // 
+            // helpMenuBarItem
+            // 
+            this.helpMenuBarItem.Index = 1;
+            this.helpMenuBarItem.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.helpReadmeMenuBarItem,
+            this.menuItem5,
+            this.helpAboutMenuBarItem});
+            this.helpMenuBarItem.Text = "Help";
+            // 
+            // helpReadmeMenuBarItem
+            // 
+            this.helpReadmeMenuBarItem.Index = 0;
+            this.helpReadmeMenuBarItem.Text = "Readme";
+            this.helpReadmeMenuBarItem.Click += new System.EventHandler(this.helpReadmeMenuBarItem_Click);
+            // 
+            // menuItem5
+            // 
+            this.menuItem5.Index = 1;
+            this.menuItem5.Text = "-";
+            // 
+            // helpAboutMenuBarItem
+            // 
+            this.helpAboutMenuBarItem.Index = 2;
+            this.helpAboutMenuBarItem.Text = "About";
+            this.helpAboutMenuBarItem.Click += new System.EventHandler(this.helpAboutMenuBarItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(644, 341);
+            this.ClientSize = new System.Drawing.Size(644, 340);
             this.Controls.Add(this.mainGridLayout);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(660, 380);
+            this.Menu = this.menuBar;
+            this.MinimumSize = new System.Drawing.Size(660, 379);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "trakr-sharp";
@@ -229,6 +305,16 @@ namespace trakr_sharp {
         private System.Windows.Forms.ContextMenuStrip sysTrayIconContextMenu;
         private System.Windows.Forms.ToolStripMenuItem trakrToolStripMenuLabel;
         private System.Windows.Forms.ToolStripMenuItem quitToolStripMenuItem;
+        private System.Windows.Forms.MainMenu menuBar;
+        private System.Windows.Forms.MenuItem fileMenuBarItem;
+        private System.Windows.Forms.MenuItem helpMenuBarItem;
+        private System.Windows.Forms.MenuItem fileAddMenuBarItem;
+        private System.Windows.Forms.MenuItem fileSettingsMenuBarItem;
+        private System.Windows.Forms.MenuItem menuItem3;
+        private System.Windows.Forms.MenuItem fileExitMenuBarItem;
+        private System.Windows.Forms.MenuItem helpReadmeMenuBarItem;
+        private System.Windows.Forms.MenuItem menuItem5;
+        private System.Windows.Forms.MenuItem helpAboutMenuBarItem;
     }
 }
 

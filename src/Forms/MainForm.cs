@@ -164,13 +164,6 @@ namespace trakr_sharp {
             }
         }
 
-        // Called when the quit button on the tray icon tool strip is clicked
-        private void quitToolStripMenuItem_Click(object sender, EventArgs e) {
-            // Set flag to force close in case MainForm is currently in normal state
-            this._forceClose = true;
-            this.Close();
-        }
-
         // Called on any keypress
         private void _keyListener_KeyDown(Keys key) {
             if (key == _screenshotKey) {
@@ -179,6 +172,32 @@ namespace trakr_sharp {
                 string msg = Utils.SysCalls.TakeScreenshot();
                 printToProgramConsole(msg);
             }
+        }
+        #endregion
+
+        #region MenuEventHandlers
+        private void fileAddMenuBarItem_Click(object sender, EventArgs e) {
+            addButton.PerformClick();
+        }
+
+        private void fileSettingsMenuBarItem_Click(object sender, EventArgs e) {
+            settingsButton.PerformClick();
+        }
+
+        private void fileExitMenuBarItem_Click(object sender, EventArgs e) {
+            quitToolStripMenuItem.PerformClick();
+        }
+
+        private void helpAboutMenuBarItem_Click(object sender, EventArgs e) {
+            AboutForm aboutForm = new AboutForm();
+            aboutForm.ShowDialog();
+        }
+
+        // Called when the quit button on the tray icon tool strip is clicked
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e) {
+            // Set flag to force close in case MainForm is currently in normal state
+            this._forceClose = true;
+            this.Close();
         }
         #endregion
 
@@ -342,5 +361,15 @@ namespace trakr_sharp {
             this.trackingList.ResizeColumnHeaders();
         }
         #endregion
+
+        private void helpReadmeMenuBarItem_Click(object sender, EventArgs e) {
+            bool success = Utils.SysCalls.OpenReadme();
+            
+            // Show error message if failed to open README file
+            if (!success){
+                MessageBox.Show("README.md is either in use or could not be found.", "Failed to open Readme",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+            }
+        }
     }
 }

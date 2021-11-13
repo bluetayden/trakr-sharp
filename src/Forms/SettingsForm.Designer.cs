@@ -147,6 +147,7 @@ namespace trakr_sharp {
             // 
             this.startupBehaviourLabel.AutoSize = true;
             this.startupBehaviourLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.startupBehaviourLabel.Enabled = false;
             this.startupBehaviourLabel.Location = new System.Drawing.Point(3, 25);
             this.startupBehaviourLabel.Name = "startupBehaviourLabel";
             this.startupBehaviourLabel.Size = new System.Drawing.Size(177, 25);
@@ -169,6 +170,7 @@ namespace trakr_sharp {
             // 
             this.startupBehaviourCheckbox.AutoSize = true;
             this.startupBehaviourCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.startupBehaviourCheckbox.Enabled = false;
             this.startupBehaviourCheckbox.Location = new System.Drawing.Point(187, 28);
             this.startupBehaviourCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
             this.startupBehaviourCheckbox.Name = "startupBehaviourCheckbox";
