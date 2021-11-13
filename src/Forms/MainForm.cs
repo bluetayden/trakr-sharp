@@ -13,7 +13,7 @@ namespace trakr_sharp {
         #region Init
         private ProcMonitor _procMonitor;
         private UserSettings _userSettings;
-        private KeyboardListener _keyListener;
+        private KeyboardListener _keyListener = null;
 
         private readonly Keys _screenshotKey = Keys.F12;
         private FormWindowState _lastWindowState;
@@ -33,10 +33,9 @@ namespace trakr_sharp {
             // Get current user settings
             _userSettings = Utils.SysCalls.ReadUserSettings();
 
-            // Setup keyboard listener and init screenshots folder
+            // Init screenshots folder and setup keyboard listener if needed
             Utils.SysCalls.InitScreenshots();
-            _keyListener = new KeyboardListener();
-            _keyListener.KeyDown += _keyListener_KeyDown;
+            handleKeyboardListenerSetup();
 
             // this.trackingList init
             this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
@@ -133,7 +132,7 @@ namespace trakr_sharp {
 
         // Called when the main form is closed (will either hide the form or close it depending on user preference)
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
-            // If user settings choose to minimize instead of close, and the close request didn't come from 'Exit trakr'
+            // If user settings choose to minimize instead of close, and the close request didn't come from 'Quit trakr'
             if (_userSettings.OnClose == UserSettings.CloseBehaviour.Minimize && !_forceClose) {
                 // Cancel close event
                 e.Cancel = true;
@@ -165,8 +164,8 @@ namespace trakr_sharp {
             }
         }
 
-        // Called when the exit button on the tray icon tool strip is clicked
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e) {
+        // Called when the quit button on the tray icon tool strip is clicked
+        private void quitToolStripMenuItem_Click(object sender, EventArgs e) {
             // Set flag to force close in case MainForm is currently in normal state
             this._forceClose = true;
             this.Close();
@@ -250,8 +249,11 @@ namespace trakr_sharp {
             if (settingsForm.DialogResult == DialogResult.Cancel) {
                 _userSettings = Utils.SysCalls.ReadUserSettings();
 
-                // Show util cols if settings now require it
+                // Show util cols if setting enabled
                 handleShowingUtilCols();
+
+                // Disable/Enable screenshots if setting changed
+                handleKeyboardListenerSetup();
             }
         }
 
@@ -272,13 +274,28 @@ namespace trakr_sharp {
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
         }
 
-        // Shows or hides the util cols of this.trackingList if settings require it
+        // Shows or hides the util cols of this.trackingList if user settings require it
         private void handleShowingUtilCols() {
             if (_userSettings.ShowUtilCols) {
                 this.trackingList.ShowUtilCols();
             }
             else {
                 this.trackingList.HideUtilCols();
+            }
+        }
+
+        // Creates keyboard listener or disables it depending on user settings
+        private void handleKeyboardListenerSetup() {
+            // If screenshots enabled and _keyListener not assigned to an object yet
+            if (_userSettings.EnableScreenshots && _keyListener == null) {
+                _keyListener = new KeyboardListener();
+                _keyListener.KeyDown += _keyListener_KeyDown;
+            }
+            // Otherwise if screenshots disabled and _keyListener not null
+            else if (!_userSettings.EnableScreenshots && _keyListener != null) {
+                _keyListener.KeyDown -= _keyListener_KeyDown;
+                _keyListener.Dispose();
+                _keyListener = null;
             }
         }
 
@@ -299,7 +316,7 @@ namespace trakr_sharp {
         }
 
         private void updateSysTrayIconText() {
-            string msg = string.Format("Tracking: {0}\r\nActive: {1}\r\n\r\nRecent:\r\n{2}",
+            string msg = string.Format("Tracking: {0}\r\nRunning: {1}\r\n\r\nRecent:\r\n{2}",
                 this.trackingSummary.TrackedCount, this.trackingSummary.RunningCount, this.trackingSummary.ProcName);
 
             if (msg.Length > 64) {

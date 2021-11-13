@@ -31,6 +31,7 @@ namespace trakr_sharp.Utils {
                 UserSettings userSettings = new UserSettings {
                     OnClose = UserSettings.CloseBehaviour.Close,
                     RunOnStartup = false,
+                    EnableScreenshots = false,
                     ShowUtilCols = false
                 };
 
@@ -64,6 +65,7 @@ namespace trakr_sharp.Utils {
             // Write changes from newUserSettings to jsonUserSettings
             diskUserSettings["OnClose"] = (int)newUserSettings.OnClose;
             diskUserSettings["RunOnStartup"] = newUserSettings.RunOnStartup;
+            diskUserSettings["EnableScreenshots"] = newUserSettings.EnableScreenshots;
             diskUserSettings["ShowUtilCols"] = newUserSettings.ShowUtilCols;
 
             // Write changes to back to file
@@ -77,9 +79,16 @@ namespace trakr_sharp.Utils {
         }
 
         public static string TakeScreenshot() {
-            string fileName = Guid.NewGuid().ToString() + ".png";
+            string fileName = Guid.NewGuid().ToString() + ".png"; ;
             string filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
 
+            // Make sure screenshot with chosen GUID does not exist
+            while (File.Exists(filePath)) {
+                fileName = Guid.NewGuid().ToString() + ".png"; ;
+                filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
+            }
+
+            // Take screenshot and try to save it
             try {
                 Rectangle bounds = Screen.GetBounds(Point.Empty);
                 using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) {

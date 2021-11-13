@@ -40,6 +40,7 @@ namespace trakr_sharp {
         private void applyButton_Click(object sender, EventArgs e) {
             this._userSettings.OnClose = (UserSettings.CloseBehaviour)this.closeBehaviourComboBox.SelectedIndex;
             this._userSettings.RunOnStartup = this.startupBehaviourCheckbox.Checked;
+            this._userSettings.EnableScreenshots = this.enableScreenshotsCheckbox.Checked;
             this._userSettings.ShowUtilCols = this.showUtilityColsCheckbox.Checked;
 
             try {
@@ -49,6 +50,9 @@ namespace trakr_sharp {
                 // Show success message
                 MessageBox.Show("Settings updated successfully", "Save Succesful",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Close settings window
+                cancelButton.PerformClick();
             }
             catch (Exception ex) {
                 // Show error message
@@ -64,14 +68,16 @@ namespace trakr_sharp {
 
         #region Methods
         private void SetControlValuesToOriginal() {
-            this.closeBehaviourComboBox.SelectedIndex = ((int)_userSettings.OnClose);
+            this.closeBehaviourComboBox.SelectedIndex = (int)_userSettings.OnClose;
             this.startupBehaviourCheckbox.Checked = _userSettings.RunOnStartup;
+            this.enableScreenshotsCheckbox.Checked = _userSettings.EnableScreenshots;
             this.showUtilityColsCheckbox.Checked = _userSettings.ShowUtilCols;
         }
 
         private void SubscribeToValueChanges() {
             this.closeBehaviourComboBox.SelectedValueChanged += onControlValueChanged; 
-            this.startupBehaviourCheckbox.CheckedChanged += onControlValueChanged; 
+            this.startupBehaviourCheckbox.CheckedChanged += onControlValueChanged;
+            this.enableScreenshotsCheckbox.CheckedChanged += onControlValueChanged;
             this.showUtilityColsCheckbox.CheckedChanged += onControlValueChanged; 
         }
         #endregion

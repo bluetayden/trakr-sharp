@@ -402,7 +402,7 @@ namespace trakr_sharp {
             this.pathBrowseLayout.Name = "pathBrowseLayout";
             this.pathBrowseLayout.RowCount = 1;
             this.pathBrowseLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.pathBrowseLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.pathBrowseLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
             this.pathBrowseLayout.Size = new System.Drawing.Size(357, 29);
             this.pathBrowseLayout.TabIndex = 8;
             // 

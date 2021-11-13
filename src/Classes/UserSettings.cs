@@ -7,6 +7,7 @@
 
         public CloseBehaviour OnClose { get; set; }
         public bool RunOnStartup { get; set; }
+        public bool EnableScreenshots { get; set; }
         public bool ShowUtilCols { get; set; }
     }
 }

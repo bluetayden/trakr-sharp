@@ -1,19 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
     static class Program {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+        // Unique GUID to differentiate this app process from others
+        private static readonly string appGUID = "TheShadeOfTheMangoTree";
+
         [STAThread]
         static void Main() {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            // Create a disposable mutex lock using the GUID
+            using (Mutex mutex = new Mutex(false, "Global\\" + appGUID)) {
+                // If the lock is already acquired (the process is already running) stop execution 
+                if (!mutex.WaitOne(0, false)) {
+                    return;
+                }
+                // Otherwise run the program as normal
+                else {
+                    Application.EnableVisualStyles();
+                    Application.SetCompatibleTextRenderingDefault(false);
+                    Application.Run(new MainForm());
+                }
+            }
         }
     }
 }
