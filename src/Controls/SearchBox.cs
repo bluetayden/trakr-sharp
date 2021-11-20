@@ -27,7 +27,7 @@ namespace trakr_sharp.Controls {
         /// </summary>
         private void queryBox_TextChanged(object sender, EventArgs e) {
             if (this.queryBox.Text != _placeholderText) {
-                OnValidQuery?.Invoke(this, this.queryBox.Text);
+                OnValidQuery?.Invoke(this, this.queryBox.Text.ToLower());
             }
         }
         #endregion

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace trakr_sharp {
     static class Program {
         // Unique GUID to differentiate this app process from others
-        private static readonly string appGUID = "TheShadeOfTheMangoTree";
+        private static readonly string appGUID = "GlendaleLaRoma";
 
         [STAThread]
         static void Main() {

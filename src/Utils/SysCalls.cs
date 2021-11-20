@@ -80,12 +80,12 @@ namespace trakr_sharp.Utils {
         }
 
         public static string TakeScreenshot() {
-            string fileName = Guid.NewGuid().ToString() + ".png"; ;
+            string fileName = Guid.NewGuid().ToString() + ".png";
             string filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
 
             // Make sure screenshot with chosen GUID does not exist
             while (File.Exists(filePath)) {
-                fileName = Guid.NewGuid().ToString() + ".png"; ;
+                fileName = Guid.NewGuid().ToString() + ".png";
                 filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
             }
 

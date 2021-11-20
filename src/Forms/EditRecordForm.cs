@@ -162,9 +162,12 @@ namespace trakr_sharp {
 
         private void SubscribeToValueChanges() {
             this.progNameTextBox.TextChanged += OnControlValueChanged;
+            this.progNameTextBox.KeyDown += OnControlValueChanged;
 
             this.hoursCounter.ValueChanged += OnControlValueChanged;
+            this.hoursCounter.KeyDown += OnControlValueChanged;
             this.minsCounter.ValueChanged += OnControlValueChanged;
+            this.minsCounter.KeyDown += OnControlValueChanged;
 
             this.dateAddedTimePicker.ValueChanged += OnControlValueChanged;
             this.dateOpenedTimePicker.ValueChanged += OnControlValueChanged;

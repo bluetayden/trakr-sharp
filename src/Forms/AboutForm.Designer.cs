@@ -31,8 +31,8 @@ namespace trakr_sharp {
             this.infoLabelsLayout = new System.Windows.Forms.TableLayoutPanel();
             this.nameVersionLabel = new System.Windows.Forms.Label();
             this.websiteLabel = new System.Windows.Forms.LinkLabel();
-            this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.authorLabel = new System.Windows.Forms.Label();
+            this.iconPictureBox = new System.Windows.Forms.PictureBox();
             this.mainLayout.SuspendLayout();
             this.infoLayout.SuspendLayout();
             this.infoLabelsLayout.SuspendLayout();
@@ -107,7 +107,7 @@ namespace trakr_sharp {
             this.nameVersionLabel.Name = "nameVersionLabel";
             this.nameVersionLabel.Size = new System.Drawing.Size(154, 22);
             this.nameVersionLabel.TabIndex = 0;
-            this.nameVersionLabel.Text = "trakr-sharp v1.0.0b";
+            this.nameVersionLabel.Text = "trakr-sharp v1.0.1b";
             this.nameVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // websiteLabel
@@ -124,17 +124,6 @@ namespace trakr_sharp {
             this.websiteLabel.VisitedLinkColor = System.Drawing.Color.Blue;
             this.websiteLabel.Click += new System.EventHandler(this.websiteLabel_Click);
             // 
-            // iconPictureBox
-            // 
-            this.iconPictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("iconPictureBox.BackgroundImage")));
-            this.iconPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.iconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.iconPictureBox.Location = new System.Drawing.Point(3, 3);
-            this.iconPictureBox.Name = "iconPictureBox";
-            this.iconPictureBox.Size = new System.Drawing.Size(77, 69);
-            this.iconPictureBox.TabIndex = 1;
-            this.iconPictureBox.TabStop = false;
-            // 
             // authorLabel
             // 
             this.authorLabel.AutoSize = true;
@@ -145,6 +134,17 @@ namespace trakr_sharp {
             this.authorLabel.TabIndex = 2;
             this.authorLabel.Text = "by bluetayden";
             this.authorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // iconPictureBox
+            // 
+            this.iconPictureBox.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("iconPictureBox.BackgroundImage")));
+            this.iconPictureBox.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.iconPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.iconPictureBox.Location = new System.Drawing.Point(3, 3);
+            this.iconPictureBox.Name = "iconPictureBox";
+            this.iconPictureBox.Size = new System.Drawing.Size(77, 69);
+            this.iconPictureBox.TabIndex = 1;
+            this.iconPictureBox.TabStop = false;
             // 
             // AboutForm
             // 
@@ -157,7 +157,7 @@ namespace trakr_sharp {
             this.MinimizeBox = false;
             this.Name = "AboutForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About trakr-sharp";
+            this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.AboutForm_FormClosing);
             this.mainLayout.ResumeLayout(false);
             this.infoLayout.ResumeLayout(false);
