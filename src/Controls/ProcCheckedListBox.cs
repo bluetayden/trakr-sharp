@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
     public partial class ProcCheckedListBox : UserControl {
-        #region Init
-        public delegate void OnItemCheckDelegate(ProcCheckedListBox sender, int changedIndex); // Create delegator for public ItemCheck event
-        public event OnItemCheckDelegate OnItemCheck; // Create instance of that event from delegator
+        public delegate void OnItemCheckDelegate(ProcCheckedListBox sender, int changedIndex);
+        public event OnItemCheckDelegate OnItemCheck;
         private List<string> _procs = new List<string>();
         private List<string> _checkedProcs = new List<string>();
 
+        #region Init
         public ProcCheckedListBox() {
             InitializeComponent();
         }
@@ -30,25 +26,35 @@ namespace trakr_sharp.Controls {
             return this._procs;
         }
 
-        // Add items to this._procs from a list
+        /// <summary>
+        /// Adds items from "extra_procs" to this._procs
+        /// </summary>
         public void AddProcs(List<string> extraProcs) {
             this._procs.AddRange(extraProcs.Cast<string>());
         }
 
+        /// <summary>
+        /// Returns a list of processes that have been ticked/checked by the user
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetCheckedProcs() {
             return this._checkedProcs;
         }
 
+        /// <summary>
+        /// Removes the items that were checked by the user both internally and from this.checkedListBox
+        /// </summary>
         public void RemoveCheckedItemsFromProcs() {
             // Update _procs to not contain any of this.checkedListBox's checked items 
             this._procs = this._procs.Where(proc => !this._checkedProcs.Contains(proc)).ToList();
-            // Clear _checkedProcs
             this._checkedProcs.Clear();
         }
         #endregion
 
-        #region PublicEventRaisers
-        /// Raises a public event if an item in this.checkboxList is changed, checkedIndex is the index of the item that was affected 
+        #region Public Event Raisers
+        /// <summary>
+        /// Fires if an item in this.checkboxList is changed, e.Index/checkedIndex is the position of the affected item
+        /// </summary>
         private void checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e) {
             this.BeginInvoke((MethodInvoker)(() => this.UpdateCheckedProcs(e.Index)));
             OnItemCheck?.Invoke(this, e.Index);
@@ -56,16 +62,16 @@ namespace trakr_sharp.Controls {
         #endregion
 
         #region Methods
-        // Takes an optional list (i.e. when user querying) and uses it to populate this.checkedListBox
-        // Otherwise populates using this._procs
+        /// <summary>
+        /// Takes an optional list (i.e. when user is querying with a search box) and uses it to populate this.checkedListBox.
+        /// Otherwise populates using this._procs.
+        /// </summary>
         public void RepopulateListBox(IEnumerable<string> customList = default) {
-            // Suppress listbox UI updates
             this.checkedListBox.BeginUpdate();
 
             // Clear all items
             this.checkedListBox.Items.Clear();
-
-            // Add custom items to checkedListBox if given
+            // Add custom items to checkedListBox if provided
             if (customList != default(IEnumerable<string>)) {
                 this.checkedListBox.Items.AddRange(customList.ToArray<string>());
             }
@@ -74,16 +80,16 @@ namespace trakr_sharp.Controls {
                 this.checkedListBox.Items.AddRange(this._procs.ToArray<string>());
             }
 
-            // Restore checked states of this.checkedListBox
+            // Restore items that were checked before this update
             RestoreCheckStates();
 
-            // Re-enable listbox UI Updates
             this.checkedListBox.EndUpdate();
-
             Utils.SysCalls.Print("Repopulated checkedListBox");
         }
 
-        // Adds items to this.checkedListBox by using a provided item list and an optional query
+        /// <summary>
+        /// Adds items to this.checkedListBox by using a provided item list and an optional query
+        /// </summary>
         public void QueryItems(string query = "") {
             // Clear checkedListBox
             this.checkedListBox.Items.Clear();
@@ -100,7 +106,9 @@ namespace trakr_sharp.Controls {
             Utils.SysCalls.Print("Queried checkedListBox");
         }
 
-        // Updates _checkedProcs using the state of the item at checkedListBox.Items[cIndex]
+        /// <summary>
+        /// Updates _checkedProcs using the state of the item at checkedListBox.Items[cIndex]
+        /// </summary>
         public void UpdateCheckedProcs(int cIndex) {
             // Get the item at cIndex
             string changedItem = this.checkedListBox.Items[cIndex].ToString();
@@ -117,7 +125,9 @@ namespace trakr_sharp.Controls {
             Utils.SysCalls.Print("Updated _checkedRunningProcs " + this._checkedProcs.Count);
         }
 
-        // Used to update checked states of the this.checkboxList, typically when states are lost during search/repopulation
+        /// <summary>
+        /// Used to update checked states of the this.checkboxList, typically when states are lost during search/repopulation
+        /// </summary>
         private void RestoreCheckStates() {
             // Suppress listbox UI updates
             this.checkedListBox.BeginUpdate();
@@ -136,9 +146,8 @@ namespace trakr_sharp.Controls {
 
             // Re-enable ItemChecked event
             this.checkedListBox.ItemCheck += this.checkedListBox_ItemCheck;
-            // Re-enable listbox UI Updates
-            this.checkedListBox.EndUpdate();
 
+            this.checkedListBox.EndUpdate();
             Utils.SysCalls.Print("Restored checkedListBox checks");
         }
 
@@ -146,8 +155,7 @@ namespace trakr_sharp.Controls {
         public void ResetControl() {
             this._procs = new List<string>();
             this._checkedProcs = new List<string>();
-
-            this.checkedListBox.Items.Clear();
+            this.checkedListBox.Items.Clear(); // affects UI
         }
         #endregion
     }

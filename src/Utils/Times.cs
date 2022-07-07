@@ -27,17 +27,17 @@ namespace trakr_sharp.Utils {
                 return "0";
             }
             else if (total_secs < 60) {
-                return String.Format("{0}s", total_secs);
+                return string.Format("{0}s", total_secs);
             }
             else if (total_secs < 3600) {
                 int mins = (int)Math.Floor((double)(total_secs / 60));
                 int secs = (int)total_secs - (mins * 60);
 
                 if (secs > 0) {
-                    return String.Format("{0}m {1}s", mins, secs);
+                    return string.Format("{0}m {1}s", mins, secs);
                 }
                 else {
-                    return String.Format("{0}m", mins);
+                    return string.Format("{0}m", mins);
                 }
             }
             else {
@@ -45,10 +45,10 @@ namespace trakr_sharp.Utils {
                 int mins = (int)(total_secs - (hours * 3600))/60;
 
                 if (mins > 0) {
-                    return String.Format("{0}h {1}m", hours, mins);
+                    return string.Format("{0}h {1}m", hours, mins);
                 }
                 else {
-                    return String.Format("{0}h", hours);
+                    return string.Format("{0}h", hours);
                 }
             }
         }
@@ -68,7 +68,7 @@ namespace trakr_sharp.Utils {
             }
             else if (DatesAreInTheSameWeek(ISO_date, curr_date)) {
                 // {num}d
-                return String.Format("{0}d", (int)Math.Ceiling((curr_date - ISO_date).TotalDays));
+                return string.Format("{0}d", (int)Math.Ceiling((curr_date - ISO_date).TotalDays));
             }
             else {
                 // dd/MM/yy
@@ -83,7 +83,6 @@ namespace trakr_sharp.Utils {
             else if (logical.EndsWith("d")) {
                 // Remove 'd' from string and parse int
                 int days = int.Parse(logical.Substring(0, logical.Length - 1));
-
                 return DateTime.Now.AddDays(-days);
             }
             else {

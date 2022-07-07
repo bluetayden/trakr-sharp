@@ -3,16 +3,13 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
-
     /// <summary>
-    /// This implementation was taken directly from the links below and shortened slightly: 
+    /// Implementation taken directly from the links below and shortened slightly: 
     /// https://stackoverflow.com/a/34290332/17313384                                             
     /// https://stackoverflow.com/a/62509480/17313384
     /// </summary>
-
     public class KeyboardListener : IDisposable {
         #region Imports/Fields
-
         public delegate void ErrorEventHandler(Exception e);
         public delegate void LocalKeyEventHandler(Keys key);
         public event LocalKeyEventHandler KeyDown;
@@ -66,7 +63,7 @@ namespace trakr_sharp {
         #endregion
 
         #region Constructor
-        //Start hook
+        // Start hook
         public KeyboardListener() {
             TheHookCB = new CallbackDelegate(KeybHookProc);
             IntPtr hInstance = LoadLibrary("User32");
@@ -94,7 +91,7 @@ namespace trakr_sharp {
 
         #region Listener
         [STAThread]
-        //The listener that will trigger events
+        // The listener that will trigger events
         private int KeybHookProc(int Code, IntPtr W, IntPtr L) {
             if (Code < 0) {
                 return CallNextHookEx(HookID, Code, W, L);
@@ -114,8 +111,8 @@ namespace trakr_sharp {
                 }
             }
             catch (Exception e) {
+                // Ignore all errors
                 if (OnError != null) OnError(e);
-                //Ignore all errors
             }
 
             return CallNextHookEx(HookID, Code, W, L);

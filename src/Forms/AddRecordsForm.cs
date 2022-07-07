@@ -1,48 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
     public partial class AddRecordsForm : Form {
-        #region Init
-        public delegate void OnDBUpdateDelegate(AddRecordsForm sender, string msg); // Create delegator for public OnDBUPdate event
-        public event OnDBUpdateDelegate OnDBUpdate; // Create instance of that event from delegator
+        public delegate void OnDBUpdateDelegate(AddRecordsForm sender, string msg);
+        public event OnDBUpdateDelegate OnDBUpdate;
 
+        #region Init
         public AddRecordsForm() {
             InitializeComponent();
 
             // Initialise this.runningProcListBox
             this.runningProcList.SetProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
-
             // Repopulate both procListBoxes
             RepopulateProcListBoxes();
         }
         #endregion
 
-        #region PublicEventHandlers
-        // Called when this.searchBox raises a public valid query event
+        #region Public Event Handlers
+        /// <summary>
+        /// Called when this.searchBox raises a public "valid query" event
+        /// </summary>
         private void searchBox_OnValidQuery(Controls.SearchBox sender, string query) {
             this.runningProcList.QueryItems(query);
         }
 
-        // Called whenever an item in runningProcListBox is checked
+        /// <summary>
+        /// Called whenever an item in runningProcListBox is checked
+        /// </summary>
         private void runningProcList_OnItemCheck(Controls.ProcCheckedListBox sender, int changedIndex) {
             this.BeginInvoke((MethodInvoker)(() => HandleButtonEnabling()));
         }
 
-        // Called whenever an item in selectedProcListBox is checked
+        /// <summary>
+        /// Called whenever an item in selectedProcListBox is checked
+        /// </summary>
         private void selectedProcList_OnItemCheck(Controls.ProcCheckedListBox sender, int changedIndex) {
             this.BeginInvoke((MethodInvoker)(() => HandleButtonEnabling()));
         }
         #endregion
 
-        #region LocalEventHandlers
+        #region Local Event Handlers
         private void AddRecordsForm_FormClosing(object sender, FormClosingEventArgs e) {
             foreach (Control c in this.Controls) {
                 c.Dispose();
@@ -58,7 +57,6 @@ namespace trakr_sharp {
             UpdateProcListFieldsForAddition();
             // Repopulate the list boxes with their updated _procs fields
             RepopulateProcListBoxes();
-
             // Clear searchBox
             this.searchBox.clearQueryBox();
         }
@@ -68,22 +66,21 @@ namespace trakr_sharp {
             UpdateProcListFieldsForRemoval();
             // Repopulate the list boxes with their updated _procs fields
             RepopulateProcListBoxes();
-
             // Clear searchBox
             this.searchBox.clearQueryBox();
         }
 
-        // Resets the contents of this.runningProcList and this.selectedProcList
-        // allows for this.runningProcList to contain an up to date list of running system procs
+        /// <summary>
+        /// Resets the contents of this.runningProcList and this.selectedProcList
+        /// allows for this.runningProcList to contain an up to date list of running system procs
+        /// </summary>
         private void refreshButton_Click(object sender, EventArgs e) {
             // Reset both proc lists
             this.runningProcList.ResetControl();
             this.selectedProcList.ResetControl();
-
             // Reinitialise this.runningProcListBox and repopulate both lists
             this.runningProcList.SetProcs(Utils.SysCalls.GetRunningUntrackedProcNameList());
             RepopulateProcListBoxes();
-
             // Clear searchBox
             this.searchBox.clearQueryBox();
 
@@ -118,7 +115,6 @@ namespace trakr_sharp {
                 // Show error message
                 MessageBox.Show(ex.ToString(), "Error adding records",
                 MessageBoxButtons.OK, MessageBoxIcon.Error);
-
                 // Reenable Apply button
                 this.applyButton.Enabled = true;
             }
@@ -126,7 +122,9 @@ namespace trakr_sharp {
         #endregion
 
         #region UI_Updates
-        // Updates _runningProcs and _selectedProcs for an addition action
+        /// <summary>
+        /// Updates _runningProcs and _selectedProcs for an addition action
+        /// </summary>
         private void UpdateProcListFieldsForAddition() {
             // Update for selectedProcListBox._selectedProcs to contain runningProcListBox._selectedProcs
             this.selectedProcList.AddProcs(this.runningProcList.GetCheckedProcs());
@@ -136,7 +134,9 @@ namespace trakr_sharp {
             Utils.SysCalls.Print("Updated proc list fields (addition)");
         }
 
-        // Updates _runningProcs and _selectedProcs for a removal action
+        /// <summary>
+        /// Updates _runningProcs and _selectedProcs for a removal action
+        /// </summary>
         private void UpdateProcListFieldsForRemoval() {
             // Update for runningProcListBox._procs to contain selectedProcListBox._selectedProcs
             this.runningProcList.AddProcs(this.selectedProcList.GetCheckedProcs());
@@ -146,7 +146,9 @@ namespace trakr_sharp {
             Utils.SysCalls.Print("Updated proc list fields (removal)");
         }
 
-        // Repopulates this.runningProcList and this.selectedProcList with their _proc fields
+        /// <summary>
+        /// Repopulates this.runningProcList and this.selectedProcList with their _proc fields
+        /// </summary>
         private void RepopulateProcListBoxes() {
             this.runningProcList.RepopulateListBox();
             this.selectedProcList.RepopulateListBox();
@@ -154,15 +156,12 @@ namespace trakr_sharp {
             HandleButtonEnabling();
         }
 
-        // Controls enabling/disabling of buttons depending on listBox selections/population
+        /// <summary>
+        /// Controls enabling/disabling of buttons depending on listBox selections/population
+        /// </summary>
         private void HandleButtonEnabling() {
-            // Add button
             this.addButton.Enabled = this.runningProcList.GetCheckedProcs().Count > 0;
-
-            // Remove button
             this.removeButton.Enabled = this.selectedProcList.GetCheckedProcs().Count > 0;
-
-            // Apply button
             this.applyButton.Enabled = this.selectedProcList.GetProcs().Count > 0;
         }
         #endregion

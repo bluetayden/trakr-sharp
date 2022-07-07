@@ -3,54 +3,62 @@ using System.Windows.Forms;
 using System.Drawing;
 
 namespace trakr_sharp {
+    /// <summary>
+    /// An alternate representation of a database document for a tracked process with extra fields for use at runtime.
+    /// i.e. ElapsedTime, IsRunning and StartTime
+    /// </summary>
     public class ProcData {
-        public readonly int Count = 10;
+        #region Constants
+        public const int Count = 10;
+        #endregion
 
         #region Fields
         public Bitmap Icon { get; set; }
-        public string Program_Name { get; set; }
-        public long Elapsed_Time { get; set; }
-        public string Date_Opened { get; set; } // ISO Format
-        public long Total_Time { get; set; }
-        public string Date_Added { get; set; } // ISO Format
+        public string ProgramName { get; set; }
+        public long ElapsedTime { get; set; }
+        public string DateOpened { get; set; } // ISO Format
+        public long TotalTime { get; set; }
+        public string DateAdded { get; set; } // ISO Format
 
-        public string Process_Name { get; set; }
-        public string Process_Path { get; set; }
-        public bool Is_Running { get; set; }
-        public long Start_Time { get; set; }
+        public string ProcessName { get; set; }
+        public string ProcessPath { get; set; }
+        public bool IsRunning { get; set; }
+        public long StartTime { get; set; }
         #endregion
 
         #region Methods
-        // Takes this ProcData instance and converts it to a ListViewItem
+        /// <summary>
+        /// Converts this ProcData instance into a ListViewItem for use with WinForms
+        /// </summary>
         public ListViewItem ToLVItem() {
             // Create new ListViewItem instance (skip populating Icon column with no constructor params)
-            ListViewItem lv_item = new ListViewItem();
+            ListViewItem lvItem = new ListViewItem();
 
-            // Handle Program_Name [1]
-            lv_item.SubItems.Add(this.Program_Name);
-            // Handle Elapsed_Time [2]
-            lv_item.SubItems.Add(this.Elapsed_Time == -1 ? "-" : this.Elapsed_Time.ToString());
-            lv_item.SubItems[2].Tag = this.Elapsed_Time;
-            // Handle Date_Opened [3]
-            lv_item.SubItems.Add(Utils.Times.ISOToLogicalDateString(this.Date_Opened));
-            // Handle Total_Time [4]
-            lv_item.SubItems.Add(Utils.Times.SecsToHMSString(this.Total_Time));
-            lv_item.SubItems[4].Tag = this.Total_Time;
-            // Handle Date_Added [5]
-            lv_item.SubItems.Add(Utils.Times.ISOToShortDateString(this.Date_Added));
+            // Program_Name [1]
+            lvItem.SubItems.Add(this.ProgramName);
+            // Elapsed_Time [2]
+            lvItem.SubItems.Add(this.ElapsedTime == -1 ? "-" : this.ElapsedTime.ToString());
+            lvItem.SubItems[2].Tag = this.ElapsedTime;
+            // Date_Opened [3]
+            lvItem.SubItems.Add(Utils.Times.ISOToLogicalDateString(this.DateOpened));
+            // Total_Time [4]
+            lvItem.SubItems.Add(Utils.Times.SecsToHMSString(this.TotalTime));
+            lvItem.SubItems[4].Tag = this.TotalTime;
 
-            // Handle Process_Name [6]
-            lv_item.SubItems.Add(this.Process_Name);
-            // Handle Process_Path [7]
-            lv_item.SubItems.Add(this.Process_Path);
-            // Handle Is_Running [8]
-            lv_item.SubItems.Add(this.Is_Running.ToString());
-            lv_item.SubItems[8].Tag = this.Is_Running;
-            // Handle Start_Time [9]
-            lv_item.SubItems.Add(this.Start_Time == -1 ? "null" : this.Start_Time.ToString());
-            lv_item.SubItems[9].Tag = this.Start_Time;
+            // Date_Added [5]
+            lvItem.SubItems.Add(Utils.Times.ISOToShortDateString(this.DateAdded));
+            // Process_Name [6]
+            lvItem.SubItems.Add(this.ProcessName);
+            // Process_Path [7]
+            lvItem.SubItems.Add(this.ProcessPath);
+            // Is_Running [8]
+            lvItem.SubItems.Add(this.IsRunning.ToString());
+            lvItem.SubItems[8].Tag = this.IsRunning;
+            // Start_Time [9]
+            lvItem.SubItems.Add(this.StartTime == -1 ? "null" : this.StartTime.ToString());
+            lvItem.SubItems[9].Tag = this.StartTime;
 
-            return lv_item;
+            return lvItem;
         }
         #endregion
     }

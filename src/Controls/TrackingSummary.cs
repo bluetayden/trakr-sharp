@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp.Controls {
@@ -21,7 +15,7 @@ namespace trakr_sharp.Controls {
             refreshUptime_Timer.Start();
         }
 
-        public void RerenderFields() {
+        public void RefreshFields() {
             this.picturePanel.BackgroundImage = this.ProcIcon;
             this.trackingLabel.Text = String.Format("Tracking: {0}", TrackedCount);
             this.runningLabel.Text = String.Format("Running: {0}", RunningCount);

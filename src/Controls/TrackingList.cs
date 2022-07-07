@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 
 namespace trakr_sharp.Controls {
     public partial class TrackingList : UserControl {
-        #region Definitions
+        #region Constants
         private const int Program_Name_i = 1;
         private const int Elapsed_Time_i = 2;
         private const int Date_Opened_i = 3;
@@ -23,11 +18,10 @@ namespace trakr_sharp.Controls {
         private const int Start_Time_i = 9;
 
         private const int IconColWidth = 28;
-
-        private const int One_Min = 60;
+        private const int OneMin = 60;
         #endregion
 
-        #region PublicEventRaisers
+        #region Public Event Raisers
         public delegate void RequestDBWriteDelegate(TrackingList sender, Dictionary<string, long> procTimePairs);
         public event RequestDBWriteDelegate RequestDBWrite;
         public delegate void OnItemSelectedDelegate(TrackingList sender, int selectedCount);
@@ -37,8 +31,8 @@ namespace trakr_sharp.Controls {
         #endregion
 
         #region Init
-        private int _imgIndex = 0;
         private ListViewColumnSorter _lvColumnSorter;
+        private int _numImages = 0; // tracks number of icons in this.listView.smallImageList
 
         public TrackingList() {
             InitializeComponent();
@@ -51,16 +45,18 @@ namespace trakr_sharp.Controls {
             // Add all items from db to this.listView and update running states
             InitListItems(procDataList);
             UpdateRunningStates(running, false);
-
             // Assign a LVColumnSorter to this.listView for column sorting when needed
             _lvColumnSorter = new ListViewColumnSorter();
             this.listView.ListViewItemSorter = _lvColumnSorter;
-
+            // Fit column headers to current window size
             ResizeColumnHeaders();
         }
         #endregion
 
-        #region LocalEventHandlers
+        #region Local Event Handlers
+        /// <summary>
+        /// Rerenders the values in the elapsed column every tick of the internal timer
+        /// </summary>
         private void updateElapsedCol_Timer_Tick(object sender, EventArgs e) {
             updateElapsedCol_Timer.Stop();
             UpdateElapsedCol();
@@ -71,7 +67,9 @@ namespace trakr_sharp.Controls {
             OnItemSelected?.Invoke(this, this.GetSelectedItems().Count);
         }
 
-        // Opens context menu when an item in this.listView is right clicked
+        /// <summary>
+        /// Opens the right-click context menu when an item in this.listView is right clicked
+        /// </summary>
         private void listView_MouseClick(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Right) {
                 var focusedItem = this.listView.FocusedItem;
@@ -81,7 +79,9 @@ namespace trakr_sharp.Controls {
             }
         }
 
-        // Called whenever a column in this.listView is clicked. Sorts items depending on column content.
+        /// <summary>
+        /// Called whenever a column in this.listView is clicked. Sorts items depending on column content.
+        /// </summary>
         private void listView_ColumnClick(object sender, ColumnClickEventArgs e) {
             // Determine if clicked column is already the column that is being sorted.
             if (e.Column == _lvColumnSorter.SortColumn) {
@@ -116,15 +116,15 @@ namespace trakr_sharp.Controls {
         }
         #endregion
 
-        #region Utility
-        // Returns list of selected values in the "Process_Name" column of this.listView
+        #region Util
+        /// <summary>
+        /// Returns a list of selected values in the "Process_Name" column of this.listView
+        /// </summary>
         public List<string> GetSelectedItems() {
             List<string> selectedProcNames = new List<string>();
-
             foreach (ListViewItem selectedItem in this.listView.SelectedItems) {
                 selectedProcNames.Add(selectedItem.SubItems[Process_Name_i].Text);
             }
-
             return selectedProcNames;
         }
 
@@ -173,7 +173,9 @@ namespace trakr_sharp.Controls {
             }
         }
 
-        // Resizes columns using fixed proportions
+        /// <summary>
+        /// Resizes columns using fixed proportions (based on current window size)
+        /// </summary>
         public void ResizeColumnHeaders() {
             int endMargin = this.listView.Items.Count > 9 ? 20 : 3;
             int width = this.listView.Width - (IconColWidth + endMargin);
@@ -186,7 +188,9 @@ namespace trakr_sharp.Controls {
             }
         }
 
-        // Hides the Process_Name, Is_Running and Start_Time cols
+        /// <summary>
+        /// Hides the Process_Name, Is_Running and Start_Time cols
+        /// </summary>
         public void HideUtilCols() {
             this.listView.Columns[Process_Name_i].Width = 0;
             this.listView.Columns[Process_Path_i].Width = 0;
@@ -194,7 +198,9 @@ namespace trakr_sharp.Controls {
             this.listView.Columns[Start_Time_i].Width = 0;
         }
 
-        // Shows the Process_Name, Is_Running and Start_Time cols
+        /// <summary>
+        /// Shows the Process_Name, Is_Running and Start_Time cols
+        /// </summary>
         public void ShowUtilCols() {
             this.listView.Columns[Process_Name_i].Width = -2;
             this.listView.Columns[Process_Path_i].Width = -2;
@@ -208,7 +214,6 @@ namespace trakr_sharp.Controls {
                     return true;
                 }
             }
-
             return false;
         }
 
@@ -221,14 +226,20 @@ namespace trakr_sharp.Controls {
             return (Utils.Times.GetUTCNow() - (long)lv_row.SubItems[Start_Time_i].Tag);
         }
 
+        /// <summary>
+        /// Clears the rows that have been selected by the user with (Ctrl +) Left Click
+        /// </summary>
         public void ClearSelections() {
             this.listView.SelectedItems.Clear();
         }
         #endregion
 
         #region Macro
-        // Clears and updates this.listView using db values, used during initialisation only
-        public void InitListItems(List<ProcData> procDataList) {
+        /// <summary>
+        /// Clears and updates this.listView using db values, used during initialisation only
+        /// </summary>
+        /// <param name="procDataList"></param>
+        private void InitListItems(List<ProcData> procDataList) {
             // Init SmallImageList to an empty ImageList with dimensions of 18,18
             ImageList smallImgList = new ImageList {
                 ImageSize = new Size(18, 18)
@@ -251,7 +262,7 @@ namespace trakr_sharp.Controls {
 
             // Loop through each row in DataTable
             foreach (ProcData procData in procDataList) {
-                if (!LVContainsProcName(procData.Process_Name)) {
+                if (!LVContainsProcName(procData.ProcessName)) {
                     AddLVItem(procData);
                 }
             }
@@ -259,7 +270,9 @@ namespace trakr_sharp.Controls {
             this.listView.EndUpdate();
         }
 
-        // Deletes selected items in this.listView
+        /// <summary>
+        /// Deletes items selected by the user in this.listView
+        /// </summary>
         public void DeleteSelectedLVItems() {
             List<string> for_deletion = GetSelectedItems();
             this.listView.BeginUpdate();
@@ -275,29 +288,33 @@ namespace trakr_sharp.Controls {
             this.listView.EndUpdate();
         }
 
-        // Updates the values in the Elapsed_Time col using the time between now and the last updateElapsedCol_Timer_Tick call
+        /// <summary>
+        /// Updates the values in the Elapsed_Time col using the time between now and the last updateElapsedCol_Timer_Tick call
+        /// </summary>
         private void UpdateElapsedCol() {
             this.listView.BeginUpdate();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
                 if (RowIsMarkedRunning(lv_row)) {
                     // Handle Elapsed_Time col
-                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + One_Min;
+                    lv_row.SubItems[Elapsed_Time_i].Tag = (long)lv_row.SubItems[Elapsed_Time_i].Tag + OneMin;
                     lv_row.SubItems[Elapsed_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Elapsed_Time_i].Tag);
                 }
             }
 
             this.listView.EndUpdate();
         }
-
-        // Updates the values in a single row of this.listView (called from EditRecordForm) [Rewrite this later]
+        /// <summary>
+        /// Updates the values in a single row of this.listView (called from EditRecordForm)
+        /// TODO: Rewrite this later
+        /// </summary>
         public void UpdateLVItem(ProcData newProcData) {
             this.listView.BeginUpdate();
 
             // Find the lv item that matches the name of newProcData
             ListViewItem recordRow = new ListViewItem();
             foreach (ListViewItem lv_row in this.listView.Items) {
-                if (lv_row.SubItems[Process_Name_i].Text == newProcData.Process_Name) {
+                if (lv_row.SubItems[Process_Name_i].Text == newProcData.ProcessName) {
                     recordRow = lv_row;
                     break;
                 }
@@ -308,46 +325,49 @@ namespace trakr_sharp.Controls {
             this.listView.SmallImageList.Images[recordRow.ImageIndex] = resizedIcon;
             resizedIcon.Dispose();
             // Prog name
-            recordRow.SubItems[Program_Name_i].Text = newProcData.Program_Name;
+            recordRow.SubItems[Program_Name_i].Text = newProcData.ProgramName;
             // Opened
             if (!RowIsMarkedRunning(recordRow)) {
-                recordRow.SubItems[Date_Opened_i].Text = Utils.Times.ISOToLogicalDateString(newProcData.Date_Opened);
+                recordRow.SubItems[Date_Opened_i].Text = Utils.Times.ISOToLogicalDateString(newProcData.DateOpened);
             }
             // Total
-            recordRow.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString(newProcData.Total_Time);
-            recordRow.SubItems[Total_Time_i].Tag = newProcData.Total_Time;
+            recordRow.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString(newProcData.TotalTime);
+            recordRow.SubItems[Total_Time_i].Tag = newProcData.TotalTime;
             // Added
-            recordRow.SubItems[Date_Added_i].Text = Utils.Times.ISOToShortDateString(newProcData.Date_Added);
+            recordRow.SubItems[Date_Added_i].Text = Utils.Times.ISOToShortDateString(newProcData.DateAdded);
             // Path
-            recordRow.SubItems[Process_Path_i].Text = newProcData.Process_Path;
+            recordRow.SubItems[Process_Path_i].Text = newProcData.ProcessPath;
 
             this.listView.EndUpdate();
         }
         #endregion
 
         #region Micro
+        /// <summary>
+        /// Adds a proc data object to this.listView as a new row
+        /// </summary>
         private void AddLVItem(ProcData procData) {
-            // Convert procData to a ListViewItem
             ListViewItem lv_row = procData.ToLVItem();
-
-            // Set lv_row's ImageIndex
-            lv_row.ImageIndex = _imgIndex;
-            _imgIndex++;
-
+            // Set lv_row's ImageIndex, and inc _imgIndex for the next row
+            lv_row.ImageIndex = _numImages;
+            _numImages++;
             // Add icon from procData to this.listView.SmallImageList
             this.listView.SmallImageList.Images.Add(procData.Icon);
-
+            // Add the new row to this.listView
             this.listView.Items.Add(lv_row);
         }
 
-        // Uses list of running procs (from ProcMonitor) to shade items in this.listView green [Rewrite this later]
+        /// <summary>
+        /// Uses a list of running procs (from ProcMonitor) to shade items in this.listView green
+        /// TODO: Rewrite this later
+        /// </summary>
         public void UpdateRunningStates(List<string> running, bool raiseDBRequests = true) {
             Dictionary<string, long> procTimePairs = new Dictionary<string, long>();
 
             foreach (ListViewItem lv_row in this.listView.Items) {
                 // If an item in running is present in this.listView
                 if (running.Contains(lv_row.SubItems[Process_Name_i].Text)) {
-                    // Set bg colour green
+                    // Set bg colour in this.listView to green
                     lv_row.BackColor = Color.PaleGreen;
 
                     // If the process wasn't marked as running in this.listView yet
@@ -355,21 +375,18 @@ namespace trakr_sharp.Controls {
                         // Update Elapsed_Time text to 0
                         lv_row.SubItems[Elapsed_Time_i].Text = "0m";
                         lv_row.SubItems[Elapsed_Time_i].Tag = (long)0;
-
                         // Change Opened To "Today"
                         lv_row.SubItems[Date_Opened_i].Text = "Today";
-
                         // Set Is_Running to 1
-                        lv_row.SubItems[Is_Running_i].Text = "True";
+                        lv_row.SubItems[Is_Running_i].Text = "true";
                         lv_row.SubItems[Is_Running_i].Tag = true;
-
                         // Save Start_Time
                         lv_row.SubItems[Start_Time_i].Text = Utils.Times.GetUTCNow().ToString();
                         lv_row.SubItems[Start_Time_i].Tag = Utils.Times.GetUTCNow();
                     }
                 }
                 else {
-                    // Set bg colour white
+                    // Set bg colour in this.listView to white
                     lv_row.BackColor = Color.White;
 
                     // If lv_row was marked Is_Running, add process name and elapsed time to procTimePairs
@@ -381,16 +398,15 @@ namespace trakr_sharp.Controls {
                         lv_row.SubItems[Total_Time_i].Tag = (long)lv_row.SubItems[Total_Time_i].Tag + elapsedTime;
                         lv_row.SubItems[Total_Time_i].Text = Utils.Times.SecsToHMSString((long)lv_row.SubItems[Total_Time_i].Tag);
                     }
-
-                    // Reset Elapsed_Time to default value
+                    // Reset Elapsed_Time to default
                     lv_row.SubItems[Elapsed_Time_i].Text = "-";
                     lv_row.SubItems[Elapsed_Time_i].Tag = (long)-1;
-                    // Reset Start_Time to default value
+                    // Reset Start_Time to default
                     lv_row.SubItems[Start_Time_i].Text = "null";
                     lv_row.SubItems[Start_Time_i].Tag = (long)-1;
-                    // Reset Is_Running to default value
+                    // Reset Is_Running to default
                     lv_row.SubItems[Is_Running_i].Tag = false;
-                    lv_row.SubItems[Is_Running_i].Text = "False";
+                    lv_row.SubItems[Is_Running_i].Text = "false";
                 }
             }
 
@@ -403,8 +419,10 @@ namespace trakr_sharp.Controls {
         #endregion
     }
 
-    #region DoubleBufferFix
-    // Reflection class required to prevent flickering during resize events
+    #region Double Buffer Fix
+    /// <summary>
+    /// Reflection class required to prevent flickering during resize events
+    /// </summary>
     public static class ControlExtensions {
         public static void DoubleBuffering(this Control control, bool enable) {
             PropertyInfo doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered",

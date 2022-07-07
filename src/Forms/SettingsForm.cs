@@ -1,34 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
     public partial class SettingsForm : Form {
-        #region Init
         private UserSettings _userSettings;
 
+        #region Init
         public SettingsForm() {
             InitializeComponent();
 
             _userSettings = Utils.SysCalls.ReadUserSettings();
             SetControlValuesToOriginal();
-
             SubscribeToValueChanges();
         }
         #endregion
 
-        #region LocalEventHandlers
+        #region Local Event Handlers
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e) {
             foreach (Control c in this.Controls) {
                 c.Dispose();
             }
-
             this.Dispose();
         }
 
@@ -46,11 +37,9 @@ namespace trakr_sharp {
             try {
                 Utils.SysCalls.UpdateUserSettings(_userSettings);
                 this.applyButton.Enabled = false;
-
                 // Show success message
                 MessageBox.Show("Settings updated successfully", "Save Succesful",
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
-
                 // Close settings window
                 cancelButton.PerformClick();
             }

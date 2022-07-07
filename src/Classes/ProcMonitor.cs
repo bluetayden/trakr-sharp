@@ -6,22 +6,23 @@ using Timer = System.Timers.Timer;
 
 namespace trakr_sharp {
     public class ProcMonitor {
-        #region Init
-        public delegate void OnTrackedProcEventDelegate(ProcMonitor sender, string msg); // Create delegator for public OnTrackedProc event
-        public event OnTrackedProcEventDelegate OnTrackedProcEvent; // Create instance of that event from delegator
+        public delegate void OnTrackedProcEventDelegate(ProcMonitor sender, string msg);
+        public event OnTrackedProcEventDelegate OnTrackedProcEvent;
         private List<string> _trackedProcs;
         private Dictionary<string, int> _runningTrackedPairs;
 
+        #region Init
         public ProcMonitor() {
             UpdateTrackingFields();
-
             WatchProcessCreations();
             WatchProcessDeletions();
         }
         #endregion
 
         #region Get/Set
-        // Used by MainForm to print a msg for trackedProcs that were already running before trakr started
+        /// <summary>
+        /// Used by MainForm to print a msg for trackedProcs that were already running before trakr started
+        /// </summary>
         public string GetStartupString() {
             Utils.SysCalls.Print(_trackedProcs.Count + " processes are currently being tracked");
             return _trackedProcs.Count + " processes are currently being tracked";
@@ -42,13 +43,17 @@ namespace trakr_sharp {
         #endregion
 
         #region Methods
-        // Used to update _trackedProcs and _runningTrackedPairs when a db update ocurrs or on init
+        /// <summary>
+        /// Used to update _trackedProcs and _runningTrackedPairs when a db update ocurrs or on init
+        /// </summary>
         public void UpdateTrackingFields() {
             _trackedProcs = Utils.Database.GetProcessNameList();
             _runningTrackedPairs = Utils.SysCalls.GetRunningTrackedPairs();
         }
 
-        // Forces the instance counts of the provided procs to zero
+        /// <summary>
+        /// Forces the instance counts of the provided procs to zero
+        /// </summary>
         public void ForceCountsToZero(List<string> procNames) {
             foreach (string name in procNames) {
                 if (_runningTrackedPairs.ContainsKey(name)) {
@@ -61,7 +66,9 @@ namespace trakr_sharp {
             }
         }
 
-        // Watches for when any new process is created
+        /// <summary>
+        /// Watches for when any new process is created
+        /// </summary>
         private void WatchProcessCreations() {
             ManagementEventWatcher startWatch = new ManagementEventWatcher(
                 "SELECT * FROM __InstanceCreationEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
@@ -69,6 +76,9 @@ namespace trakr_sharp {
             startWatch.Start();
         }
 
+        /// <summary>
+        /// Watches for when any processes are closed
+        /// </summary>
         private void WatchProcessDeletions() {
             ManagementEventWatcher stopWatch = new ManagementEventWatcher(
                 "SELECT * FROM __InstanceDeletionEvent WITHIN 1 WHERE TargetInstance ISA 'Win32_Process'");
@@ -77,8 +87,10 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region LocalEventHandlers
-        // Fired when a new process is received
+        #region Local Event Handlers
+        /// <summary>
+        /// Fired when a new process is received
+        /// </summary>
         private void startWatch_EventArrived(object sender, EventArrivedEventArgs e) {
             ManagementBaseObject targetInstance = (ManagementBaseObject)e.NewEvent["TargetInstance"];
             string name = targetInstance["Name"]?.ToString();
@@ -106,6 +118,9 @@ namespace trakr_sharp {
             e.NewEvent.Dispose();
         }
 
+        /// <summary>
+        /// Fired when a process is stopped
+        /// </summary>
         private void stopWatch_EventArrived(object sender, EventArrivedEventArgs e) {
             ManagementBaseObject targetInstance = (ManagementBaseObject)e.NewEvent["TargetInstance"];
             string name = targetInstance["Name"]?.ToString();

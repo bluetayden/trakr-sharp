@@ -8,7 +8,6 @@ namespace trakr_sharp {
     /// This implementation was taken directly from the link below and adapted slightly: 
     /// https://docs.microsoft.com/en-us/troubleshoot/dotnet/csharp/sort-listview-by-column
     /// </summary>
-
     class ListViewColumnSorter : IComparer {
         // Fields to check if column should be sorted numerically or textually
         private readonly List<int> numericCols = new List<int>() { 0, 2, 4, 8, 9 };

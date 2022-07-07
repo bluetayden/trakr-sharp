@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace trakr_sharp {
     public partial class MainForm : Form {
@@ -15,9 +9,10 @@ namespace trakr_sharp {
         private UserSettings _userSettings;
         private KeyboardListener _keyListener = null;
 
-        private readonly Keys _screenshotKey = Keys.F12;
         private FormWindowState _lastWindowState;
         private bool _forceClose = false;
+        private const Keys _screenshotKey = Keys.F12;
+        private const int ConsoleTextLimit = 32000;
 
         public MainForm() {
             InitializeComponent();
@@ -26,7 +21,7 @@ namespace trakr_sharp {
             Utils.Database.Init();
             Utils.SysCalls.InitUserSettings();
 
-            // Proc monitor instance init
+            // Proc monitor init
             _procMonitor = new ProcMonitor();
             _procMonitor.OnTrackedProcEvent += procMonitor_OnTrackedProcEvent;
 
@@ -34,17 +29,17 @@ namespace trakr_sharp {
             _userSettings = Utils.SysCalls.ReadUserSettings();
 
             // Init screenshots folder and setup keyboard listener if needed
-            Utils.SysCalls.InitScreenshots();
+            Utils.SysCalls.InitScreenshotsDir();
             HandleKeyboardListenerSetup();
 
-            // this.trackingList init
+            // Init trackingList
             this.trackingList.InitListView(Utils.Database.GetProcDataList(), this._procMonitor.GetRunningProcs());
             this.trackingList.RequestDBWrite += trackingList_OnRequestDBWrite;
             this.trackingList.OnItemSelected += trackingList_OnItemSelected;
             this.trackingList.RequestProcStop += trackingList_OnRequestProcStop;
             HandleShowingUtilCols();
 
-            // Update this.trackingSummary
+            // Initial trackingSummary update
             UpdateTrackingSummary();
 
             // Get current window state for use in this.listView resizing later
@@ -56,7 +51,7 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region PublicEventHandlers
+        #region Public Event Handlers
         private void procMonitor_OnTrackedProcEvent(ProcMonitor sender, string msg) {
             this.BeginInvoke((MethodInvoker)(() => {
                 Utils.SysCalls.Print(msg);
@@ -116,8 +111,10 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region WindowEventHandlers
-        // Called when the main form truly closes
+        #region Window Event Handlers
+        /// <summary>
+        /// Called when the MainForm truly closes
+        /// </summary>
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e) {
             // Unsubscribe from trackingList db requests
             this.trackingList.RequestDBWrite -= trackingList_OnRequestDBWrite;
@@ -130,25 +127,32 @@ namespace trakr_sharp {
             Application.Exit();
         }
 
-        // Called when the main form is closed (will either hide the form or close it depending on user preference)
+        /// <summary>
+        /// Called when the MainForm is attempting to close (will either hide the form or lead to an actual close
+        /// depending on user preference)
+        /// </summary>
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
             // If user settings choose to minimize instead of close, and the close request didn't come from 'Quit trakr'
             if (_userSettings.OnClose == UserSettings.CloseBehaviour.Minimize && !_forceClose) {
-                // Cancel close event
+                // Cancel close event (prevent MainForm_FormClosed)
                 e.Cancel = true;
-                // Hide Main Form
+                // Hide MainForm (it will still remain the system tray)
                 this.Hide();
             }
         }
 
-        // Called when the form is finished resizing
+        /// <summary>
+        /// Called when the form is finished resizing
+        /// </summary>
         private void MainForm_ResizeEnd(object sender, EventArgs e) {
             if (this.WindowState != FormWindowState.Minimized) {
                 this.trackingList.ResizeColumnHeaders();
             }
         }
 
-        // Called whenever form is resized, but only applied when form is maximized or unmaximized
+        /// <summary>
+        /// Called whenever form is resized, but only applied when form is maximized or unmaximized
+        /// </summary>
         private void MainForm_Resize(object sender, EventArgs e) {
             if (this.WindowState != _lastWindowState && this.WindowState != FormWindowState.Minimized) {
                 this.trackingList.ResizeColumnHeaders();
@@ -156,7 +160,9 @@ namespace trakr_sharp {
             }
         }
 
-        // Called when the trakr tray icon is clicked (the main form is shown again)
+        /// <summary>
+        /// Called when the trakr tray icon is clicked (the MainForm is shown again)
+        /// </summary>
         private void sysTrayIcon_MouseClick(object sender, MouseEventArgs e) {
             if (e.Button == MouseButtons.Left) {
                 WindowState = FormWindowState.Normal;
@@ -164,18 +170,19 @@ namespace trakr_sharp {
             }
         }
 
-        // Called on any keypress
+        /// <summary>
+        /// Called on any keypress, takes a screenshot if the relevant key is used.
+        /// </summary>
         private void _keyListener_KeyDown(Keys key) {
             if (key == _screenshotKey) {
                 Utils.SysCalls.Print("Screenshot key pressed (F12)");
-
                 string msg = Utils.SysCalls.TakeScreenshot();
                 PrintToProgramConsole(msg);
             }
         }
         #endregion
 
-        #region MenuEventHandlers
+        #region Menu Event Handlers
         private void fileAddMenuBarItem_Click(object sender, EventArgs e) {
             addButton.PerformClick();
         }
@@ -203,7 +210,9 @@ namespace trakr_sharp {
             aboutForm.ShowDialog();
         }
 
-        // Called when the quit button on the tray icon tool strip is clicked
+        /// <summary>
+        /// Called when the quit button on the tray icon tool strip is clicked
+        /// </summary>
         private void quitToolStripMenuItem_Click(object sender, EventArgs e) {
             // Set flag to force close in case MainForm is currently in normal state
             this._forceClose = true;
@@ -211,17 +220,17 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region LocalEventHandlers
+        #region Local Event Handlers
         private void addButton_Click(object sender, EventArgs e) {
             // Disable add button
             this.addButton.Enabled = false;
 
             // Create addRecordsForm
             AddRecordsForm addRecordsForm = new AddRecordsForm();
-            // Subscribe to events
+            // Subscribe to events from addRecordsForm
             addRecordsForm.OnDBUpdate += addRecordsForm_OnDBUpdate;
             addRecordsForm.FormClosed += addRecordsForm_FormClosed;
-            // Execute form
+            // Show addRecordsForm
             addRecordsForm.Show();
         }
 
@@ -252,20 +261,18 @@ namespace trakr_sharp {
             if (userResp == DialogResult.OK) {
                 // Update db
                 Utils.Database.DeleteProcs(selectedItems);
-
                 // Update _procMonitor
                 _procMonitor.UpdateTrackingFields();
-                // Update this.trackingList
-                DeleteTrackingListItems();
-                // Update this.trackingSummary
-                UpdateTrackingSummary();
 
+                // UI Updates
+                DeleteTrackingListItems();
+                UpdateTrackingSummary();
                 // Print msg
                 string msg = String.Format("Deleted {0} record(s) from database", selectedItems.Count);
                 Utils.SysCalls.Print(msg);
                 PrintToProgramConsole(msg);
 
-                // Disable delete button
+                // Disable delete button again
                 this.deleteButton.Enabled = false;
             }
         }
@@ -274,13 +281,11 @@ namespace trakr_sharp {
             SettingsForm settingsForm = new SettingsForm();
             settingsForm.ShowDialog();
 
-            // When settingsForm closed, update _userSettings
+            // When settingsForm closed, update _userSettings with any changes
             if (settingsForm.DialogResult == DialogResult.Cancel) {
                 _userSettings = Utils.SysCalls.ReadUserSettings();
-
                 // Show util cols if setting enabled
                 HandleShowingUtilCols();
-
                 // Disable/Enable screenshots if setting changed
                 HandleKeyboardListenerSetup();
             }
@@ -292,10 +297,12 @@ namespace trakr_sharp {
         #endregion
 
         #region Methods
-        // Prints msg with a timestamp to MainForm's programConsole
+        /// <summary>
+        /// Prints a message with a timestamp to MainForm's programConsole
+        /// </summary>
         private void PrintToProgramConsole(string msg) {
             // Clear console if getting close to character limit
-            if (this.programConsole.Text.Length >= 32000) {
+            if (this.programConsole.Text.Length >= ConsoleTextLimit) {
                 this.programConsole.Text = "";
             }
 
@@ -303,7 +310,9 @@ namespace trakr_sharp {
             this.programConsole.AppendText(String.Format("[{0}] {1}\r\n", currTime, msg));
         }
 
-        // Shows or hides the util cols of this.trackingList if user settings require it
+        /// <summary>
+        /// Shows or hides the util cols of this.trackingList if user settings require it
+        /// </summary>
         private void HandleShowingUtilCols() {
             if (_userSettings.ShowUtilCols) {
                 this.trackingList.ShowUtilCols();
@@ -313,7 +322,9 @@ namespace trakr_sharp {
             }
         }
 
-        // Creates keyboard listener or disables it depending on user settings
+        /// <summary>
+        /// Creates keyboard listener or disables it depending on user settings
+        /// </summary>
         private void HandleKeyboardListenerSetup() {
             // If screenshots enabled and _keyListener not assigned to an object yet
             if (_userSettings.EnableScreenshots && _keyListener == null) {
@@ -328,7 +339,9 @@ namespace trakr_sharp {
             }
         }
 
-        // Updates the TrackedCount and RunningCount fields of this.trackingSummary (also updates the system tray icon text)
+        /// <summary>
+        /// Updates the TrackedCount and RunningCount fields of this.trackingSummary (also updates the system tray icon text)
+        /// </summary>
         private void UpdateTrackingSummary() {
             if (this.trackingSummary.ProcIcon != null) {
                 this.trackingSummary.ProcIcon.Dispose();
@@ -339,7 +352,7 @@ namespace trakr_sharp {
             this.trackingSummary.ProcName = mostRecentProc;
             this.trackingSummary.TrackedCount = _procMonitor.GetTrackedCount();
             this.trackingSummary.RunningCount = _procMonitor.GetRunningCount();
-            this.trackingSummary.RerenderFields();
+            this.trackingSummary.RefreshFields();
 
             UpdateSysTrayIconText();
         }
@@ -355,7 +368,9 @@ namespace trakr_sharp {
             this.sysTrayIcon.Text = msg;
         }
 
-        // Invokes an update of this.trackingList where only new db items are added
+        /// <summary>
+        /// Invokes an update of this.trackingList where only new db items are added
+        /// </summary>
         private void AddUniqueTrackingListItems() {
             this.trackingList.AddUniqueLVItems(Utils.Database.GetProcDataList());
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());
@@ -363,7 +378,9 @@ namespace trakr_sharp {
             this.trackingList.ResizeColumnHeaders();
         }
 
-        // Invokes an update of this.trackingList where selected items are deleted
+        /// <summary>
+        /// Invokes an update of this.trackingList where selected items are deleted
+        /// </summary>
         private void DeleteTrackingListItems() {
             this.trackingList.DeleteSelectedLVItems();
             this.trackingList.UpdateRunningStates(this._procMonitor.GetRunningProcs());

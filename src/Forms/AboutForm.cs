@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace trakr_sharp {
@@ -16,7 +9,7 @@ namespace trakr_sharp {
         }
         #endregion
 
-        #region LocalEventHandlers
+        #region Local Event Handlers
         private void AboutForm_FormClosing(object sender, FormClosingEventArgs e) {
             if (this.iconPictureBox.BackgroundImage != null) {
                 this.iconPictureBox.BackgroundImage.Dispose();
@@ -36,7 +29,6 @@ namespace trakr_sharp {
         private void websiteLabel_Click(object sender, EventArgs e) {
             // Open repo link in browser window
             bool success = Utils.SysCalls.OpenRepoLink();
-
             // Show error message if failed to open wesbite
             if (!success) {
                 MessageBox.Show("Attempt to open link with browser was unsuccessful.", "Failed to open repository link",

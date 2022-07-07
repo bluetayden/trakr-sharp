@@ -19,7 +19,6 @@ namespace trakr_sharp.Utils {
         public static void Init() {
             // Create user_data folder if not exists
             System.IO.Directory.CreateDirectory("user_data");
-
             // Create db file
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Create 'tracked' table if doesn't exist
@@ -27,6 +26,9 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        /// <summary>
+        /// Creates several new ProcRecords with a dictionary [string proc_name, string proc_path]
+        /// </summary>
         public static void InsertProcPathPairs(Dictionary<string, string> procPathPairs) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
@@ -43,12 +45,15 @@ namespace trakr_sharp.Utils {
                         proc_path = procPathPairs[name]
                     };
 
-                    // Insert record into db col
+                    // Insert record into db collection
                     trackedCol.Insert(record);
                 }
             }
         }
 
+        /// <summary>
+        /// Deletes a List of ProcRecords from the database by proc_name
+        /// </summary>
         public static void DeleteProcs(List<string> proc_names) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
@@ -59,7 +64,9 @@ namespace trakr_sharp.Utils {
             }
         }
 
-        // Updates the hours_used and date_opened field of every relevant proc
+        /// <summary>
+        /// Updates the hours_used and date_opened field of every relevant proc
+        /// </summary>
         public static void UpdateTotalTimes(Dictionary<string, long> procTimePairs) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
@@ -75,23 +82,27 @@ namespace trakr_sharp.Utils {
             }
         }
 
-        // Updates an existing record with new values (called from EditRecordForm)
+        /// <summary>
+        /// Updates an existing record with new values (called from EditRecordForm)
+        /// </summary>
         public static void UpdateRecord(ProcRecord record) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
-
+                // Update the relevant document with the new "record" object
                 trackedCol.Update(record);
             }
         }
 
+        /// <summary>
+        /// Gets a list of every proc_name field in the database
+        /// </summary>
+        /// <returns></returns>
         public static List<string> GetProcessNameList() {
             List<string> procNames = new List<string>();
-
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
-
                 // Query each record in db for its proc_name, store result in procNames
                 procNames.AddRange(
                     trackedCol.Query()
@@ -103,15 +114,15 @@ namespace trakr_sharp.Utils {
             return procNames;
         }
 
-        // Get a List<ProcRecord> of every entry in the db
+        /// <summary>
+        /// Get a List[ProcRecord] containing every entry in the db
+        /// </summary>
         public static List<ProcRecord> GetProcRecords() {
             // Get all records from db as list
             List<ProcRecord> allRecords = new List<ProcRecord>();
-
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
-
                 // Query db for each record
                 allRecords = trackedCol.FindAll().ToList();
             }
@@ -119,6 +130,9 @@ namespace trakr_sharp.Utils {
             return allRecords;
         }
 
+        /// <summary>
+        /// Retrieves a ProcRecord document from the database
+        /// </summary>
         public static ProcRecord GetProcRecord(string name) {
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
@@ -127,28 +141,29 @@ namespace trakr_sharp.Utils {
             }
         }
 
+        /// <summary>
+        /// Retrieves a ProcRecord document and casts it to ProcData before returning it
+        /// </summary>
         public static ProcData GetProcData(string name) {
             ProcRecord record = GetProcRecord(name);
-
             return record.ToProcData();
         }
 
-        // Convert db entries to List<ProcData> for display in TrackingList
+        /// <summary>
+        /// Convert db entries to List<ProcData> for display in TrackingList
+        /// </summary>
         public static List<ProcData> GetProcDataList() {
             // Get all records from db as list
             List<ProcRecord> allRecords = new List<ProcRecord>();
-
             using (LiteDatabase db = ConnectToDatabase()) {
                 // Get 'tracked' collection from db
                 ILiteCollection<ProcRecord> trackedCol = db.GetCollection<ProcRecord>("tracked");
-
                 // Query db for each record
                 allRecords = trackedCol.FindAll().ToList();
             }
 
             // Convert each ProcRecord to ProcData
             List<ProcData> allData = new List<ProcData>();
-
             foreach (ProcRecord record in allRecords) {
                 ProcData new_data = record.ToProcData();
                 allData.Add(new_data);
