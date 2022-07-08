@@ -101,7 +101,6 @@ namespace trakr_sharp {
                 if (!_runningTrackedPairs.ContainsKey(name)) {
                     // Add KVP of name with instance count of 1
                     _runningTrackedPairs.Add(name, 1);
-
                     // Send message that proc has started to MainForm
                     Utils.SysCalls.Print(name + " started");
                     OnTrackedProcEvent?.Invoke(this, name + " started");
@@ -131,8 +130,8 @@ namespace trakr_sharp {
                 _runningTrackedPairs[name] -= 1;
                 Utils.SysCalls.Print("Updated instance count of " + name + " to " + _runningTrackedPairs[name]);
 
-                // If instance count is now 0
-                if (_runningTrackedPairs[name] == 0) {
+                // If instance count is now 0, or an explicit check shows the proc is not running
+                if (_runningTrackedPairs[name] == 0 || !Utils.SysCalls.ProcIsRunning(name)) {
                     // remove key from _runningTrackedPairs
                     _runningTrackedPairs.Remove(name);
                     // print process stopped

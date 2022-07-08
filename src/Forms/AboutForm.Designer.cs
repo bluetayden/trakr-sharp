@@ -107,7 +107,7 @@ namespace trakr_sharp {
             this.nameVersionLabel.Name = "nameVersionLabel";
             this.nameVersionLabel.Size = new System.Drawing.Size(154, 22);
             this.nameVersionLabel.TabIndex = 0;
-            this.nameVersionLabel.Text = "trakr-sharp v1.0.1b";
+            this.nameVersionLabel.Text = "trakr-sharp v1.0.2b";
             this.nameVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // websiteLabel

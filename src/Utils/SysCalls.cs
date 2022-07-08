@@ -230,6 +230,16 @@ namespace trakr_sharp.Utils {
             return trackedPairs;
         }
 
+        /// <summary>
+        /// Checks if a single process is running by name. 
+        /// </summary>
+        public static bool ProcIsRunning(string procName) {
+            if (procName.EndsWith(".exe")) {
+                procName = procName.Remove(procName.Length - 4);
+            }
+            return Process.GetProcessesByName(procName).Length > 0;
+        }
+
         public static Icon GetIconFromPath(string path) {
             Icon ico = null;
 
