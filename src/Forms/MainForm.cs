@@ -29,7 +29,7 @@ namespace TrakrSharp {
             _userSettings = Utils.SysCalls.ReadUserSettings();
 
             // Init screenshots folder and setup keyboard listener if needed
-            Utils.SysCalls.InitScreenshotsDir();
+            Utils.SysCalls.InitScreenshotRootDir();
             HandleKeyboardListenerSetup();
 
             // Init trackingList

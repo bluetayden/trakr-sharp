@@ -23,7 +23,7 @@ namespace TrakrSharp.Utils {
             "Registry", "WindowsInternal.ComposableShell.Experiences.TextInput.InputApp.exe", "conhost.exe" };
 
         /// <summary>
-        /// Creates a JSON to store user settings if it doens't exist
+        /// Creates a JSON to store user settings if it doesn't exist
         /// </summary>
         public static void InitUserSettings() {
             // Create user_data folder if not exists
@@ -75,26 +75,47 @@ namespace TrakrSharp.Utils {
         }
 
         /// <summary>
-        /// Creates the user_data folder if it doesn't exist
+        /// Creates the user_data/screenshots folder if it doesn't exist
         /// </summary>
-        public static void InitScreenshotsDir() {
+        public static void InitScreenshotRootDir() {
             Directory.CreateDirectory(_screenshotsPath);
         }
 
         /// <summary>
-        /// Attempts to take and saves screenshot of the current display
+        /// Returns the path that screenshots taken on the current date should be saved to.
+        /// Follows the yy/MM/dd structure e.g. 2022/07/23.
         /// </summary>
-        /// <returns>[String] The path the image was saved to, or a failure message</returns>
-        public static string TakeScreenshot() {
-            string fileName = Guid.NewGuid().ToString() + ".png";
-            string filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
+        private static string GetTodaysScreenshotDir() {
+            string month = DateTime.Now.Month.ToString().PadLeft(2, '0');
+            return $"{_screenshotsPath}/{DateTime.Now.Year}/{month}/{DateTime.Now.Day}";
+        }
 
+        /// <summary>
+        /// Creates a unique GUID for a screenshot file and appends it to basePath
+        /// </summary>
+        private static string GetUniqueScreenshotPath(string basePath) {
+            // Choose a unique ID for the screenshot and append to relevant dir
+            string fileName = Guid.NewGuid().ToString() + ".png";
+            string filePath = $"{basePath}/{fileName}";
             // Make sure screenshot with chosen GUID does not exist
             while (File.Exists(filePath)) {
                 fileName = Guid.NewGuid().ToString() + ".png";
-                filePath = string.Format("{0}/{1}", _screenshotsPath, fileName);
+                filePath = $"{basePath}/{fileName}";
             }
+            return filePath;
+        }
 
+        /// <summary>
+        /// Attempts to take and save a screenshot of the current display.
+        /// Saves to the path "user_data/screenshots/yy/MM/dd/{GUID}.png".
+        /// </summary>
+        /// <returns>[String] The path the image was saved to, or a failure message</returns>
+        public static string TakeScreenshot() {
+            // Get todays screenshot dir and create if it doesn't exist
+            string todaysScreenshotDir = GetTodaysScreenshotDir();
+            Directory.CreateDirectory(todaysScreenshotDir);
+            // Generate unique path to save the screenshot to
+            string filePath = GetUniqueScreenshotPath(todaysScreenshotDir);
             // Take screenshot and try to save it
             try {
                 Rectangle bounds = Screen.GetBounds(Point.Empty);
@@ -104,7 +125,6 @@ namespace TrakrSharp.Utils {
                     }
                     bitmap.Save(filePath, ImageFormat.Png);
                 }
-
                 return string.Format("Screenshot saved to {0}", filePath);
             }
             catch (Exception) {
