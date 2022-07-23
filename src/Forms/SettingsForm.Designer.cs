@@ -31,16 +31,16 @@ namespace TrakrSharp {
             this.optionLayout = new System.Windows.Forms.TableLayoutPanel();
             this.systemGroupBox = new System.Windows.Forms.GroupBox();
             this.systemTable = new System.Windows.Forms.TableLayoutPanel();
-            this.startupBehaviourLabel = new System.Windows.Forms.Label();
-            this.closeBehaviourLabel = new System.Windows.Forms.Label();
             this.startupBehaviourCheckbox = new System.Windows.Forms.CheckBox();
+            this.startupBehaviourLabel = new System.Windows.Forms.Label();
+            this.enableScreenshotsCheckbox = new System.Windows.Forms.CheckBox();
+            this.enableScreenshotsLabel = new System.Windows.Forms.Label();
             this.closeBehaviourComboBox = new System.Windows.Forms.ComboBox();
+            this.closeBehaviourLabel = new System.Windows.Forms.Label();
             this.displayGroupBox = new System.Windows.Forms.GroupBox();
             this.displayTable = new System.Windows.Forms.TableLayoutPanel();
-            this.showUtilityColsCheckbox = new System.Windows.Forms.CheckBox();
             this.showUtilityColsLabel = new System.Windows.Forms.Label();
-            this.enableScreenshotsLabel = new System.Windows.Forms.Label();
-            this.enableScreenshotsCheckbox = new System.Windows.Forms.CheckBox();
+            this.showUtilityColsCheckbox = new System.Windows.Forms.CheckBox();
             this.applyCancelPanel.SuspendLayout();
             this.mainLayout.SuspendLayout();
             this.optionLayout.SuspendLayout();
@@ -61,28 +61,28 @@ namespace TrakrSharp {
             this.applyCancelPanel.Size = new System.Drawing.Size(158, 29);
             this.applyCancelPanel.TabIndex = 4;
             // 
-            // cancelButton
-            // 
-            this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(3, 3);
-            this.cancelButton.Name = "cancelButton";
-            this.cancelButton.Size = new System.Drawing.Size(75, 23);
-            this.cancelButton.TabIndex = 3;
-            this.cancelButton.Text = "Cancel";
-            this.cancelButton.UseVisualStyleBackColor = true;
-            // 
             // applyButton
             // 
             this.applyButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.applyButton.Enabled = false;
-            this.applyButton.Location = new System.Drawing.Point(80, 3);
+            this.applyButton.Location = new System.Drawing.Point(3, 3);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 4;
             this.applyButton.Text = "Apply";
             this.applyButton.UseVisualStyleBackColor = true;
             this.applyButton.Click += new System.EventHandler(this.applyButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(80, 3);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(75, 23);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Cancel";
+            this.cancelButton.UseVisualStyleBackColor = true;
             // 
             // mainLayout
             // 
@@ -109,8 +109,8 @@ namespace TrakrSharp {
             this.optionLayout.Location = new System.Drawing.Point(3, 3);
             this.optionLayout.Name = "optionLayout";
             this.optionLayout.RowCount = 2;
-            this.optionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.optionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.optionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.66666F));
+            this.optionLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.optionLayout.Size = new System.Drawing.Size(378, 150);
             this.optionLayout.TabIndex = 5;
             // 
@@ -120,7 +120,7 @@ namespace TrakrSharp {
             this.systemGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.systemGroupBox.Location = new System.Drawing.Point(3, 3);
             this.systemGroupBox.Name = "systemGroupBox";
-            this.systemGroupBox.Size = new System.Drawing.Size(372, 69);
+            this.systemGroupBox.Size = new System.Drawing.Size(372, 93);
             this.systemGroupBox.TabIndex = 0;
             this.systemGroupBox.TabStop = false;
             this.systemGroupBox.Text = "System";
@@ -130,53 +130,67 @@ namespace TrakrSharp {
             this.systemTable.ColumnCount = 2;
             this.systemTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.systemTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.systemTable.Controls.Add(this.startupBehaviourLabel, 0, 1);
-            this.systemTable.Controls.Add(this.closeBehaviourLabel, 0, 0);
-            this.systemTable.Controls.Add(this.startupBehaviourCheckbox, 1, 1);
+            this.systemTable.Controls.Add(this.startupBehaviourCheckbox, 1, 2);
+            this.systemTable.Controls.Add(this.startupBehaviourLabel, 0, 2);
+            this.systemTable.Controls.Add(this.enableScreenshotsCheckbox, 1, 1);
+            this.systemTable.Controls.Add(this.enableScreenshotsLabel, 0, 1);
             this.systemTable.Controls.Add(this.closeBehaviourComboBox, 1, 0);
+            this.systemTable.Controls.Add(this.closeBehaviourLabel, 0, 0);
             this.systemTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.systemTable.Location = new System.Drawing.Point(3, 16);
             this.systemTable.Name = "systemTable";
-            this.systemTable.RowCount = 2;
-            this.systemTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.systemTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.systemTable.Size = new System.Drawing.Size(366, 50);
+            this.systemTable.RowCount = 3;
+            this.systemTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.systemTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.systemTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.systemTable.Size = new System.Drawing.Size(366, 74);
             this.systemTable.TabIndex = 0;
-            // 
-            // startupBehaviourLabel
-            // 
-            this.startupBehaviourLabel.AutoSize = true;
-            this.startupBehaviourLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.startupBehaviourLabel.Enabled = false;
-            this.startupBehaviourLabel.Location = new System.Drawing.Point(3, 25);
-            this.startupBehaviourLabel.Name = "startupBehaviourLabel";
-            this.startupBehaviourLabel.Size = new System.Drawing.Size(177, 25);
-            this.startupBehaviourLabel.TabIndex = 0;
-            this.startupBehaviourLabel.Text = "Run trakr on system startup";
-            this.startupBehaviourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // closeBehaviourLabel
-            // 
-            this.closeBehaviourLabel.AutoSize = true;
-            this.closeBehaviourLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.closeBehaviourLabel.Location = new System.Drawing.Point(3, 0);
-            this.closeBehaviourLabel.Name = "closeBehaviourLabel";
-            this.closeBehaviourLabel.Size = new System.Drawing.Size(177, 25);
-            this.closeBehaviourLabel.TabIndex = 1;
-            this.closeBehaviourLabel.Text = "Close button behaviour";
-            this.closeBehaviourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // startupBehaviourCheckbox
             // 
             this.startupBehaviourCheckbox.AutoSize = true;
             this.startupBehaviourCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.startupBehaviourCheckbox.Enabled = false;
-            this.startupBehaviourCheckbox.Location = new System.Drawing.Point(187, 28);
+            this.startupBehaviourCheckbox.Location = new System.Drawing.Point(187, 51);
             this.startupBehaviourCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
             this.startupBehaviourCheckbox.Name = "startupBehaviourCheckbox";
-            this.startupBehaviourCheckbox.Size = new System.Drawing.Size(176, 19);
+            this.startupBehaviourCheckbox.Size = new System.Drawing.Size(176, 20);
             this.startupBehaviourCheckbox.TabIndex = 1;
             this.startupBehaviourCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // startupBehaviourLabel
+            // 
+            this.startupBehaviourLabel.AutoSize = true;
+            this.startupBehaviourLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.startupBehaviourLabel.Enabled = false;
+            this.startupBehaviourLabel.Location = new System.Drawing.Point(3, 48);
+            this.startupBehaviourLabel.Name = "startupBehaviourLabel";
+            this.startupBehaviourLabel.Size = new System.Drawing.Size(177, 26);
+            this.startupBehaviourLabel.TabIndex = 0;
+            this.startupBehaviourLabel.Text = "Run trakr on system startup";
+            this.startupBehaviourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // enableScreenshotsCheckbox
+            // 
+            this.enableScreenshotsCheckbox.AutoSize = true;
+            this.enableScreenshotsCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.enableScreenshotsCheckbox.Location = new System.Drawing.Point(187, 27);
+            this.enableScreenshotsCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
+            this.enableScreenshotsCheckbox.Name = "enableScreenshotsCheckbox";
+            this.enableScreenshotsCheckbox.Size = new System.Drawing.Size(176, 18);
+            this.enableScreenshotsCheckbox.TabIndex = 2;
+            this.enableScreenshotsCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // enableScreenshotsLabel
+            // 
+            this.enableScreenshotsLabel.AutoSize = true;
+            this.enableScreenshotsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.enableScreenshotsLabel.Location = new System.Drawing.Point(3, 24);
+            this.enableScreenshotsLabel.Name = "enableScreenshotsLabel";
+            this.enableScreenshotsLabel.Size = new System.Drawing.Size(177, 24);
+            this.enableScreenshotsLabel.TabIndex = 3;
+            this.enableScreenshotsLabel.Text = "Enable screenshots (F12 key)";
+            this.enableScreenshotsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // closeBehaviourComboBox
             // 
@@ -191,13 +205,24 @@ namespace TrakrSharp {
             this.closeBehaviourComboBox.Size = new System.Drawing.Size(177, 21);
             this.closeBehaviourComboBox.TabIndex = 0;
             // 
+            // closeBehaviourLabel
+            // 
+            this.closeBehaviourLabel.AutoSize = true;
+            this.closeBehaviourLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.closeBehaviourLabel.Location = new System.Drawing.Point(3, 0);
+            this.closeBehaviourLabel.Name = "closeBehaviourLabel";
+            this.closeBehaviourLabel.Size = new System.Drawing.Size(177, 24);
+            this.closeBehaviourLabel.TabIndex = 1;
+            this.closeBehaviourLabel.Text = "Close button behaviour";
+            this.closeBehaviourLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // displayGroupBox
             // 
             this.displayGroupBox.Controls.Add(this.displayTable);
             this.displayGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.displayGroupBox.Location = new System.Drawing.Point(3, 78);
+            this.displayGroupBox.Location = new System.Drawing.Point(3, 102);
             this.displayGroupBox.Name = "displayGroupBox";
-            this.displayGroupBox.Size = new System.Drawing.Size(372, 69);
+            this.displayGroupBox.Size = new System.Drawing.Size(372, 45);
             this.displayGroupBox.TabIndex = 1;
             this.displayGroupBox.TabStop = false;
             this.displayGroupBox.Text = "Tracking Display";
@@ -207,62 +232,38 @@ namespace TrakrSharp {
             this.displayTable.ColumnCount = 2;
             this.displayTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.displayTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.displayTable.Controls.Add(this.enableScreenshotsCheckbox, 1, 0);
-            this.displayTable.Controls.Add(this.showUtilityColsLabel, 0, 1);
-            this.displayTable.Controls.Add(this.showUtilityColsCheckbox, 1, 1);
-            this.displayTable.Controls.Add(this.enableScreenshotsLabel, 0, 0);
+            this.displayTable.Controls.Add(this.showUtilityColsLabel, 0, 0);
+            this.displayTable.Controls.Add(this.showUtilityColsCheckbox, 1, 0);
             this.displayTable.Dock = System.Windows.Forms.DockStyle.Fill;
             this.displayTable.Location = new System.Drawing.Point(3, 16);
             this.displayTable.Name = "displayTable";
-            this.displayTable.RowCount = 2;
-            this.displayTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.displayTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.displayTable.Size = new System.Drawing.Size(366, 50);
+            this.displayTable.RowCount = 1;
+            this.displayTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.displayTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.displayTable.Size = new System.Drawing.Size(366, 26);
             this.displayTable.TabIndex = 0;
-            // 
-            // showUtilityColsCheckbox
-            // 
-            this.showUtilityColsCheckbox.AutoSize = true;
-            this.showUtilityColsCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.showUtilityColsCheckbox.Location = new System.Drawing.Point(187, 28);
-            this.showUtilityColsCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
-            this.showUtilityColsCheckbox.Name = "showUtilityColsCheckbox";
-            this.showUtilityColsCheckbox.Size = new System.Drawing.Size(176, 19);
-            this.showUtilityColsCheckbox.TabIndex = 2;
-            this.showUtilityColsCheckbox.UseVisualStyleBackColor = true;
             // 
             // showUtilityColsLabel
             // 
             this.showUtilityColsLabel.AutoSize = true;
             this.showUtilityColsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.showUtilityColsLabel.Location = new System.Drawing.Point(3, 25);
+            this.showUtilityColsLabel.Location = new System.Drawing.Point(3, 0);
             this.showUtilityColsLabel.Name = "showUtilityColsLabel";
-            this.showUtilityColsLabel.Size = new System.Drawing.Size(177, 25);
+            this.showUtilityColsLabel.Size = new System.Drawing.Size(177, 26);
             this.showUtilityColsLabel.TabIndex = 0;
             this.showUtilityColsLabel.Text = "Show utility columns";
             this.showUtilityColsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // enableScreenshotsLabel
+            // showUtilityColsCheckbox
             // 
-            this.enableScreenshotsLabel.AutoSize = true;
-            this.enableScreenshotsLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.enableScreenshotsLabel.Location = new System.Drawing.Point(3, 0);
-            this.enableScreenshotsLabel.Name = "enableScreenshotsLabel";
-            this.enableScreenshotsLabel.Size = new System.Drawing.Size(177, 25);
-            this.enableScreenshotsLabel.TabIndex = 0;
-            this.enableScreenshotsLabel.Text = "Enable screenshots (F12 key)";
-            this.enableScreenshotsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // enableScreenshotsCheckbox
-            // 
-            this.enableScreenshotsCheckbox.AutoSize = true;
-            this.enableScreenshotsCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.enableScreenshotsCheckbox.Location = new System.Drawing.Point(187, 3);
-            this.enableScreenshotsCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
-            this.enableScreenshotsCheckbox.Name = "enableScreenshotsCheckbox";
-            this.enableScreenshotsCheckbox.Size = new System.Drawing.Size(176, 19);
-            this.enableScreenshotsCheckbox.TabIndex = 1;
-            this.enableScreenshotsCheckbox.UseVisualStyleBackColor = true;
+            this.showUtilityColsCheckbox.AutoSize = true;
+            this.showUtilityColsCheckbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.showUtilityColsCheckbox.Location = new System.Drawing.Point(187, 3);
+            this.showUtilityColsCheckbox.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
+            this.showUtilityColsCheckbox.Name = "showUtilityColsCheckbox";
+            this.showUtilityColsCheckbox.Size = new System.Drawing.Size(176, 20);
+            this.showUtilityColsCheckbox.TabIndex = 2;
+            this.showUtilityColsCheckbox.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -302,15 +303,15 @@ namespace TrakrSharp {
         private System.Windows.Forms.GroupBox systemGroupBox;
         private System.Windows.Forms.GroupBox displayGroupBox;
         private System.Windows.Forms.TableLayoutPanel systemTable;
-        private System.Windows.Forms.Label startupBehaviourLabel;
         private System.Windows.Forms.Label closeBehaviourLabel;
         private System.Windows.Forms.ComboBox closeBehaviourComboBox;
-        private System.Windows.Forms.CheckBox startupBehaviourCheckbox;
         private System.Windows.Forms.TableLayoutPanel displayTable;
+        private System.Windows.Forms.Panel applyCancelPanel;
         private System.Windows.Forms.Label showUtilityColsLabel;
         private System.Windows.Forms.CheckBox showUtilityColsCheckbox;
-        private System.Windows.Forms.Panel applyCancelPanel;
         private System.Windows.Forms.Label enableScreenshotsLabel;
         private System.Windows.Forms.CheckBox enableScreenshotsCheckbox;
+        private System.Windows.Forms.Label startupBehaviourLabel;
+        private System.Windows.Forms.CheckBox startupBehaviourCheckbox;
     }
 }

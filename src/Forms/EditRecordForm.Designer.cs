@@ -92,7 +92,7 @@ namespace TrakrSharp {
             // applyButton
             // 
             this.applyButton.Enabled = false;
-            this.applyButton.Location = new System.Drawing.Point(77, 6);
+            this.applyButton.Location = new System.Drawing.Point(0, 6);
             this.applyButton.Name = "applyButton";
             this.applyButton.Size = new System.Drawing.Size(75, 23);
             this.applyButton.TabIndex = 9;
@@ -104,7 +104,7 @@ namespace TrakrSharp {
             // 
             this.cancelButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(0, 6);
+            this.cancelButton.Location = new System.Drawing.Point(77, 6);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(75, 23);
             this.cancelButton.TabIndex = 8;
