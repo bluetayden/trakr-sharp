@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     partial class ProcCheckedListBox {
         /// <summary> 
         /// Required designer variable.

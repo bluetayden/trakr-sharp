@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp {
+namespace TrakrSharp {
     partial class AboutForm {
         /// <summary>
         /// Required designer variable.

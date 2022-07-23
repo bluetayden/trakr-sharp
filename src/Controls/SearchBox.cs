@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     public partial class SearchBox : UserControl {
         private readonly string _placeholderText = "Search...";
         public delegate void OnValidQueryDelegate(SearchBox sender, string query);

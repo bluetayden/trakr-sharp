@@ -1,4 +1,4 @@
-﻿namespace trakr_sharp {
+﻿namespace TrakrSharp {
     /// <summary>
     /// Represents a document for a tracked process that is stored in the Database
     /// </summary>

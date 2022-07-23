@@ -12,7 +12,7 @@ using System.IO;
 
 using Newtonsoft.Json;
 
-namespace trakr_sharp.Utils {
+namespace TrakrSharp.Utils {
     class SysCalls {
         private static readonly string _settingsJsonPath = "user_data/settings.json";
         private static readonly string _screenshotsPath = "user_data/screenshots";

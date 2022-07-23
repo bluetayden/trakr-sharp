@@ -8,7 +8,7 @@ using System.Globalization;
 
 using LiteDB;
 
-namespace trakr_sharp.Utils {
+namespace TrakrSharp.Utils {
     class Database {
         private static readonly string _databasePath = "user_data/tracking.db";
 

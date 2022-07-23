@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     /// <summary>
     /// This implementation was taken directly from the link below and adapted slightly: 
     /// https://docs.microsoft.com/en-us/troubleshoot/dotnet/csharp/sort-listview-by-column

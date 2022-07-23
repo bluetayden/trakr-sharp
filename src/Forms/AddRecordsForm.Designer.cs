@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp {
+namespace TrakrSharp {
     partial class AddRecordsForm {
         /// <summary>
         /// Required designer variable.
@@ -32,9 +32,9 @@ namespace trakr_sharp {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddRecordsForm));
             this.addButton = new System.Windows.Forms.Button();
             this.removeButton = new System.Windows.Forms.Button();
-            this.runningProcList = new trakr_sharp.Controls.ProcCheckedListBox();
-            this.selectedProcList = new trakr_sharp.Controls.ProcCheckedListBox();
-            this.searchBox = new trakr_sharp.Controls.SearchBox();
+            this.runningProcList = new TrakrSharp.Controls.ProcCheckedListBox();
+            this.selectedProcList = new TrakrSharp.Controls.ProcCheckedListBox();
+            this.searchBox = new TrakrSharp.Controls.SearchBox();
             this.dialogButtonsLayout = new System.Windows.Forms.TableLayoutPanel();
             this.refreshButton = new System.Windows.Forms.Button();
             this.cancelButton = new System.Windows.Forms.Button();
@@ -116,7 +116,7 @@ namespace trakr_sharp {
             this.runningProcList.Name = "runningProcList";
             this.runningProcList.Size = new System.Drawing.Size(200, 157);
             this.runningProcList.TabIndex = 1;
-            this.runningProcList.OnItemCheck += new trakr_sharp.Controls.ProcCheckedListBox.OnItemCheckDelegate(this.runningProcList_OnItemCheck);
+            this.runningProcList.OnItemCheck += new TrakrSharp.Controls.ProcCheckedListBox.OnItemCheckDelegate(this.runningProcList_OnItemCheck);
             // 
             // selectedProcList
             // 
@@ -125,7 +125,7 @@ namespace trakr_sharp {
             this.selectedProcList.Name = "selectedProcList";
             this.selectedProcList.Size = new System.Drawing.Size(201, 157);
             this.selectedProcList.TabIndex = 2;
-            this.selectedProcList.OnItemCheck += new trakr_sharp.Controls.ProcCheckedListBox.OnItemCheckDelegate(this.selectedProcList_OnItemCheck);
+            this.selectedProcList.OnItemCheck += new TrakrSharp.Controls.ProcCheckedListBox.OnItemCheckDelegate(this.selectedProcList_OnItemCheck);
             // 
             // mainLayout
             // 
@@ -153,7 +153,7 @@ namespace trakr_sharp {
             this.searchBox.Name = "searchBox";
             this.searchBox.Size = new System.Drawing.Size(458, 21);
             this.searchBox.TabIndex = 0;
-            this.searchBox.OnValidQuery += new trakr_sharp.Controls.SearchBox.OnValidQueryDelegate(this.searchBox_OnValidQuery);
+            this.searchBox.OnValidQuery += new TrakrSharp.Controls.SearchBox.OnValidQueryDelegate(this.searchBox_OnValidQuery);
             // 
             // dialogButtonsLayout
             // 

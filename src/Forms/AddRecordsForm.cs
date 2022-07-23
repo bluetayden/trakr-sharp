@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     public partial class AddRecordsForm : Form {
         public delegate void OnDBUpdateDelegate(AddRecordsForm sender, string msg);
         public event OnDBUpdateDelegate OnDBUpdate;

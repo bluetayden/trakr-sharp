@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     public partial class EditRecordForm : Form {
         private ProcRecord _record { get; set; }
         private Image _tempProcIcon { get; set; }

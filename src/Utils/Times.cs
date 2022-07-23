@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace trakr_sharp.Utils {
+namespace TrakrSharp.Utils {
     class Times {
         public static long GetUTCNow() {
             return DateTimeOffset.Now.ToUnixTimeSeconds();

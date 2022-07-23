@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     public partial class TrackingSummary : UserControl {
         public Bitmap ProcIcon { get; set; }
         public string ProcName { get; set; }

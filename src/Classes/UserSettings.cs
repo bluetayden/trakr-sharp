@@ -1,4 +1,4 @@
-﻿namespace trakr_sharp {
+﻿namespace TrakrSharp {
     public struct UserSettings {
         public enum CloseBehaviour { Close = 0, Minimize = 1 }
 

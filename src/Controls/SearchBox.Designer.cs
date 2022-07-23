@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     partial class SearchBox {
         /// <summary> 
         /// Required designer variable.

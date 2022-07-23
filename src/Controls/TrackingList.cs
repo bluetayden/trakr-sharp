@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     public partial class TrackingList : UserControl {
         #region Constants
         private const int Program_Name_i = 1;

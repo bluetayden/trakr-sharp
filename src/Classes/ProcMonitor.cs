@@ -4,7 +4,7 @@ using System.Management;
 using System.Timers;
 using Timer = System.Timers.Timer;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     public class ProcMonitor {
         public delegate void OnTrackedProcEventDelegate(ProcMonitor sender, string msg);
         public event OnTrackedProcEventDelegate OnTrackedProcEvent;

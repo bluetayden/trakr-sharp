@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     /// <summary>
     /// An alternate representation of a database document for a tracked process with extra fields for use at runtime.
     /// i.e. ElapsedTime, IsRunning and StartTime

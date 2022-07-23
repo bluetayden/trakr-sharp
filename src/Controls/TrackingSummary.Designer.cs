@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     partial class TrackingSummary {
         /// <summary> 
         /// Required designer variable.

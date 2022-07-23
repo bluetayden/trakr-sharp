@@ -2,7 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     /// <summary>
     /// Implementation taken directly from the links below and shortened slightly: 
     /// https://stackoverflow.com/a/34290332/17313384                                             

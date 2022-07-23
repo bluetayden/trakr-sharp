@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     public partial class AboutForm : Form {
         #region Init
         public AboutForm() {

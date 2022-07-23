@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 
-namespace trakr_sharp {
+namespace TrakrSharp {
     public partial class MainForm : Form {
         #region Init
         private ProcMonitor _procMonitor;

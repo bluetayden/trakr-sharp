@@ -1,5 +1,5 @@
 ﻿
-namespace trakr_sharp {
+namespace TrakrSharp {
     partial class MainForm {
         /// <summary>
         /// Required designer variable.
@@ -47,8 +47,8 @@ namespace trakr_sharp {
             this.helpReadmeMenuBarItem = new System.Windows.Forms.MenuItem();
             this.menuItem5 = new System.Windows.Forms.MenuItem();
             this.helpAboutMenuBarItem = new System.Windows.Forms.MenuItem();
-            this.trackingList = new trakr_sharp.Controls.TrackingList();
-            this.trackingSummary = new trakr_sharp.Controls.TrackingSummary();
+            this.trackingList = new TrakrSharp.Controls.TrackingList();
+            this.trackingSummary = new TrakrSharp.Controls.TrackingSummary();
             this.mainGridLayout.SuspendLayout();
             this.buttonLayout.SuspendLayout();
             this.sysTrayIconContextMenu.SuspendLayout();

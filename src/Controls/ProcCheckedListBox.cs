@@ -4,7 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace trakr_sharp.Controls {
+namespace TrakrSharp.Controls {
     public partial class ProcCheckedListBox : UserControl {
         public delegate void OnItemCheckDelegate(ProcCheckedListBox sender, int changedIndex);
         public event OnItemCheckDelegate OnItemCheck;
